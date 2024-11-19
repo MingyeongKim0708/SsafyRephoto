@@ -1,50 +1,32 @@
 package com.ssafy.mvc.model.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
-	private String id;
-	private String password;
-	private String name;
-	private int curriculumCode;
-	private String curriculumName;
-
-	public String getId() {
-		return id;
+	
+	private String userId;
+	private String userPassword;
+	private String userNick;
+	private String userEmail;
+	private String userCreatedAt;
+	private String authority= "general";
+	private String photoName = "window.webp";
+	private String PhotoUuid = "0";
+	
+	public User() {};
+	
+	public User(String userId, String userPassword) {
+		this.userId = userId;
+		this.userPassword = userPassword;
 	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public int getCurriculumCode() {
-		return curriculumCode;
-	}
-
-	public void setCurriculumCode(int curriculumCode) {
-		this.curriculumCode = curriculumCode;
-	}
-
-	public String getCurriculumName() {
-		return curriculumName;
-	}
-
-	public void setCurriculumName(String curriculumName) {
-		this.curriculumName = curriculumName;
-	}
-
+	
 }
