@@ -19,14 +19,20 @@ public class User {
 	private String userEmail;
 	private String userCreatedAt;
 	private String authority= "general";
-	private String photoName = "window.webp";
-	private String PhotoUuid = "0";
-	
-	public User() {};
+	private String userImg = "window.webp";
+	private String userUuid = "0";
+
 	
 	public User(String userId, String userPassword) {
 		this.userId = userId;
 		this.userPassword = userPassword;
 	}
+	
+	public User(String userId, String userPassword, String userEmail) {
+		this.userId = userId;
+		this.userPassword = userPassword;
+		this.userEmail = userEmail;
+	}
+	
 	
 }

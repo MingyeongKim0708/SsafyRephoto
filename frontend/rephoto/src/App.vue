@@ -3,6 +3,7 @@
     <TheHeaderNav/>
     <RouterView/>
     <h3>rephoto</h3>
+    <button>Start</button>
     <TheFooter/>
   </div>
 </template>

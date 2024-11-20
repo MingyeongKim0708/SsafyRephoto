@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.ssafy.mvc.interceptor.AdminInterceptor;
+import com.ssafy.mvc.interceptor.AdminInterceptor2;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer{
@@ -14,13 +15,13 @@ public class WebConfig implements WebMvcConfigurer{
 	@Autowired
 	AdminInterceptor adminInterceptor;
 	
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(adminInterceptor).addPathPatterns("/api-user/users");
-	}
+	@Autowired
+	AdminInterceptor2 adminInterceptor2;
 	
 	@Override
-	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET","POST");
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(adminInterceptor).addPathPatterns("/").excludePathPatterns("/user/login");
+		registry.addInterceptor(adminInterceptor2).addPathPatterns("/user/login");
 	}
+	
 }
