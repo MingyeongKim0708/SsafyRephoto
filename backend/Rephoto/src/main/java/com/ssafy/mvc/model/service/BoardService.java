@@ -7,26 +7,29 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ssafy.mvc.model.dto.Board;
 import com.ssafy.mvc.model.dto.SearchCondition;
 
-
 public interface BoardService {
+	// 게시물 전체 목록 조회 및 검색
+	public List<Board> search(SearchCondition condition);
+	
+	// 게시물 상세 조회
+	public Board readBoard(int boardId);
+	
 	// 게시글 전체 조회
-	public List<Board> getBoardList();
+//	public List<Board> getBoardList();
 
-	// 게시글 상세조회 (클릭시 읽는거)
-	public Board readBoard(int id);
 
 	// 게시글 작성
-	public void writeBoard(Board board);
+//	public void writeBoard(Board board);
 
 	// 게시글 삭제
 	public boolean removeBoard(int id);
 
 	// 게시글 수정
-	public void modifyBoard(Board board);
-
-	// 검색버튼을 눌렀을 떄 처리할 메서드
-	public List<Board> search(SearchCondition condition);
+//	public void modifyBoard(Board board);
 
 	// 파일업로드
 	public void fileUpload(MultipartFile file, Board board);
+	
+	// 파일 원본명 조회
+	public String getFileNAmeByUuid(String fileUuid);
 }

@@ -2,6 +2,7 @@ package com.ssafy.mvc.model.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,97 +11,114 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ssafy.mvc.model.dao.BoardDao;
 import com.ssafy.mvc.model.dto.Board;
 import com.ssafy.mvc.model.dto.SearchCondition;
 
 @Service
-public class BoardServiceImpl implements BoardService{
-	
-	private final BoardDao boardDao; 
+public class BoardServiceImpl implements BoardService {
+
+	private final BoardDao boardDao;
 	private final ResourceLoader resourceLoader;
-	
+
 	public BoardServiceImpl(BoardDao boardDao, ResourceLoader resourceLoader) {
 		this.boardDao = boardDao;
 		this.resourceLoader = resourceLoader;
 	}
-	
-	@Override
-	public List<Board> getBoardList() {
-		System.out.println("모든 게시글 가지고 왔습니다.");
-		return boardDao.selectAll();
-	}
 
-	@Override
-	public Board readBoard(int id) {
-		System.out.println(id+"번 글을 읽어옵니다.");
-		boardDao.updateViewCnt(id);
-		return boardDao.selectOne(id);
-	}
-
-	@Override
-	public void writeBoard(Board board) {
-		System.out.println("게시글 작성했습니다");
-		boardDao.insertBoard(board);
-	}
-
-	@Override
-	public boolean removeBoard(int id) {
-		System.out.println("게시글을 삭제합니다.");
-		int result = boardDao.deleteBoard(id);
-		System.out.println(result);
-//		if(result == 1) return true;
-//		return false;
-		return result == 1;
-		
-	}
-
-	@Override
-	public void modifyBoard(Board board) {
-		System.out.println("게시글을 수정합니다.");
-		
-		//실제로 우리 수정하고 싶은 id를 가진 게시글을 일단 가지고와서.
-//		Board tmp = boardDao.selectOne(board.getId());
-//		tmp.setTitle(board.getTitle());
-		boardDao.updateBoard(board);
-	}
-
+	// 게시물 전체 목록 조회 및 검색
 	@Override
 	public List<Board> search(SearchCondition condition) {
+		System.out.println("게시물 전체 목록 조회 및 검색");
 		return boardDao.search(condition);
 	}
 
+	// 게시물 상세 조회
+	@Override
+	public Board readBoard(int boardId) {
+		System.out.println(boardId + "번 상세 조회");
+		boardDao.updateViewCnt(boardId);
+		return boardDao.selectOne(boardId);
+	}
+
+	// 게시글 삭제
+	@Override
+	public boolean removeBoard(int boardId) {
+		System.out.println("게시글을 삭제합니다.");
+		int result = boardDao.deleteBoard(boardId);
+		System.out.println("게시글 삭제 성공시 1 :" + result);
+		return result == 1;
+	}
+
+	// 게시물 등록 및 파일 업로드
 	@Override
 	public void fileUpload(MultipartFile file, Board board) {
-		if(file != null && file.getSize() > 0 ) {
+		if (file != null && file.getSize() > 0) {
 			try {
 				String fileName = file.getOriginalFilename(); // 실제파일 이름
-				//확장자를 따로 저장하는 그러한 처리가 사실은 필요하다.
-				String fileId = UUID.randomUUID().toString(); // 고유한 이름(확장자 날아가요)
-				//게시글 바구니를 확장 시켜서 파일 정보도 저장을 해보자아~~
-				board.setFileId(fileId);
-				board.setFileName(fileName);
-				
-				//어디다가 저장을 할래잉.
+
+				// 확장자 검사
+				String extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+				String[] allowedExtensions = { "jpg", "jpeg", "png", "webp" };
+
+				boolean isAllowed = Arrays.asList(allowedExtensions).contains(extension);
+				if (!isAllowed) {
+					throw new IllegalArgumentException("허용되지 않은 확장자입니다.");
+				}
+
+				String fileId = UUID.randomUUID().toString() + "." + extension; // UUID 생성(확장자없음)
+				board.setPhotoUuid(fileId); // 확장자 추가
+				board.setPhotoName(fileName);
+
+				// 파일 저장
 				Resource resource = resourceLoader.getResource("classpath:/static/img");
-				file.transferTo(new File(resource.getFile(),fileId));
-				///////////////////// 위의 코드까지 정상 수행이 되면...
+				file.transferTo(new File(resource.getFile(), fileId)); 
+
+				// DB 처리
 				boardDao.insertBoard(board);
 				boardDao.insertFile(board);
-				
-				
+
 			} catch (IllegalStateException e) {
-				e.printStackTrace();
+				throw e; // 예외를 그냥 던짐 (Controller에서 처리될 예정)
 			} catch (IOException e) {
 				e.printStackTrace();
+				throw new RuntimeException("파일 저장 중 문제가 발생했습니다.", e); // 예외를 던짐
 			}
-			
-			
+
 		}
-		
-		
-		
+
 	}
+
+	// 파일 원본명 조회
+	@Override
+	public String getFileNAmeByUuid(String fileUuid) {
+		return boardDao.getFileNameByUuid(fileUuid);
+	}
+
+//	@Override
+//	public void modifyBoard(Board board) {
+//		System.out.println("게시글을 수정합니다.");
+//		
+//		//실제로 우리 수정하고 싶은 id를 가진 게시글을 일단 가지고와서.
+////		Board tmp = boardDao.selectOne(board.getId());
+////		tmp.setTitle(board.getTitle());
+//		boardDao.updateBoard(board);
+//	}
+
+	// 안씀
+//	@Override
+//	public List<Board> getBoardList() {
+//		System.out.println("모든 게시글 가지고 왔습니다.");
+//		return boardDao.selectAll();
+//	}
+	
+	// 게시물 등록
+//	@Override
+//	public void writeBoard(Board board) {
+//		System.out.println("게시글 작성했습니다");
+//		boardDao.insertBoard(board);
+//	}
 
 }
