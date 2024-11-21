@@ -132,9 +132,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public File getProfile(String Uuid) throws IOException {
-		Resource resource = resourceLoader.getResource("classpath:/static/img");
-		File file = new File(resource.getFile(),Uuid);
-		return file;
+
+		Resource resource = resourceLoader.getResource("classpath:/static/img/"+Uuid);
+		if (!resource.exists()) {
+	        return null;  // 파일이 없을 경우 처리
+	    }
+
+	    // File 객체 반환
+	    return resource.getFile();
 	}
 
 }

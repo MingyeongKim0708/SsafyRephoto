@@ -20,7 +20,7 @@ public class User {
 	private String userCreatedAt;
 	private String authority = "general";
 	private String userImg = "window.webp";
-	private String userUuid = "0";
+	private String userUuid = "0.webp";
 
 	public User(String userId, String userPassword) {
 		this.userId = userId;

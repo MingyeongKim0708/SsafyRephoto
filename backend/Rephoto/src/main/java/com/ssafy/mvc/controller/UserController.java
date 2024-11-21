@@ -1,9 +1,13 @@
 package com.ssafy.mvc.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -135,10 +139,36 @@ public class UserController {
 	@GetMapping("/userImg/{userUuid}")
 	public ResponseEntity<?> getProfile(@PathVariable String userUuid) throws IOException{
 		File file = userService.getProfile(userUuid);
+		System.out.println(file);
 		if(file == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0);
 		} 
-		return new ResponseEntity<File>(file, HttpStatus.OK);
+		
+		InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+		String fileName = file.getName();
+		String extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+		
+		MediaType mediaType;
+		switch (extension) {
+		    case "jpg":
+		    case "jpeg":
+		        mediaType = MediaType.IMAGE_JPEG;
+		        break;
+		    case "png":
+		        mediaType = MediaType.IMAGE_PNG;
+		        break;
+		    case "webp":
+		        mediaType = MediaType.valueOf("image/webp");
+		        break;
+		    default:
+		        mediaType = MediaType.APPLICATION_OCTET_STREAM; // 기본값: 바이너리 파일
+		}
+		
+	    return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=" + file.getName())  // inline으로 변경
+                .contentType(mediaType)  // 이미지의 경우 적절한 MIME 타입 사용 (예: JPEG, PNG 등)
+                .contentLength(file.length())
+                .body(resource);
 	}
 	
 	// 회원 탈퇴

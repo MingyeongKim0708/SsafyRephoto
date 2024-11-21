@@ -138,20 +138,7 @@ export const useUserStore = defineStore('user', () => {
     })
   }
 
-  const getProfile = function(Uuid){
-    axios({
-      url:`${REST_API_URL}/userImg/${Uuid}`,
-      method:'GET'
-    })
-    .then((response)=>{
-      console.log(response.data)
-      profile.value = response.data
-    })
-    .catch(()=>{
-      console.log("이미지 로드 실패")
-    })
-  }
-  return { loginUser,isLogin,idCheck, emailCheck,nickCheck, user, profile, login, logout, quit, registUser, setIdCheck, setNickCheck, setEmailCheck, check, getUser, getProfile}
+  return { loginUser,isLogin,idCheck, emailCheck,nickCheck, user, profile, login, logout, quit, registUser, setIdCheck, setNickCheck, setEmailCheck, check, getUser}
 },
 {
   persist:true,
