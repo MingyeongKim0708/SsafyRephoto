@@ -13,7 +13,7 @@ public interface UserService {
 	//ID, 닉네임, 이메일 중복확인
 	public boolean check(String condition, String word);
 	// 파일 업로드
-	public User upload(MultipartFile file, User user);
+	public String upload(MultipartFile file);
 	//사용자 등록하기
 	public void signup(User user);
 	//로그인 하기

@@ -44,14 +44,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User upload(MultipartFile file, User user) {
+	public String upload(MultipartFile file) {
 		if (file != null && file.getSize() > 0) {
 			try {
 
 				String fileName = file.getOriginalFilename(); // 실제파일 이름
 
 				if (fileName.isEmpty()) {
-					return user;
+					return "0";
 				}
 
 				String extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
@@ -71,21 +71,18 @@ public class UserServiceImpl implements UserService {
 	
 				String fileId = UUID.randomUUID().toString()+"."+extension; // 고유한 이름
 
-				user.setUserImg(fileName);
-				user.setUserUuid(fileId);
 	
 				// 저장할 위치 지정
 				Resource resource = resourceLoader.getResource("classpath:/static/img");
 				file.transferTo(new File(resource.getFile(), fileId));
-				return user;
-
+				return fileId;
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		return user;
+		return "0";
 	}
 
 	@Override

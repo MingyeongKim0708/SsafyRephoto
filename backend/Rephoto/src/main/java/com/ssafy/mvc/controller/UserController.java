@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,6 +24,7 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin("*")
 public class UserController {
 
 	private final UserService userService;
@@ -59,7 +61,7 @@ public class UserController {
 		session.setAttribute("userId", tmp_user.getUserId());
 		session.setAttribute("userNick", tmp_user.getUserNick());
 
-		return ResponseEntity.status(HttpStatus.OK).body(1);
+		return new ResponseEntity<String>(tmp_user.getUserNick(),HttpStatus.OK);
 	}
 
 	// 로그아웃
@@ -77,9 +79,9 @@ public class UserController {
 
 	// 아이디나 닉네임, 이메일의 중복 여부 확인
 	@GetMapping("/check/{condition}/{word}")
-	public ResponseEntity<?> check(@PathVariable("condition") String condtion, @PathVariable("word") String word) {
+	public ResponseEntity<?> check(@PathVariable("condition") String condition, @PathVariable("word") String word) {
 		// 중복이 되면 false, 아니면 true를 반환하는 result1
-		boolean result1 = userService.check(condtion, word);
+		boolean result1 = userService.check(condition, word);
 
 		if (result1) {
 			return ResponseEntity.status(HttpStatus.OK).body(1);
@@ -88,27 +90,24 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0);
 	}
 
-	// 파일 업로드 (프로필 업로드)
-	@PostMapping("/file")
-	public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, @ModelAttribute User user) {
-
-		try {
-			// 프로필이 정상적으로 업로드되었다면 userImg, userUuid가 바뀌었을 것
-			User tmp_user = userService.upload(file, user);
-			return new ResponseEntity<User>(tmp_user, HttpStatus.CREATED);
-
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0);
-		}
-	}
-
 	// 회원가입 
 	@PostMapping("/regist")
-	public ResponseEntity<?> regist(@RequestBody User user) {
+	public ResponseEntity<?> regist(@RequestParam("userId") String userId,
+			@RequestParam("userPassword") String userPassword,
+			@RequestParam("userNick") String userNick,
+			@RequestParam("userEmail") String userEmail,
+			@RequestParam(value = "file", required = false) MultipartFile file
+			) {
 		
 		//필요한 것들이 없다면 에러
-		if(user.getUserEmail().isEmpty() || user.getUserId().isEmpty() || user.getUserNick().isEmpty() || user.getUserPassword().isEmpty()) {
+		if(userId.isEmpty() || userPassword.isEmpty() || userNick.isEmpty() || userEmail.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0);
+		}
+		User user = new User(userId,userPassword,userNick,userEmail);
+		if(file != null && file.getSize() > 0) {
+			user.setUserImg(file.getOriginalFilename());
+			String userUuid = userService.upload(file);
+			user.setUserUuid(userUuid);
 		}
 		
 		try {		
