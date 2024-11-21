@@ -8,6 +8,8 @@ const REST_API_URL = `http://localhost:8080/user`
 export const useUserStore = defineStore('user', () => {
 
   const loginUser = ref({"userId":'', "userNick":''});
+  const user = ref({})
+  const profile = ref(null)
   const isLogin = computed(()=>loginUser.value.userId!=='');
   const idCheck = ref(0);
   const nickCheck = ref(0);
@@ -122,8 +124,34 @@ export const useUserStore = defineStore('user', () => {
       }
     })
   }
+  const getUser = function(userId){
+    axios({
+      url:`${REST_API_URL}/myPage/${userId}`,
+      method:'GET'
+    })
+    .then((response)=>{
+      console.log(response.data)
+      user.value = response.data
+    })
+    .catch(()=>{
+      console.log("해당 유저 못가져옴")
+    })
+  }
 
-  return { loginUser,isLogin,idCheck, emailCheck,nickCheck, login, logout, quit, registUser, setIdCheck, setNickCheck, setEmailCheck, check }
+  const getProfile = function(Uuid){
+    axios({
+      url:`${REST_API_URL}/userImg/${Uuid}`,
+      method:'GET'
+    })
+    .then((response)=>{
+      console.log(response.data)
+      profile.value = response.data
+    })
+    .catch(()=>{
+      console.log("이미지 로드 실패")
+    })
+  }
+  return { loginUser,isLogin,idCheck, emailCheck,nickCheck, user, profile, login, logout, quit, registUser, setIdCheck, setNickCheck, setEmailCheck, check, getUser, getProfile}
 },
 {
   persist:true,

@@ -130,4 +130,11 @@ public class UserServiceImpl implements UserService {
 		userDao.updateFile(user);
 	}
 
+	@Override
+	public File getProfile(String Uuid) throws IOException {
+		Resource resource = resourceLoader.getResource("classpath:/static/img");
+		File file = new File(resource.getFile(),Uuid);
+		return file;
+	}
+
 }

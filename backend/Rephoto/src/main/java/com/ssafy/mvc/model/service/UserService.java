@@ -1,5 +1,7 @@
 package com.ssafy.mvc.model.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +22,8 @@ public interface UserService {
 	public User login(String id, String password);
 	// 프로필 정보 가져오기
 	public User getInfo(String id);
+	// 프로필 사진 가져오기
+	public File getProfile(String Uuid) throws IOException;
 	// 사용자 탈퇴
 	public int removeUser(String id);
 	// 사용자 정보 수정

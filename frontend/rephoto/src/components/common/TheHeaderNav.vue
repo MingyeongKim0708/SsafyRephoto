@@ -3,7 +3,8 @@
     <div>
       Logo 
       <span v-if="store.isLogin">
-        <span>{{store.loginUser.userNick}}님, 안녕하세요!</span>
+        <RouterLink :to="{'name':'profile', params:{'userId':store.loginUser.userId}}">{{store.loginUser.userNick}}</RouterLink>
+        <span>님, 안녕하세요!</span>
         <button @click.prevent.stop="logout">로그 아웃</button>
         <button @click.prevent.stop="quit">회원 탈퇴</button>
       </span> 

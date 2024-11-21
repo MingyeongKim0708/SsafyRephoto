@@ -1,5 +1,8 @@
 package com.ssafy.mvc.controller;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -128,6 +131,16 @@ public class UserController {
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 
+	// 유저들의 프로필사진을 Uuid를 통해 가져온다.
+	@GetMapping("/userImg/{userUuid}")
+	public ResponseEntity<?> getProfile(@PathVariable String userUuid) throws IOException{
+		File file = userService.getProfile(userUuid);
+		if(file == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0);
+		} 
+		return new ResponseEntity<File>(file, HttpStatus.OK);
+	}
+	
 	// 회원 탈퇴
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<?> quit(@PathVariable String userId, HttpSession session) {
