@@ -77,8 +77,13 @@ public class BoardServiceImpl implements BoardService {
 				file.transferTo(new File(resource.getFile(), fileId)); 
 
 				// DB 처리
-				boardDao.insertBoard(board);
+				// DB 처리 전 유효한 userNick인지 체크
+				if (!isValidUserNick(board.getUserNick())) {
+					throw new IllegalArgumentException("Invalid userNick: " + board.getUserNick());
+				}
+				boardDao.insertBoard(board); // 삽입 시도
 				boardDao.insertFile(board);
+				System.out.println("파일 업로드 및 게시글 등록 처리 Service");
 
 			} catch (IllegalStateException e) {
 				throw e; // 예외를 그냥 던짐 (Controller에서 처리될 예정)
@@ -89,6 +94,11 @@ public class BoardServiceImpl implements BoardService {
 
 		}
 
+	}
+
+	private boolean isValidUserNick(String userNick) {
+		// DB에서 userNick 존재 여부를 확인
+	    return boardDao.isUserNickExist(userNick);
 	}
 
 	// 파일 원본명 조회

@@ -134,11 +134,22 @@ public class BoardRestController {
 			headers.setLocation(URI.create("/board/" + board.getBoardId())); // URI는 boardId를 포함해야 함
 
 			// 게시물 등록 성공 (201)
+			System.out.println("파일 업로드 및 게시물 등록 성공 Controller");
 			return new ResponseEntity<Board>(headers, HttpStatus.CREATED);
 
 		} catch (IllegalArgumentException e) {
-			// 파일 확장자 오류
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("400 Bad Request: 허용되지 않은 파일 확장자");
+			String errorMessage = e.getMessage();
+			if (errorMessage.contains("Invalid userNick")) {
+				// userNick 유효성 검사 실패
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("400 Bad Request: 유효하지 않은 userNick입니다.");
+			} else if (errorMessage.contains("허용되지 않은 파일 확장자")) {
+				// 파일 확장자 오류
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("400 Bad Request: 허용되지 않은 파일 확장자");
+			} else {
+				// 기타 IllegalArgumentException
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+						.body("500 Internal Server Error: " + errorMessage);
+			}
 		} catch (RuntimeException e) {
 			// 파일 저장 중 오류 (서버 오류)
 			e.printStackTrace();

@@ -1,34 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.mvc.model.dao.BoardDao">
-	
+
 	<!-- 전체 게시글 조회 및 검색기능 -->
 	<select id="search" resultType="Board" parameterType="SearchCondition">
-		SELECT 
-			b.board_id,
-		    b.user_nick,
-		    b.board_title,
-		    b.board_info,
-		    b.board_created_at,
-		    b.view_cnt,
-		    b.avg_score,
-		    p.photo_name,
-		    p.photo_uuid
-		FROM 
-		    board b
-		LEFT JOIN 
-		    photo p
-	    ON 
-    		b.board_id = p.board_id
-		<!-- 검색 조건 -->
-		<if test="key != 'none'">
+		SELECT b.board_id, b.user_nick, b.board_title, b.board_info,
+		b.board_created_at, b.view_cnt, b.avg_score, p.photo_name, p.photo_uuid
+		FROM board b LEFT JOIN photo p ON b.board_id = p.board_id <!-- 검색 조건 -->
+		<if
+			test="key != 'none'">
 			WHERE ${key} LIKE concat('%',#{word},'%')
 		</if>
 		<!-- 정렬 조건 -->
-		<if test="orderBy != 'none'">
+		<if
+			test="orderBy != 'none'">
 			ORDER BY ${orderBy} ${orderByDir}
 		</if>
 	</select>
@@ -57,20 +43,27 @@
 		INSERT INTO photo (board_id, photo_name, photo_uuid)
 		VALUES (#{boardId}, #{photoName}, #{photoUuid});
 	</insert>
-	
+
 	<!-- 조회수 증가 -->
 	<update id="updateViewCnt" parameterType="int">
 		UPDATE board
 		SET view_cnt = view_cnt+1
 		WHERE board_id = #{boardId};
 	</update>
-	
-	<!-- UUID로 원본 파일명 조회--><!-- -->
-    <select id="getFileNameByUuid" resultType="String" parameterType="String">
-        SELECT photo_name
-        FROM photo
-        WHERE photo_uuid = #{fileUuid}
-    </select>
+
+	<!-- UUID로 원본 파일명 조회-->
+	<select id="getFileNameByUuid" resultType="String" parameterType="String">
+		SELECT photo_name
+		FROM photo
+		WHERE photo_uuid = #{fileUuid}
+	</select>
+
+	<!-- userNick이 존재하는지 확인-->
+	<select id="isUserNickExist" parameterType="string" resultType="boolean">
+		SELECT COUNT(*) > 0
+		FROM user
+		WHERE user_nick = #{userNick}
+	</select>
 
 	<!-- 게시글 수정.. 생각해보니까 안쓰네 댓글 수정할 때 사용하겠음 -->
 	<!--	<update id="updateBoard" parameterType="Board">

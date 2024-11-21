@@ -34,6 +34,10 @@ public interface BoardDao {
 	public String getFileNameByUuid(String fileUuid);
 
 
+	// 게시글 작성 전 유효한 userNick인지 확인
+	public boolean isUserNickExist(String userNick);
+
+
 
 	// 전체 게시글을 조회
 //	public List<Board> selectAll();
