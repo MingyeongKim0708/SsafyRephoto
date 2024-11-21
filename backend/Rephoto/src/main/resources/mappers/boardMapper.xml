@@ -5,9 +5,22 @@
 
 	<!-- 전체 게시글 조회 및 검색기능 + pagination -->
 	<select id="search" resultType="Board" parameterType="SearchCondition">
-		SELECT b.board_id, b.user_nick, b.board_title, b.board_info,
-		b.board_created_at, b.view_cnt, b.avg_score, p.photo_name, p.photo_uuid
-		FROM board b LEFT JOIN photo p ON b.board_id = p.board_id 
+		SELECT
+			b.board_id, 
+			b.user_nick, 
+			b.board_title, 
+			b.board_info,
+			b.board_created_at, 
+			b.view_cnt, 
+			b.avg_score, 
+			p.photo_name, 
+			p.photo_uuid
+		FROM 
+			board b 
+		LEFT JOIN 
+			photo p 
+		ON 
+			b.board_id = p.board_id 
 		<!-- 검색 조건 -->
 		<if
 			test="key != 'none'">
@@ -20,13 +33,29 @@
 		</if>
 		
 		<!-- 페이징 처리-->
-		LIMIT #{size} OFFSET #{offset}
+		<!--LIMIT #{size} OFFSET #{offset}-->
 	</select>
 
 	<!-- 상세 게시글 조회 -->
 	<select id="selectOne" resultType="Board" parameterType="int">
-		SELECT * FROM board
-		WHERE board_id = #{boardId};
+		SELECT 
+		    b.board_id, 
+		    b.user_nick, 
+		    b.board_title, 
+		    b.board_info,
+		    b.board_created_at, 
+		    b.view_cnt, 
+		    b.avg_score, 
+		    p.photo_name, 
+		    p.photo_uuid
+		FROM 
+		    board b 
+		LEFT JOIN 
+		    photo p 
+		ON 
+		    b.board_id = p.board_id 
+		WHERE 
+		    b.board_id = #{boardId};
 	</select>
 
 	<!-- 게시글 등록 -->
@@ -78,7 +107,14 @@
             AND title LIKE CONCAT('%', #{key}, '%')  <!-- 예시: title에 key가 포함된 게시물 수 조회 -->
         </if>
 	</select>
-
+	
+	<!-- photoUuid 조회 -->
+	<select id="getPhotoUuidByBoardId" resultType="String">
+		SELECT photo_uuid
+		FROM photo
+		WHERE board_id = #{boardId}
+	</select>
+	
 	<!-- 게시글 수정.. 생각해보니까 안쓰네 댓글 수정할 때 사용하겠음 -->
 	<!--	<update id="updateBoard" parameterType="Board">
 		UPDATE board

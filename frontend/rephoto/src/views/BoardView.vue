@@ -1,10 +1,13 @@
 <template>
   <div>
-    <h3>board view</h3>
+    <h2 class="text-center">Board</h2>
+    <RouterView/>
   </div>
 </template>
 
 <script setup>
+
+import { RouterView } from 'vue-router';
 
 </script>
 

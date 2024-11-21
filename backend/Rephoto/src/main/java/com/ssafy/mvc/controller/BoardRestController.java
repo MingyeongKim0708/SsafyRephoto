@@ -42,8 +42,14 @@ public class BoardRestController {
 
 	// 게시물 전체 목록 조회 및 검색 + pagination
 	@GetMapping("")
-	public ResponseEntity<?> list(@ModelAttribute SearchCondition condition){
+	public ResponseEntity<?> list(@ModelAttribute SearchCondition condition) {
 		try {
+			// 인증 정보가 없거나 유효하지 않으면 401 Unauthorized 반환 - 아직 인증 관련된 것 안넣어서 주석 처리
+//	        if (authorization == null || !isValidToken(authorization)) {
+//				System.out.println("HttpStatus 401 Unauthorized");
+//            	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("401 Unauthorized: Invalid or missing authorization token");
+//        }
+
 			// 400: 잘못된 요청 - 유효하지 않은 query parameter
 			if (condition.getKey() == null || condition.getOrderBy() == null || condition.getOrderByDir() == null) {
 				System.out.println("HttpStatus 400 BAD_REQUEST");
@@ -60,15 +66,16 @@ public class BoardRestController {
 				System.out.println("HttpStatus 204 NO_CONTENT");
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).body("204 No content");
 			}
-			
-			// 페이지네이션 정보 추가 (전체 게시물 수, 페이지 크기, 총 페이지 수)
-			int total = boardService.getTotalCount(condition); // 전체 게시물 수
-			int totalPages = (int) Math.ceil((double) total/condition.getSize()); // 전체 페이지 수 계산
-			
-			PaginationResponse paginationResponse = new PaginationResponse(list, total, totalPages, condition.getPage(), condition.getSize());
+
+//			// 페이지네이션 정보 추가 (전체 게시물 수, 페이지 크기, 총 페이지 수)
+//			int total = boardService.getTotalCount(condition); // 전체 게시물 수
+//			int totalPages = (int) Math.ceil((double) total / condition.getSize()); // 전체 페이지 수 계산
+//
+//			PaginationResponse paginationResponse = new PaginationResponse(list, total, totalPages, condition.getPage(),
+//					condition.getSize());
 
 			// 200: 게시물 전체 불러오기 성공
-			return new ResponseEntity<>(paginationResponse, HttpStatus.OK);
+			return new ResponseEntity<>(list, HttpStatus.OK);
 
 		} catch (Exception e) {
 			// 500: 서버 오류
@@ -82,10 +89,10 @@ public class BoardRestController {
 	public ResponseEntity<?> detail(@PathVariable("boardId") int boardId) {
 
 		try {
-			// 인증 실패 처리 (401 Unauthorized) 아직 인증 관련된 것 안넣어서 주석 처리
+			// 인증 정보가 없거나 유효하지 않으면 401 Unauthorized 반환 - 아직 인증 관련된 것 안넣어서 주석 처리
 //	        if (authorization == null || !isValidToken(authorization)) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-//                                 .body("Unauthorized: Invalid or missing token");
+//				System.out.println("HttpStatus 401 Unauthorized");
+//            	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("401 Unauthorized: Invalid or missing authorization token");
 //        }
 
 			// 유효하지 않은 boardId 처리 (400 Bad Request)
@@ -168,6 +175,12 @@ public class BoardRestController {
 	@DeleteMapping("/{boardId}")
 	public ResponseEntity<String> delete(@PathVariable("boardId") int boardId) {
 		try {
+			// 인증 정보가 없거나 유효하지 않으면 401 Unauthorized 반환 - 아직 인증 관련된 것 안넣어서 주석 처리
+//	        if (authorization == null || !isValidToken(authorization)) {
+//				System.out.println("HttpStatus 401 Unauthorized");
+//            	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("401 Unauthorized: Invalid or missing authorization token");
+//        }
+
 			boolean isDeleted = boardService.removeBoard(boardId);
 
 			// 게시물 삭제 성공 (204)
@@ -185,53 +198,5 @@ public class BoardRestController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
 		}
 	}
-
-	// 파일 업로드 - 게시물 등록이랑 통합 (어차피 같이 해야하는 부분이라)
-//	@PostMapping("/upload")
-//	public ResponseEntity<?> fileUpload(@RequestParam("file") MultipartFile file, @ModelAttribute Board board) {
-//
-//		try {
-//			System.out.println(file.getOriginalFilename());
-//			System.out.println(board);
-//
-//			boardService.fileUpload(file, board);
-//
-//			// 파일 업로드 성공
-//			return new ResponseEntity<>(HttpStatus.OK);
-//
-//		} catch (IllegalStateException e) {
-//			// 파일 확장자 오류
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("400 Bad Request: 파일 확장자 오류");
-//		} catch (RuntimeException e) {
-//			// 파일 저장 중 오류 (서버 오류)
-//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
-//		}
-//	}
-
-	// // 게시글 수정
-//	// swagger를 사용하면 RequestBody 임포트할 때 두개가 뜨는데 import org.springframework.web.bind.annotation.RequestBody; 로 임포트 해야한다 주의!!
-//	// 잘 모르겠으면 syso로 board 잘 받아오는지 확인해보기
-//	@PutMapping("/board/{id}")
-//	public ResponseEntity<Void> update(@PathVariable("id") int id, @RequestBody Board board) {
-//		System.out.println(board);
-//		board.setId(id);
-//		boardService.modifyBoard(board);
-//		// 아주 심플하게 무조건 성공! 해놓았지만...
-//		// 세밀하게 컨트롤할 수 있는 부분
-//		return new ResponseEntity<Void>(HttpStatus.OK);
-//	}
-//	
-
-	// --- 안씀 ---
-
-	// 게시글 전체 조회
-//	@GetMapping("/")
-//	@CrossOrigin(value="*", methods = RequestMethod.GET)
-//	public ResponseEntity<List<Board>> list() {
-//		System.out.println("왔나");
-//		List<Board> list = boardService.search(null)
-//		return new ResponseEntity<>(list, HttpStatus.OK);
-//	}
-//	
 
 }

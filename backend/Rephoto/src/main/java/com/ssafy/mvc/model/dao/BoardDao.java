@@ -8,7 +8,7 @@ import com.ssafy.mvc.model.dto.Board;
 import com.ssafy.mvc.model.dto.SearchCondition;
 
 public interface BoardDao {
-	// 게시물 전체 목록 조회 및 검색 + 페이징처리
+	// 게시물 전체 목록 조회 및 검색
 	public List<Board> search(SearchCondition condition);
 
 	// 전체 게시물 수
@@ -36,6 +36,10 @@ public interface BoardDao {
 
 	// 게시글 작성 전 유효한 userNick인지 확인
 	public boolean isUserNickExist(String userNick);
+	
+	// photoUuid 조회
+	public String getPhotoUuidByBoardId(int boardId);
+
 
 	// 페이징 처리된 게시물을 조회하는 기능
 //	public List<Board> searchWithPagination(SearchCondition condition, int offset, int size);
