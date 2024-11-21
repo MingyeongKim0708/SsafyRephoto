@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.mvc.model.dto.Board;
+import com.ssafy.mvc.model.dto.PaginationResponse;
 import com.ssafy.mvc.model.dto.SearchCondition;
 import com.ssafy.mvc.model.service.BoardService;
 
@@ -39,9 +40,9 @@ public class BoardRestController {
 		this.boardService = boardService;
 	}
 
-	// 게시물 전체 목록 조회 및 검색
+	// 게시물 전체 목록 조회 및 검색 + pagination
 	@GetMapping("")
-	public ResponseEntity<?> list(@ModelAttribute SearchCondition condition) {
+	public ResponseEntity<?> list(@ModelAttribute SearchCondition condition){
 		try {
 			// 400: 잘못된 요청 - 유효하지 않은 query parameter
 			if (condition.getKey() == null || condition.getOrderBy() == null || condition.getOrderByDir() == null) {
@@ -59,9 +60,15 @@ public class BoardRestController {
 				System.out.println("HttpStatus 204 NO_CONTENT");
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).body("204 No content");
 			}
+			
+			// 페이지네이션 정보 추가 (전체 게시물 수, 페이지 크기, 총 페이지 수)
+			int total = boardService.getTotalCount(condition); // 전체 게시물 수
+			int totalPages = (int) Math.ceil((double) total/condition.getSize()); // 전체 페이지 수 계산
+			
+			PaginationResponse paginationResponse = new PaginationResponse(list, total, totalPages, condition.getPage(), condition.getSize());
 
 			// 200: 게시물 전체 불러오기 성공
-			return new ResponseEntity<>(list, HttpStatus.OK);
+			return new ResponseEntity<>(paginationResponse, HttpStatus.OK);
 
 		} catch (Exception e) {
 			// 500: 서버 오류

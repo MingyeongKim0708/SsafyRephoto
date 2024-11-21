@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,22 @@ public class BoardServiceImpl implements BoardService {
 		this.resourceLoader = resourceLoader;
 	}
 
-	// 게시물 전체 목록 조회 및 검색
+	// 게시물 전체 목록 조회 및 검색 + pagination
 	@Override
 	public List<Board> search(SearchCondition condition) {
-		System.out.println("게시물 전체 목록 조회 및 검색");
+		System.out.println(condition);
+		System.out.println("게시물 전체 목록 조회 및 검색 + pagination");
+
+		condition.setOffset((condition.getPage() -1 )*condition.getSize());
+
 		return boardDao.search(condition);
+
+	}
+
+	// 전체 게시물 수
+	@Override
+	public int getTotalCount(SearchCondition condition) {
+		return boardDao.countBoards(condition); // 전체 게시물 수를 구하는 메서드
 	}
 
 	// 게시물 상세 조회
@@ -74,7 +86,7 @@ public class BoardServiceImpl implements BoardService {
 
 				// 파일 저장
 				Resource resource = resourceLoader.getResource("classpath:/static/img");
-				file.transferTo(new File(resource.getFile(), fileId)); 
+				file.transferTo(new File(resource.getFile(), fileId));
 
 				// DB 처리
 				// DB 처리 전 유효한 userNick인지 체크
@@ -96,9 +108,9 @@ public class BoardServiceImpl implements BoardService {
 
 	}
 
+	// DB에서 userNick 존재 여부를 확인
 	private boolean isValidUserNick(String userNick) {
-		// DB에서 userNick 존재 여부를 확인
-	    return boardDao.isUserNickExist(userNick);
+		return boardDao.isUserNickExist(userNick);
 	}
 
 	// 파일 원본명 조회
@@ -123,7 +135,7 @@ public class BoardServiceImpl implements BoardService {
 //		System.out.println("모든 게시글 가지고 왔습니다.");
 //		return boardDao.selectAll();
 //	}
-	
+
 	// 게시물 등록
 //	@Override
 //	public void writeBoard(Board board) {
