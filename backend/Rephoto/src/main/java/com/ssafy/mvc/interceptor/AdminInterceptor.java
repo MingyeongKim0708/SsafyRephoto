@@ -1,8 +1,13 @@
 package com.ssafy.mvc.interceptor;
 
+
+import java.util.Arrays;
+import java.util.Enumeration;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -16,9 +21,8 @@ public class AdminInterceptor implements HandlerInterceptor {
 		HttpSession session = request.getSession();
 
 		System.out.println(1);
-		if (session.getAttribute("loginUser") == null || session.getAttribute("loginUser").toString().isEmpty()) {
-			System.out.println(session.getAttribute("loginUser"));
-			response.sendRedirect("/user/login");
+		if (session.getAttribute("userId") == null || session.getAttribute("userId").toString().isEmpty()) {
+			System.out.println("막을게");
 			return false;
 		}
 

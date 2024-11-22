@@ -23,23 +23,47 @@ const router = createRouter({
     {
       path:"/user/login",
       name: "login",
-      component: UserLogin
+      component: UserLogin,
+      beforeEnter: ()=>{
+        const store = useUserStore();
+        if(store.isLogin){
+          return {'name':'boardList'};
+        }
+      }
     },
     {
       path:"/user/regist",
       name:"regist",
-      component: UserCreate
+      component: UserCreate,
+      beforeEnter: ()=>{
+        const store = useUserStore();
+        if(store.isLogin){
+          return {'name':'boardList'};
+        }
+      }
     }
     ,
     {
       path:"/user/:userId",
       name:"profile",
       component:UserProfile,
+      beforeEnter: ()=>{
+        const store = useUserStore();
+        if(!store.isLogin){
+          return {'name':'login'};
+        }
+      },
     },
     {
       path: '/board',
       name: 'board',
       component: BoardView,
+      beforeEnter: ()=>{
+        const store = useUserStore();
+        if(!store.isLogin){
+          return {'name':'login'};
+        }
+      },
       children: [
         {
           path: "",
