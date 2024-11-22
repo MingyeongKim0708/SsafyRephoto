@@ -26,11 +26,10 @@
 			test="key != 'none'">
 			WHERE ${key} LIKE concat('%',#{word},'%')
 		</if>
-		<!-- 정렬 조건 -->
-		<if
-			test="orderBy != 'none'">
-			ORDER BY ${orderBy} ${orderByDir}
-		</if>
+		<!-- 동적 정렬 조건 -->
+	    <if test="orderBy != null and orderBy != 'none'">
+	        ORDER BY ${orderBy} ${orderByDir}
+	    </if>
 		
 		<!-- 페이징 처리-->
 		<!--LIMIT #{size} OFFSET #{offset}-->

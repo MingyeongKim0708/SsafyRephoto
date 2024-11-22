@@ -21,5 +21,12 @@ public class Board {
 	private float avgScore = 0;
 	private String photoName;
 	private String photoUuid;
+	public Board(String userNick, String boardTitle, String boardInfo) {
+		super();
+		this.userNick = userNick;
+		this.boardTitle = boardTitle;
+		this.boardInfo = boardInfo;
+	}
 
+	
 }

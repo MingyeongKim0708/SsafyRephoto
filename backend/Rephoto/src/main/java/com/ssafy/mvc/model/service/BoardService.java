@@ -18,7 +18,10 @@ public interface BoardService {
 	public boolean removeBoard(int id);
 
 	// 파일업로드
-	public void fileUpload(MultipartFile file, Board board);
+	public String fileUpload(MultipartFile file);
+
+	// 게시글 작성
+	public void writeBoard(Board board);
 	
 	// 파일 원본명 조회
 	public String getFileNAmeByUuid(String fileUuid);
@@ -32,8 +35,6 @@ public interface BoardService {
 	// 게시글 전체 조회
 //	public List<Board> getBoardList();
 	
-	// 게시글 작성
-//	public void writeBoard(Board board);
 	
 	// 게시글 수정
 //	public void modifyBoard(Board board);

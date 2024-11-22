@@ -101,7 +101,7 @@ public class BoardServiceImpl implements BoardService {
 
 	// 게시물 등록 및 파일 업로드
 	@Override
-	public void fileUpload(MultipartFile file, Board board) {
+	public String fileUpload(MultipartFile file) {
 		if (file != null && file.getSize() > 0) {
 			try {
 				String fileName = file.getOriginalFilename(); // 실제파일 이름
@@ -116,21 +116,14 @@ public class BoardServiceImpl implements BoardService {
 				}
 
 				String fileId = UUID.randomUUID().toString() + "." + extension; // UUID 생성(확장자없음)
-				board.setPhotoUuid(fileId); // 확장자 추가
-				board.setPhotoName(fileName);
+//				board.setPhotoUuid(fileId); // 확장자 추가
+//				board.setPhotoName(fileName);
 
 				// 파일 저장
 				Resource resource = resourceLoader.getResource("classpath:/static/img");
 				file.transferTo(new File(resource.getFile(), fileId));
 
-				// DB 처리
-				// DB 처리 전 유효한 userNick인지 체크
-				if (!isValidUserNick(board.getUserNick())) {
-					throw new IllegalArgumentException("Invalid userNick: " + board.getUserNick());
-				}
-				boardDao.insertBoard(board); // 삽입 시도
-				boardDao.insertFile(board);
-				System.out.println("파일 업로드 및 게시글 등록 처리 Service");
+				return fileId;
 
 			} catch (IllegalStateException e) {
 				throw e; // 예외를 그냥 던짐 (Controller에서 처리될 예정)
@@ -140,7 +133,20 @@ public class BoardServiceImpl implements BoardService {
 			}
 
 		}
+		return "0";
 
+	}
+
+	// 게시물 등록
+	@Override
+	public void writeBoard(Board board) {
+		// DB 처리 전 유효한 userNick인지 체크
+		if (!isValidUserNick(board.getUserNick())) {
+			throw new IllegalArgumentException("Invalid userNick: " + board.getUserNick());
+		}
+		boardDao.insertBoard(board); // 삽입 시도
+		boardDao.insertFile(board);
+		System.out.println("게시글 등록 처리 Service");
 	}
 
 	// DB에서 userNick 존재 여부를 확인
@@ -171,11 +177,5 @@ public class BoardServiceImpl implements BoardService {
 //		return boardDao.selectAll();
 //	}
 
-	// 게시물 등록
-//	@Override
-//	public void writeBoard(Board board) {
-//		System.out.println("게시글 작성했습니다");
-//		boardDao.insertBoard(board);
-//	}
 
 }
