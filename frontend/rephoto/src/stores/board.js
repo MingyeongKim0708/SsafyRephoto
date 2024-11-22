@@ -10,11 +10,14 @@ export const useBoardStore = defineStore('board', () => {
   const boardList = ref([]) //게시글 목록을 스토어에서 관리하겠다~
   
   const getBoardList = function () {
-    axios.get(`${REST_API_URL}`)
+    axios.get(`${REST_API_URL}`, {
+      withCredentials:true
+    })
       .then((response) => {
         console.log(response.data)
         console.log(boardList.value)
         boardList.value = response.data;
+        
       })
       .catch((error) => {
         console.error("게시글 목록 불러오기 실패:", error);
@@ -33,6 +36,8 @@ export const useBoardStore = defineStore('board', () => {
     axios({
       url: REST_API_URL,
       method: 'POST',
+
+      withCredentials:true
       data: formData,
       headers: {
         "Content-Type" : "multipart/form-data",
@@ -49,14 +54,21 @@ export const useBoardStore = defineStore('board', () => {
   const board = ref({})
 
   const getBoard = function (id) {
-    axios.get(`${REST_API_URL}/${id}`)
+    axios.get(`${REST_API_URL}/${id}`,
+      {
+        withCredentials:true
+      }
+    )
       .then((response) => {
         board.value = response.data
       })
   }
 
   const updateBoard = function () {
-    axios.put(REST_API_URL, board.value)
+    axios.put(REST_API_URL, board.value,
+      {
+        withCredentials:true
+      })
       .then(() => {
         router.push({ name: 'boardList' })
       })
@@ -64,7 +76,8 @@ export const useBoardStore = defineStore('board', () => {
 
   const searchBoardList = function (searchCondition) {
     axios.get(REST_API_URL, {
-      params: searchCondition
+      params: searchCondition,
+      withCredentials:true
     })
       .then((res) => {
         boardList.value = res.data

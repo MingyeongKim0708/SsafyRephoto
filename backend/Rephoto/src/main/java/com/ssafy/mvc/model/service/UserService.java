@@ -26,6 +26,8 @@ public interface UserService {
 	public File getProfile(String Uuid) throws IOException;
 	// 사용자 탈퇴
 	public int removeUser(String id) throws IOException;
+	// 기존 프로필 파일 삭제
+	public void removeProfile(String id) throws IOException;
 	// 사용자 정보 수정
-	public void emitUser(User user);
+	public void emitUser(User user) throws IOException;
 }

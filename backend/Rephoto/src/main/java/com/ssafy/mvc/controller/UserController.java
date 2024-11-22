@@ -3,6 +3,7 @@ package com.ssafy.mvc.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Enumeration;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -31,7 +32,6 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin("*")
 public class UserController {
 
 	private final UserService userService;
@@ -44,6 +44,7 @@ public class UserController {
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody User user, HttpSession session) {
 
+		System.out.println(100);
 		String id = user.getUserId();
 		String password = user.getUserPassword();
 
@@ -67,6 +68,8 @@ public class UserController {
 		// 로그인 성공 시 session에 아이디와 닉네임을 저장함
 		session.setAttribute("userId", tmp_user.getUserId());
 		session.setAttribute("userNick", tmp_user.getUserNick());
+		System.out.println("session: " + session);
+		System.out.println(session.getAttribute("userId") + " " + session.getAttribute("userNick" + " 넣음"));
 
 		return new ResponseEntity<String>(tmp_user.getUserNick(), HttpStatus.OK);
 	}
@@ -74,6 +77,7 @@ public class UserController {
 	// 로그아웃
 	@GetMapping("/logout")
 	public ResponseEntity<?> logout(HttpSession session) {
+		System.out.println("logout: " + session);
 
 		try {
 			// 세션을 만료시킴
@@ -98,6 +102,7 @@ public class UserController {
 	}
 
 	// 회원가입
+	@Transactional
 	@PostMapping("/regist")
 	public ResponseEntity<?> regist(@RequestParam("userId") String userId,
 			@RequestParam("userPassword") String userPassword, @RequestParam("userNick") String userNick,
@@ -136,7 +141,7 @@ public class UserController {
 	// 유저들의 프로필사진을 Uuid를 통해 가져온다.
 	@GetMapping("/userImg/{userUuid}")
 	public ResponseEntity<?> getProfile(@PathVariable String userUuid) throws IOException {
-		
+
 		File file = userService.getProfile(userUuid);
 		if (file == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0);
@@ -195,15 +200,28 @@ public class UserController {
 	// 회원 정보 수정
 	@Transactional
 	@PutMapping("")
-	public ResponseEntity<?> emit(@RequestBody User user, HttpSession session) {
+	public ResponseEntity<?> emit(@RequestParam("userId") String userId,
+			@RequestParam("userPassword") String userPassword, 
+			@RequestParam("userNick") String userNick,
+			@RequestParam("userEmail") String userEmail,
+			@RequestParam(value = "file", required = false) MultipartFile file, HttpSession session) {
 
 		try {
-
+			System.out.println(session.getAttribute("userId"));
 			// 로그인한 유저와 수정하고자 하는 유저의 id가 같아야 수정 가능
-			if (user.getUserId().equals(session.getAttribute("userId"))) {
+			if (!userId.equals(session.getAttribute("userId"))) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0);
 			}
 
+			User user = new User(userId, userPassword, userNick, userEmail);
+			userService.removeProfile(userId);
+			
+			if (file != null && file.getSize() > 0) {
+				user.setUserImg(file.getOriginalFilename());
+				String userUuid = userService.upload(file);
+				user.setUserUuid(userUuid);
+			}
+			
 			userService.emitUser(user);
 			session.setAttribute("userNick", user.getUserNick());
 			return ResponseEntity.status(HttpStatus.OK).body(1);

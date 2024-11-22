@@ -8,7 +8,9 @@
         <h1 class="sitename">REPHOTO</h1>
       </a>
       <span v-if="store.isLogin">
-        <RouterLink :to="{ 'name': 'profile', params: { 'userId': store.loginUser.userId } }">{{ store.loginUser.userNick }}
+
+        <RouterLink :to="{'name':'profile', params:{'userId':store.loginUser.userId, 'userNick':store.loginUser.userNick}}">{{store.loginUser.userNick}}</RouterLink>
+
         </RouterLink>
         <span>님, 안녕하세요!</span>
         <button @click.prevent.stop="logout">로그 아웃</button>

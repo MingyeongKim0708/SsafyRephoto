@@ -14,9 +14,10 @@ public class AdminInterceptor2 implements HandlerInterceptor {
 			throws Exception {
 
 		HttpSession session = request.getSession();
-		System.out.println("int2");
-		if (!(session.getAttribute("loginUser") == null || session.getAttribute("loginUser").toString().isEmpty())) {
-			response.sendRedirect("/board");
+		System.out.println(2);
+		System.out.println(session.getAttribute("userId"));
+		if (session.getAttribute("userId") != null && !session.getAttribute("userId").toString().isEmpty()) {
+			System.out.println("막을게");
 			return false;
 		}
 		return true;

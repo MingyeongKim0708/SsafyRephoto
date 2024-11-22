@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController // @Controller + @ResponseBody
 @RequestMapping("/board")
-@CrossOrigin("*")
 public class BoardRestController {
 
 	// 서비스 의존성 주입

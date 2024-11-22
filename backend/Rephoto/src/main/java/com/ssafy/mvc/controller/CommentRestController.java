@@ -8,7 +8,6 @@ import com.ssafy.mvc.model.service.CommentService;
 
 @RestController
 @RequestMapping("/comment")
-@CrossOrigin("*")
 public class CommentRestController {
 
 	// 서비스 의존성 주입

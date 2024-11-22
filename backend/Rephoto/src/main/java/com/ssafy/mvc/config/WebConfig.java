@@ -13,15 +13,28 @@ import com.ssafy.mvc.interceptor.AdminInterceptor2;
 public class WebConfig implements WebMvcConfigurer{
 	
 	@Autowired
-	AdminInterceptor adminInterceptor;
+	AdminInterceptor adminInterceptor;			// 로그인이 안되어 있으면 요청 차단
 	
 	@Autowired
-	AdminInterceptor2 adminInterceptor2;
+	AdminInterceptor2 adminInterceptor2;		// 로그인이 되어 있으면 요청 차단
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(adminInterceptor).addPathPatterns("/").excludePathPatterns("/user/login");
-		registry.addInterceptor(adminInterceptor2).addPathPatterns("/user/login");
+		
+		registry.addInterceptor(adminInterceptor)
+				.addPathPatterns("/**")
+				.excludePathPatterns("/user/login","/user/regist/**");
+		
+		registry.addInterceptor(adminInterceptor2)
+				.addPathPatterns("/user/login","/user/regist/**");
 	}
-	
+
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**")
+		.allowedOrigins("http://localhost:5173/")
+		.allowedMethods("GET","POST","PUT","DELETE")
+		.allowedHeaders("*")
+		.allowCredentials(true);
+	}
 }
