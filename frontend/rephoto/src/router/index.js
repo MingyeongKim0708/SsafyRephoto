@@ -10,6 +10,7 @@ import { useUserStore } from '@/stores/user'
 import BoardList from '@/components/board/BoardList.vue'
 import BoardCreate from '@/components/board/BoardCreate.vue'
 import BoardDetail from '@/components/board/BoardDetail.vue'
+import UserEmit from '@/components/user/UserEmit.vue'
 
 
 const router = createRouter({
@@ -44,13 +45,28 @@ const router = createRouter({
     }
     ,
     {
-      path:"/user/:userId",
+      path:"/user/:userId/:userNick",
       name:"profile",
       component:UserProfile,
       beforeEnter: ()=>{
         const store = useUserStore();
         if(!store.isLogin){
           return {'name':'login'};
+        }
+      },
+    },
+    {
+      path:"/user/emit/:userId",
+      name:"emit",
+      component:UserEmit,
+      beforeEnter: (to,from)=>{
+        const store = useUserStore();
+        const routeUserId = to.params.userId
+        if(!store.isLogin){
+          return {'name':'login'};
+        } 
+        if(store.loginUser.userId!==routeUserId){
+          return{'name':'boardList'}
         }
       },
     },

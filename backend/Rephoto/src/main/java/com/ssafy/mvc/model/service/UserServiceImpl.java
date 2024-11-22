@@ -110,6 +110,7 @@ public class UserServiceImpl implements UserService {
 	public User getInfo(String id) {
 
 		Map<String, String> info = new HashMap<>();
+		System.out.println(id);
 		info.put("id", id);
 		info.put("password", null);
 		User tmp_user = userDao.selectOne(info);
@@ -129,9 +130,24 @@ public class UserServiceImpl implements UserService {
 		}
 		return userDao.deleteUser(id);
 	}
+	
+	@Override
+	public void removeProfile(String id) throws IOException {
+		String userUuid = userDao.selectUuid(id);
+		Resource resource = resourceLoader.getResource("classpath:/static/img");
+		if(!userUuid.equals("0.webp")) {
+			File file = new File(resource.getFile(),userUuid);
+			file.delete();
+		}	
+	}
 
 	@Override
-	public void emitUser(User user) {
+	public void emitUser(User user) throws IOException {
+		if (user.getUserEmail().isEmpty() || user.getUserId().isEmpty() || user.getUserNick().isEmpty()
+				|| user.getUserPassword().isEmpty()) {
+			return;
+		}
+
 		userDao.updateUser(user);
 		userDao.updateFile(user);
 	}
@@ -147,5 +163,7 @@ public class UserServiceImpl implements UserService {
 		// File 객체 반환
 		return resource.getFile();
 	}
+
+	
 
 }

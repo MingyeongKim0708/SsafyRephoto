@@ -86,6 +86,31 @@ export const useUserStore = defineStore('user', () => {
       console.log("회원가입 실패")
     })
   } 
+  const emitUser = function(userId,userPassword,userNick,userEmail,file){
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("userId", userId);
+    formData.append("userPassword", userPassword);
+    formData.append("userNick", userNick);
+    formData.append("userEmail", userEmail);
+    axios({
+      url:`${REST_API_URL}`,
+      method:"PUT",
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials:true
+    })
+    .then(()=>{
+      loginUser.value.userNick = userNick;
+      router.push({'name':'profile',params:{'userId':userId, 'userNick':userNick}})
+    })
+    .catch(()=>{
+      console.log("정보 수정 실패")
+    })
+  } 
+
 
   const setIdCheck = function(value){
     idCheck.value=value;
@@ -143,7 +168,7 @@ export const useUserStore = defineStore('user', () => {
     })
   }
 
-  return { loginUser,isLogin,idCheck, emailCheck,nickCheck, user, login, logout, quit, registUser, setIdCheck, setNickCheck, setEmailCheck, check, getUser}
+  return { loginUser,isLogin,idCheck, emailCheck,nickCheck, user, login, logout, quit, registUser, emitUser, setIdCheck, setNickCheck, setEmailCheck, check, getUser}
 },
 {
   persist:true,
