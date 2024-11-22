@@ -16,6 +16,8 @@ public interface UserDao {
 	
 	public User selectOne(Map<String, String> info);
 
+	public String selectUuid(String id);
+	
 	public int deleteUser(String id);
 	
 	public void updateUser(User user);

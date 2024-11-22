@@ -12,6 +12,12 @@
 	    </if>
 	</select>
 	
+	<select id="selectUuid" parameterType="String" resultType="String">
+		SELECT user_uuid
+		FROM profile
+		WHERE user_id = #{id}
+	</select>
+	
 	<select id="checkUser" parameterType="Map" resultType="int">
 		SELECT COUNT(*)
 		FROM user
@@ -31,15 +37,18 @@
 		INSERT INTO profile 
 		VALUES (#{userId}, #{userImg}, #{userUuid});
 	</insert>
+	
 	<delete id="deleteUser" parameterType="String">
 		DELETE FROM user
 		WHERE user_id = #{id};
 	</delete>
+	
 	<update id="updateUser" parameterType="User">
 		UPDATE user
 		SET user_password = #{userPassword}, user_nick = #{userNick}, user_email = #{userEmail}, authority = #{authority}
 		WHERE user_id = #{userId}; 
 	</update>
+	
 	<update id="updateFile" parameterType="User">
 		UPDATE profile
 		SET user_img = #{userImg}, user_uuid = #{userUuid}

@@ -64,14 +64,13 @@ public class UserServiceImpl implements UserService {
 						break;
 					}
 				}
-				
-				if(!check) {
+
+				if (!check) {
 					throw new IllegalArgumentException("허용되지 않은 확장자입니다.");
 				}
-	
-				String fileId = UUID.randomUUID().toString()+"."+extension; // 고유한 이름
 
-	
+				String fileId = UUID.randomUUID().toString() + "." + extension; // 고유한 이름
+
 				// 저장할 위치 지정
 				Resource resource = resourceLoader.getResource("classpath:/static/img");
 				file.transferTo(new File(resource.getFile(), fileId));
@@ -87,7 +86,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void signup(User user) {
-		if(user.getUserEmail().isEmpty() || user.getUserId().isEmpty() || user.getUserNick().isEmpty() || user.getUserPassword().isEmpty()) {
+		if (user.getUserEmail().isEmpty() || user.getUserId().isEmpty() || user.getUserNick().isEmpty()
+				|| user.getUserPassword().isEmpty()) {
 			return;
 		}
 		userDao.insertUser(user);
@@ -120,7 +120,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int removeUser(String id) {
+	public int removeUser(String id) throws IOException {
+		String userUuid = userDao.selectUuid(id);
+		Resource resource = resourceLoader.getResource("classpath:/static/img");
+		if(!userUuid.equals("0.webp")) {
+			File file = new File(resource.getFile(),userUuid);
+			file.delete();
+		}
 		return userDao.deleteUser(id);
 	}
 
@@ -133,13 +139,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public File getProfile(String Uuid) throws IOException {
 
-		Resource resource = resourceLoader.getResource("classpath:/static/img/"+Uuid);
+		Resource resource = resourceLoader.getResource("classpath:/static/img/" + Uuid);
 		if (!resource.exists()) {
-	        return null;  // 파일이 없을 경우 처리
-	    }
+			return null; // 파일이 없을 경우 처리
+		}
 
-	    // File 객체 반환
-	    return resource.getFile();
+		// File 객체 반환
+		return resource.getFile();
 	}
 
 }

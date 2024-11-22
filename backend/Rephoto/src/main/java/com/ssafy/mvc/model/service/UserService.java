@@ -25,7 +25,7 @@ public interface UserService {
 	// 프로필 사진 가져오기
 	public File getProfile(String Uuid) throws IOException;
 	// 사용자 탈퇴
-	public int removeUser(String id);
+	public int removeUser(String id) throws IOException;
 	// 사용자 정보 수정
 	public void emitUser(User user);
 }
