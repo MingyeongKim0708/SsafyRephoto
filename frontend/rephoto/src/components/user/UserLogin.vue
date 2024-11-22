@@ -22,7 +22,7 @@
 
 <script setup>
 import { useUserStore } from '@/stores/user';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import router from '@/router';
 
 const store = useUserStore();
@@ -30,6 +30,13 @@ const user = ref({
     userId: "",
     userPassword:""
 })
+
+onMounted(()=>{
+    user.value.userId=""
+    user.value.userPassword=""
+})
+
+
 
 const login = function(){
     store.login(user.value)

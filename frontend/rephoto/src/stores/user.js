@@ -7,14 +7,14 @@ import router from '@/router'
 const REST_API_URL = `http://localhost:8080/user`
 export const useUserStore = defineStore('user', () => {
 
-  const loginUser = ref({"userId":'', "userNick":''});
-  const user = ref({})
-  const profile = ref(null)
-  const isLogin = computed(()=>loginUser.value.userId!=='');
-  const idCheck = ref(0);
-  const nickCheck = ref(0);
-  const emailCheck = ref(0);
-  const login = function(user){
+  const loginUser = ref({"userId":'', "userNick":''});                  // 로그인했는가
+  const user = ref({})                                                  // 프로필을 보기 위한 유저정보
+  const isLogin = computed(()=>loginUser.value.userId!=='');            // 로그인했는가
+  const idCheck = ref(0);                                               // 아이디 중복확인
+  const nickCheck = ref(0);                                             // 닉네임 중복확인
+  const emailCheck = ref(0);                                            // 이메일 중복확인
+
+  const login = function(user){                                         // 로그인 요청
     axios({
       url: `${REST_API_URL}/login`,
       method: 'POST',
@@ -23,11 +23,10 @@ export const useUserStore = defineStore('user', () => {
     .then((response)=>{
       loginUser.value.userId=user.userId
       loginUser.value.userNick=response.data
-      console.log(loginUser.value)
-      router.push({name:'board'})
+      router.push({'name':'boardList'})                                   // 성공 시 boardList
     })
     .catch(()=>{
-      console.log("실패")
+      router.push({'name':'login'}) // loginview에서 onbeforerouteleave쓰자
     })
   };
 
@@ -138,7 +137,7 @@ export const useUserStore = defineStore('user', () => {
     })
   }
 
-  return { loginUser,isLogin,idCheck, emailCheck,nickCheck, user, profile, login, logout, quit, registUser, setIdCheck, setNickCheck, setEmailCheck, check, getUser}
+  return { loginUser,isLogin,idCheck, emailCheck,nickCheck, user, login, logout, quit, registUser, setIdCheck, setNickCheck, setEmailCheck, check, getUser}
 },
 {
   persist:true,
