@@ -40,7 +40,7 @@ public class BoardRestController {
 		this.boardService = boardService;
 	}
 
-	// 게시물 전체 목록 조회 및 검색 + pagination
+	// 게시물 전체 목록 조회 및 검색
 	@GetMapping("")
 	public ResponseEntity<?> list(@ModelAttribute SearchCondition condition) {
 		try {
@@ -119,25 +119,27 @@ public class BoardRestController {
 
 	// 게시물 등록 및 파일 업로드
 	@PostMapping("")
-	public ResponseEntity<?> write(@RequestParam("file") MultipartFile file, @ModelAttribute Board board) {
+	public ResponseEntity<?> write(@RequestParam("file") MultipartFile file, 
+			@RequestParam("userNick") String userNick,
+			@RequestParam("boardTitle") String boardTitle,
+			@RequestParam("boardInfo") String boardInfo) {
 		try {
-			// 인증 정보가 없거나 유효하지 않으면 401 Unauthorized 반환 - 아직 인증 관련된 것 못넣어서 주석 처리
-//	        if (authToken == null || !isValidAuthToken(authToken)) {
-//	            System.out.println("HttpStatus 401 Unauthorized");
-//	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("401 Unauthorized: Invalid or missing authorization token");
-//	        }
 
 			// 게시글 내용이 유효하지 않으면 400 Bad Request 반환
-			if (board.getUserNick() == null || board.getUserNick().isEmpty() || board.getBoardTitle() == null
-					|| board.getBoardTitle().isEmpty() || board.getBoardInfo() == null
-					|| board.getBoardInfo().isEmpty()) {
+			if (userNick == null || userNick.isEmpty() || boardTitle == null
+					|| boardTitle.isEmpty() || boardInfo == null
+					|| boardInfo.isEmpty()) {
 				System.out.println("HttpStatus 400 BAD_REQUEST");
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("400 Bad Request: Missing required fields");
 			}
 
 			// 파일이 있다면 업로드 처리
+			Board board = new Board(userNick, boardTitle, boardInfo);
 			if (file != null && !file.isEmpty()) {
-				boardService.fileUpload(file, board); // 파일 업로드 및 게시글 등록
+				String photoUuid = boardService.fileUpload(file); // 파일 업로드
+				board.setPhotoName(file.getOriginalFilename());
+				board.setPhotoUuid(photoUuid);
+				boardService.writeBoard(board); // 게시물 등록
 			} else {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("400 Bad Request : 파일이 없습니다.");
 			}

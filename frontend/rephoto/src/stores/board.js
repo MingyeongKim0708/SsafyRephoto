@@ -22,16 +22,25 @@ export const useBoardStore = defineStore('board', () => {
   }
 
   //게시글 등록
-  const createBoard = function (board) {
+  const createBoard = function (file,userNick,boardTitle,boardInfo) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("userNick", userNick);
+    formData.append("boardTitle", boardTitle);
+    formData.append("boardInfo", boardInfo);
+    console.log(formData);
+
     axios({
       url: REST_API_URL,
       method: 'POST',
-      //JSON 형태로 바꿔주지 않았지만 application/json 알아서 이게 적용이 되었다.
-      data: board
+      data: formData,
+      headers: {
+        "Content-Type" : "multipart/form-data",
+      }
     })
       .then(() => {
         console.log("완료")
-        router.push({ name: 'boardList' })
+        router.push({ name: 'boardList' }) // 등록한 boardDetail로 이동하고 싶은데...
       })
       .catch(() => {
         console.log("실패")
