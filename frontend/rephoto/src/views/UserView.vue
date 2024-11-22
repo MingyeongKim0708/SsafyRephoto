@@ -20,7 +20,7 @@ const goLogin = function(){
 }
 
 const goBoard = function(){
-router.push({"name":"board"})
+router.push({"name":"boardList"})
 }
 </script>
 

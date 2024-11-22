@@ -7,8 +7,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import { useUserStore } from '@/stores/user'
 
-import BoardView from '@/views/BoardView.vue'
-
 import BoardList from '@/components/board/BoardList.vue'
 import BoardCreate from '@/components/board/BoardCreate.vue'
 import BoardDetail from '@/components/board/BoardDetail.vue'
@@ -37,7 +35,8 @@ const router = createRouter({
       path:"/user/:userId",
       name:"profile",
       component:UserProfile,
-    }
+    },
+    {
       path: '/board',
       name: 'board',
       component: BoardView,

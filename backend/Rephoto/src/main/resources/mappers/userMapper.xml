@@ -3,6 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.mvc.model.dao.UserDao">
+	<!-- 유저 정보 가져오기-->
 	<select id="selectOne" parameterType="Map" resultType="User">
 	    SELECT *
 	    FROM user
@@ -12,17 +13,21 @@
 	    </if>
 	</select>
 	
+	<!--유저의 Uuid 가져오기-->
 	<select id="selectUuid" parameterType="String" resultType="String">
 		SELECT user_uuid
 		FROM profile
 		WHERE user_id = #{id}
 	</select>
 	
+	<!-- 회원가입시 아이디, 닉네임, 이메일 중복확인을 위한 로직-->
 	<select id="checkUser" parameterType="Map" resultType="int">
 		SELECT COUNT(*)
 		FROM user
 		WHERE ${condition} = #{word}; 
 	</select>
+	
+	<!-- -->
 	<select id="selectAll" resultType="User">
 		SELECT *
 		FROM user

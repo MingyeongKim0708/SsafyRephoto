@@ -6,7 +6,9 @@ import router from '@/router'
 const REST_API_URL = `http://localhost:8080/board`
 
 export const useBoardStore = defineStore('board', () => {
+
   const boardList = ref([]) //게시글 목록을 스토어에서 관리하겠다~
+  
   const getBoardList = function () {
     axios.get(`${REST_API_URL}`)
       .then((response) => {

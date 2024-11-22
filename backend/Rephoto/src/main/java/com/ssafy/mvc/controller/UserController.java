@@ -68,7 +68,7 @@ public class UserController {
 		session.setAttribute("userId", tmp_user.getUserId());
 		session.setAttribute("userNick", tmp_user.getUserNick());
 
-		return new ResponseEntity<String>(tmp_user.getUserNick(),HttpStatus.OK);
+		return new ResponseEntity<String>(tmp_user.getUserNick(), HttpStatus.OK);
 	}
 
 	// 로그아웃
@@ -97,27 +97,25 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0);
 	}
 
-	// 회원가입 
+	// 회원가입
 	@PostMapping("/regist")
 	public ResponseEntity<?> regist(@RequestParam("userId") String userId,
-			@RequestParam("userPassword") String userPassword,
-			@RequestParam("userNick") String userNick,
+			@RequestParam("userPassword") String userPassword, @RequestParam("userNick") String userNick,
 			@RequestParam("userEmail") String userEmail,
-			@RequestParam(value = "file", required = false) MultipartFile file
-			) {
-		
-		//필요한 것들이 없다면 에러
-		if(userId.isEmpty() || userPassword.isEmpty() || userNick.isEmpty() || userEmail.isEmpty()) {
+			@RequestParam(value = "file", required = false) MultipartFile file) {
+
+		// 필요한 것들이 없다면 에러
+		if (userId.isEmpty() || userPassword.isEmpty() || userNick.isEmpty() || userEmail.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0);
 		}
-		User user = new User(userId,userPassword,userNick,userEmail);
-		if(file != null && file.getSize() > 0) {
+		User user = new User(userId, userPassword, userNick, userEmail);
+		if (file != null && file.getSize() > 0) {
 			user.setUserImg(file.getOriginalFilename());
 			String userUuid = userService.upload(file);
 			user.setUserUuid(userUuid);
 		}
-		
-		try {		
+
+		try {
 			userService.signup(user);
 			return ResponseEntity.status(HttpStatus.CREATED).body(1);
 		} catch (Exception e) {
@@ -125,7 +123,7 @@ public class UserController {
 		}
 	}
 
-	// 유저 아이디들로 유저 정보를 불러옴 (프로필 페이지를 위해) 
+	// 유저 아이디들로 유저 정보를 불러옴 (프로필 페이지를 위해)
 	@GetMapping("/myPage/{userId}")
 	public ResponseEntity<?> seeMyPage(@PathVariable String userId) {
 		User user = userService.getInfo(userId);
@@ -137,51 +135,50 @@ public class UserController {
 
 	// 유저들의 프로필사진을 Uuid를 통해 가져온다.
 	@GetMapping("/userImg/{userUuid}")
-	public ResponseEntity<?> getProfile(@PathVariable String userUuid) throws IOException{
-		File file = userService.getProfile(userUuid);
-		System.out.println(file);
-		if(file == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0);
-		} 
+	public ResponseEntity<?> getProfile(@PathVariable String userUuid) throws IOException {
 		
+		File file = userService.getProfile(userUuid);
+		if (file == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0);
+		}
+
 		InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 		String fileName = file.getName();
 		String extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-		
+
 		MediaType mediaType;
 		switch (extension) {
-		    case "jpg":
-		    case "jpeg":
-		        mediaType = MediaType.IMAGE_JPEG;
-		        break;
-		    case "png":
-		        mediaType = MediaType.IMAGE_PNG;
-		        break;
-		    case "webp":
-		        mediaType = MediaType.valueOf("image/webp");
-		        break;
-		    default:
-		        mediaType = MediaType.APPLICATION_OCTET_STREAM; // 기본값: 바이너리 파일
+		case "jpg":
+		case "jpeg":
+			mediaType = MediaType.IMAGE_JPEG;
+			break;
+		case "png":
+			mediaType = MediaType.IMAGE_PNG;
+			break;
+		case "webp":
+			mediaType = MediaType.valueOf("image/webp");
+			break;
+		default:
+			mediaType = MediaType.APPLICATION_OCTET_STREAM; // 기본값: 바이너리 파일
 		}
-		
-	    return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=" + file.getName())  // inline으로 변경
-                .contentType(mediaType)  // 이미지의 경우 적절한 MIME 타입 사용 (예: JPEG, PNG 등)
-                .contentLength(file.length())
-                .body(resource);
+
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=" + file.getName()) // inline으로
+																													// 변경
+				.contentType(mediaType) // 이미지의 경우 적절한 MIME 타입 사용 (예: JPEG, PNG 등)
+				.contentLength(file.length()).body(resource);
 	}
-	
+
 	// 회원 탈퇴
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<?> quit(@PathVariable String userId, HttpSession session) {
-		
+
 		try {
-			
+
 			// 로그인한 유저와 탈퇴하고자 하는 유저의 id가 같아야 탈퇴 가능
-			if(userId.equals(session.getAttribute("userId"))) {
+			if (userId.equals(session.getAttribute("userId"))) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0);
 			}
-			
+
 			// 이 Id로 탈퇴시키는 유저 수
 			int result = userService.removeUser(userId);
 			if (result == 1) {
@@ -195,19 +192,20 @@ public class UserController {
 	}
 
 	// 편집되지 않는다면 지금까지 작업을 롤백해야 하므로 Transactional 처리
+	// 회원 정보 수정
 	@Transactional
 	@PutMapping("")
 	public ResponseEntity<?> emit(@RequestBody User user, HttpSession session) {
-		
+
 		try {
-			
-			// 로그인한 유저와 수정하고자 하는 유저의 id가 같아야 탈퇴 가능
-			if(user.getUserId().equals(session.getAttribute("userId"))) {
+
+			// 로그인한 유저와 수정하고자 하는 유저의 id가 같아야 수정 가능
+			if (user.getUserId().equals(session.getAttribute("userId"))) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0);
 			}
-			
-			session.setAttribute("userNick", user.getUserNick());
+
 			userService.emitUser(user);
+			session.setAttribute("userNick", user.getUserNick());
 			return ResponseEntity.status(HttpStatus.OK).body(1);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(0);
