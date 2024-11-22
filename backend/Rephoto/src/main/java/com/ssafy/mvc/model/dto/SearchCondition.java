@@ -1,51 +1,22 @@
 package com.ssafy.mvc.model.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class SearchCondition {
-	private String key;
-	private String word;
-	private String orderBy;
-	private String orderByDir;
-
-	public SearchCondition() {
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	public String getWord() {
-		return word;
-	}
-
-	public void setWord(String word) {
-		this.word = word;
-	}
-
-	public String getOrderBy() {
-		return orderBy;
-	}
-
-	public void setOrderBy(String orderBy) {
-		this.orderBy = orderBy;
-	}
-
-	public String getOrderByDir() {
-		return orderByDir;
-	}
-
-	public void setOrderByDir(String orderByDir) {
-		this.orderByDir = orderByDir;
-	}
-
-	@Override
-	public String toString() {
-		return "SearchCondition [key=" + key + ", word=" + word + ", orderBy=" + orderBy + ", orderByDir=" + orderByDir
-				+ "]";
-	}
-	
-
+	private String key = "none"; // 어떤 컬럼
+	private String word; // 검색어
+	private String orderBy = "board_id"; // 뭘 기준으로 정렬
+	private String orderByDir = "desc"; // 오름차순, 내림차순
+//	private int page = 1;
+//	private int size = 12;
+//	private int offset = 0; // 페이지 번호에 맞는 offset 계산
 }

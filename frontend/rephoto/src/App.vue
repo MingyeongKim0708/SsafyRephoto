@@ -2,7 +2,6 @@
   <div>
     <TheHeaderNav/>
     <RouterView/>
-    <h3>rephoto</h3>
     <TheFooter/>
   </div>
 </template>
