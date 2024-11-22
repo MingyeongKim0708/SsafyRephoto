@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class FileController {
 	
-	@GetMapping("/download") //fileName이라고 했지만.. 실제론 fileId -->
-	public String fileDownload(@RequestParam("fileName") String fileName, Model model) {
-		model.addAttribute("fileName", fileName);
+	@GetMapping("/download")
+	public String fileDownload(@RequestParam("fileUuid") String fileUuid, Model model) {
+		model.addAttribute("fileUuid", fileUuid);
 		return "fileDownloadView";
 	}
 }

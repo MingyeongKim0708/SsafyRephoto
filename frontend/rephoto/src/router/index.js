@@ -4,7 +4,14 @@ import UserProfile from '@/components/user/UserProfile.vue'
 import BoardView from '@/views/BoardView.vue'
 import UserView from '@/views/UserView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
+
 import { useUserStore } from '@/stores/user'
+
+import BoardView from '@/views/BoardView.vue'
+
+import BoardList from '@/components/board/BoardList.vue'
+import BoardCreate from '@/components/board/BoardCreate.vue'
+import BoardDetail from '@/components/board/BoardDetail.vue'
 
 
 const router = createRouter({
@@ -27,15 +34,32 @@ const router = createRouter({
     }
     ,
     {
-      path:"/board",
-      name:"board",
-      component:BoardView
-    },
-    {
       path:"/user/:userId",
       name:"profile",
       component:UserProfile,
     }
+      path: '/board',
+      name: 'board',
+      component: BoardView,
+      children: [
+        {
+          path: "",
+          name: "boardList",
+          component: BoardList
+        },
+        {
+          path: "create",
+          name: "boardCreate",
+          component: BoardCreate
+        },
+        {
+          path: ":id",
+          name: "boardDetail",
+          component: BoardDetail
+        },
+        
+      ]
+    },
   ],
 })
 

@@ -1,8 +1,6 @@
 <template>
   <div>
     <TheHeaderNav/>
-    
-    <h3>rephoto</h3>
     <RouterView/>
     <TheFooter/>
     
