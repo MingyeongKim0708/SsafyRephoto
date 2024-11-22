@@ -3,36 +3,35 @@
         <div class="row align-items-center">
             <div class="col-2">
                 <select class="form-select" v-model="searchInfo.key">
-                    <option value="none">전체</option>
-                    <option value="user_nick">글쓰니</option>
                     <option value="board_title">제목</option>
+                    <option value="user_nick">작성자</option>
                     <option value="board_info">내용</option>
                 </select>
             </div>
             <div class="col-6">
-                <input type="text" class="form-control" v-model="searchInfo.word" />
+                <input type="text" class="form-control" v-model="searchInfo.word" @keyup.enter="searchBoardList"/>
             </div>
             <div class="col-2">
                 <div class="form-check form-check-inline">
-                    <input v-model="searchInfo.orderBy" class="form-check-input" type="radio" id="boardTitle" value="board_title" />
-                    <label class="form-check-label" for="boardTitle"><i class="bi bi-fonts"></i></label>
+                    <input v-model="searchInfo.orderBy" class="form-check-input" type="radio" id="boardId" value="board_id" />
+                    <label class="form-check-label" for="boardId"><i class="bi bi-fonts"></i>등록순</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input v-model="searchInfo.orderBy" class="form-check-input" type="radio" id="userNick" value="user_nick" />
-                    <label class="form-check-label" for="userNick"><i class="bi bi-person-fill"></i></label>
+                    <input v-model="searchInfo.orderBy" class="form-check-input" type="radio" id="avgScore" value="avg_score" />
+                    <label class="form-check-label" for="avgScore"><i class="bi bi-person-fill">평점순</i></label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input v-model="searchInfo.orderBy" class="form-check-input" type="radio" id="viewCnt"
                         value="view_cnt" />
-                    <label class="form-check-label" for="viewCnt"><i class="bi bi-eye-fill"></i></label>
+                    <label class="form-check-label" for="viewCnt"><i class="bi bi-eye-fill"></i>조회수</label>
                 </div>
             </div>
             <div class="col-1">
                 <div @click="sortChange">
                     <span v-if="searchInfo.orderByDir === 'asc'">
-                        <i class="bi bi-arrow-up-right-square-fill"></i>
+                        <i class="bi bi-arrow-up-right-square-fill"></i>오름차순
                     </span>
-                    <span v-else><i class="bi bi-arrow-down-right-square-fill"></i></span>
+                    <span v-else><i class="bi bi-arrow-down-right-square-fill"></i>내림차순</span>
                 </div>
             </div>
             <div class="col-1">
@@ -48,10 +47,10 @@ import { useBoardStore } from "@/stores/board";
 
 const store = useBoardStore();
 const searchInfo = ref({
-    key: "none",
+    key: "board_title",
     word: "",
-    orderBy: "none",
-    orderByDir: "asc",
+    orderBy: "board_id",
+    orderByDir: "desc",
 });
 const searchBoardList = function () {
     store.searchBoardList(searchInfo.value);
