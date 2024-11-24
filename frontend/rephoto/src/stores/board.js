@@ -24,6 +24,16 @@ export const useBoardStore = defineStore('board', () => {
       });
   }
 
+  const getUserBoardList = function (userNick) {
+    axios.get(`${REST_API_URL}/userPhoto/${userNick}`, {
+      withCredentials:true
+    })
+      .then((res) => {
+        boardList.value = res.data
+      })
+  }
+
+
   //게시글 등록
   const createBoard = function (file,userNick,boardTitle,boardInfo) {
     const formData = new FormData();
@@ -37,7 +47,7 @@ export const useBoardStore = defineStore('board', () => {
       url: REST_API_URL,
       method: 'POST',
 
-      withCredentials:true
+      withCredentials:true,
       data: formData,
       headers: {
         "Content-Type" : "multipart/form-data",
@@ -84,5 +94,15 @@ export const useBoardStore = defineStore('board', () => {
       })
   }
 
-  return { boardList, getBoardList, createBoard, board, getBoard, updateBoard, searchBoardList }
+  const searchUserBoardList = function (searchCondition, userNick) {
+    axios.get(`${REST_API_URL}/userPhoto/${userNick}`, {
+      params: searchCondition,
+      withCredentials:true
+    })
+      .then((res) => {
+        boardList.value = res.data
+      })
+  }
+
+  return { boardList, getBoardList, getUserBoardList, createBoard, board, getBoard, updateBoard, searchBoardList, searchUserBoardList }
 })

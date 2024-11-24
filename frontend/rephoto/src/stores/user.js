@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user', () => {
   const idCheck = ref(0);                                               // 아이디 중복확인
   const nickCheck = ref(0);                                             // 닉네임 중복확인
   const emailCheck = ref(0);                                            // 이메일 중복확인
-
+  const photoList = ref([]);                                             // 해당 유저의 photo리스트
   const login = function(user){                                         // 로그인 요청
     axios({
       url: `${REST_API_URL}/login`,

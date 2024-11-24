@@ -43,6 +43,14 @@ public class BoardServiceImpl implements BoardService {
 
 	}
 
+	// 특정 유저의 게시물 조회 및 정렬
+	@Override
+	public List<Board> searchByUserNick(SearchCondition condition) {
+		System.out.println("특정 유저 게시글 조회");
+		
+		return boardDao.searchByUserNick(condition);
+	}
+	
 	// 전체 게시물 수
 	@Override
 	public int getTotalCount(SearchCondition condition) {
@@ -159,6 +167,8 @@ public class BoardServiceImpl implements BoardService {
 	public String getFileNAmeByUuid(String fileUuid) {
 		return boardDao.getFileNameByUuid(fileUuid);
 	}
+
+
 
 //	@Override
 //	public void modifyBoard(Board board) {

@@ -14,6 +14,9 @@ public interface BoardDao {
 	// 전체 게시물 수
 	public int countBoards(SearchCondition condition);
 
+	// 특정 유저의 게시글 조회
+	public List<Board> searchByUserNick(SearchCondition condition);
+	
 	// service에서 두 개를 같이 요청함
 	// ID에 해당하는 게시물 상세 조회
 	public Board selectOne(int id);

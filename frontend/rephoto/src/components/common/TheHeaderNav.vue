@@ -11,8 +11,8 @@
 
         <RouterLink :to="{'name':'profile', params:{'userId':store.loginUser.userId, 'userNick':store.loginUser.userNick}}">{{store.loginUser.userNick}}</RouterLink>
 
-        </RouterLink>
         <span>님, 안녕하세요!</span>
+        <br>
         <button @click.prevent.stop="logout">로그 아웃</button>
         <button @click.prevent.stop="quit">회원 탈퇴</button>
       </span>

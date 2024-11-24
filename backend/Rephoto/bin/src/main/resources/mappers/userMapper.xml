@@ -3,19 +3,62 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.mvc.model.dao.UserDao">
+	<!-- 유저 정보 가져오기-->
 	<select id="selectOne" parameterType="Map" resultType="User">
-		SELECT id, name 
-		FROM users
-		WHERE id = #{id} AND password = #{password}
+	    SELECT *
+	    FROM user
+	    WHERE user_id = #{id}
+	    <if test="password != null">
+	        AND user_password = #{password}
+	    </if>
 	</select>
 	
+	<!--유저의 Uuid 가져오기-->
+	<select id="selectUuid" parameterType="String" resultType="String">
+		SELECT user_uuid
+		FROM profile
+		WHERE user_id = #{id}
+	</select>
+	
+	<!-- 회원가입시 아이디, 닉네임, 이메일 중복확인을 위한 로직-->
+	<select id="checkUser" parameterType="Map" resultType="int">
+		SELECT COUNT(*)
+		FROM user
+		WHERE ${condition} = #{word}; 
+	</select>
+	
+	<!-- -->
 	<select id="selectAll" resultType="User">
 		SELECT *
-		FROM users 
+		FROM user
 	</select>
 	
 	<insert id="insertUser" parameterType="User">
-		INSERT INTO users
-		VALUES (#{id}, #{password}, #{name});
+		INSERT INTO user (user_id, user_password, user_nick, user_email, authority)
+		VALUES (#{userId}, #{userPassword}, #{userNick}, #{userEmail}, #{authority});
 	</insert>
+	
+	<insert id="insertFile" parameterType="User">
+		INSERT INTO profile 
+		VALUES (#{userId}, #{userImg}, #{userUuid});
+	</insert>
+	
+	<delete id="deleteUser" parameterType="String">
+		DELETE FROM user
+		WHERE user_id = #{id};
+	</delete>
+	
+	<update id="updateUser" parameterType="User">
+		UPDATE user
+		SET user_password = #{userPassword}, user_nick = #{userNick}, user_email = #{userEmail}, authority = #{authority}
+		WHERE user_id = #{userId}; 
+	</update>
+	
+	<update id="updateFile" parameterType="User">
+		UPDATE profile
+		SET user_img = #{userImg}, user_uuid = #{userUuid}
+		WHERE user_id = #{userId}; 
+	</update>
+	
+	
 </mapper>

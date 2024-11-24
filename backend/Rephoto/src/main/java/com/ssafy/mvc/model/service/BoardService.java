@@ -10,6 +10,9 @@ import com.ssafy.mvc.model.dto.SearchCondition;
 public interface BoardService {
 	// 게시물 전체 목록 조회 및 검색 + pagination
 	public List<Board> search(SearchCondition condition);
+
+	// 특정 유저의 게시물 조회
+	public List<Board> searchByUserNick(SearchCondition condition);
 	
 	// 게시물 상세 조회
 	public Board readBoard(int boardId);
@@ -28,13 +31,9 @@ public interface BoardService {
 
 	// 전체 게시물 수
 	public int getTotalCount(SearchCondition condition);
-
-	
-	
 	
 	// 게시글 전체 조회
 //	public List<Board> getBoardList();
-	
 	
 	// 게시글 수정
 //	public void modifyBoard(Board board);
