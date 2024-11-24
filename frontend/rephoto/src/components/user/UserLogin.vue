@@ -1,24 +1,24 @@
 <template>
-    <div class="login">
-        <form class="container">
+    <div class="login-container">
+        <form class="login-box">
             <fieldset>
                 <legend>로그인</legend>
                 <div class="inputform">
                     <div>
-                        <label for="id">
+                        <label for="id" class="input-group">
                             <p>아이디</p>
-                            <input type="text" id="id" placeholder="아이디" required v-model = "user.userId">
+                            <input type="text" id="id" placeholder="아이디를 입력하세요" required v-model = "user.userId">
                         </label>
                     </div>
                     <div>
-                        <label for="password">
+                        <label for="password" class="input-group">
                             <p>비밀번호</p>
-                            <input type="password" id="password" placeholder="비밀번호" required v-model = "user.userPassword">
+                            <input type="password" id="password" placeholder="비밀번호를 입력하세요" required v-model = "user.userPassword">
                         </label>
                     </div>
                     <div>
-                        <button type="button" class="btn btn-success" @click.prevent.stop="login">로그인</button>
-                        <button type="button" class="btn btn-success" @click.prevent.stop="goRegist">회원 가입</button>
+                        <button type="button" class="login-btn" @click.prevent.stop="login">로그인</button>
+                        <p class="signup-link">계정이 없으신가요? <a href="/user/regist">회원가입</a></p>
                     </div>
                 </div>
             </fieldset>
@@ -53,76 +53,88 @@ const goRegist = function(){
 </script>
 
 <style scoped>
-.login{
-    width: 1200px;
-    height: 100%; /* 전체 화면을 꽉 채우기 */
-    margin: 0;
-    display: flex;
-    justify-content: center; /* 가로 중앙 정렬 */
-    align-items: center; /* 세로 중앙 정렬 */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(to bottom right, #4caf50, #81c784);
+  font-family: Arial, sans-serif;
 }
 
-.container {
-    width : 700px;
-    height : 700px;
-    border : 1px solid black;
-    border-radius : 30px;
-    background-color : rgb(255, 235, 197);
-    padding : 0px 15px;
-    text-align : center;
-    box-sizing : border-box;
-    margin : 100px ;
-    display: flex;
-    flex-direction: column;
-    justify-content: baseline; /* 내부 요소를 가로로 중앙 정렬 */
-    align-items: center; /* 내부 요소를 세로로 중앙 정렬 */
-}
-legend{
-    text-align: center;
-    font-size: 50px;
-    color:green;
+/* 로그인 박스 */
+.login-box {
+  width: 300px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
-fieldset {
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-    justify-content: center; /* 내부 요소를 가로로 중앙 정렬 */
-    width: 500px; 
-    height: 500px; 
-    padding: 10px;
-    margin: 10px 0;
+.login-box h1 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333333;
 }
 
-input{
-    width: 500px;
-    height: 50px;
-    margin:5px;
-    margin-left:0px;
+/* 입력 그룹 */
+.input-group {
+  margin-bottom: 15px;
+  text-align: left;
 }
 
-p{
-    margin-bottom: 0px;
-    font-size: 20px;
-    font-weight: bold;
+.input-group label {
+  font-size: 14px;
+  color: #555555;
+  margin-bottom: 5px;
+  display: block;
 }
 
-label{
-    text-align: left;
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
 
-.inputform{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin:50px;
+.input-group input:focus {
+  border-color: #4caf50;
+  outline: none;
 }
 
-button{
-    margin:5px;
-    height: 50px;
-    width: 200px;
-    background-color: green;
-    color:white;
+/* 로그인 버튼 */
+.login-btn {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.login-btn:hover {
+  background: #388e3c;
+}
+
+/* 회원가입 링크 */
+.signup-link {
+  margin-top: 15px;
+  font-size: 12px;
+  color: #555555;
+}
+
+.signup-link a {
+  color: #4caf50;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
 }
 </style>

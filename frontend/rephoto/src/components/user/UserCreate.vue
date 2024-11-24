@@ -1,67 +1,49 @@
 <template>
-    <div class="regist">
-        <form @submit.prevent.stop="registUser" class="container">
-            <fieldset>
-                <legend>회원 가입</legend>
-                <div class="inputform">
-                    <div>
-                        <label for="userId">
-                            <p class="type">아이디</p>
-                            <div class="input">
-                                <input type="text" id="userId" v-model.trim="userId">
-                                <button class="btn btn-primary" @click="check('user_id',userId)">중복 확인</button>
-                            </div>
-                            <p v-if="store.idCheck==0">중복 검사를 실시해 주세요</p>
-                            <p v-if="store.idCheck==1" style="color:red">중복된 아이디입니다.</p>
-                            <p v-if="store.idCheck==2" style="color:blue">중복 검사를 통과했습니다.</p>
-                        </label> 
+    <div class="regist-container">
+        <div class="regist">
+            <form @submit.prevent.stop="registUser">
+                <fieldset class="signup-container">
+                    <legend>회원 가입</legend>
+                    <div class="form-group">
+                        <label for="userId">아이디</label>               
+                        <input type="text" id="userId" v-model.trim="userId">
+                        <p v-if="store.idCheck==0">중복 검사를 실시해 주세요</p>
+                        <p v-if="store.idCheck==1" style="color:red">중복된 아이디입니다.</p>
+                        <p v-if="store.idCheck==2" style="color:blue">중복 검사를 통과했습니다.</p>
+                        <button type="button" @click="check('user_id',userId)">중복 확인</button>
                     </div>
-                    <div>
-                        <label for="userPassword">
-                            <p class="type">비밀번호</p>
-                            <div class="input">
-                                <input type="password" id="userPassword" v-model.trim="userPassword">
-                            </div>
-                        </label>
+                    <div class="form-group">
+                        <label for="userPassword">비밀번호</label>
+                        <input type="password" id="userPassword" v-model.trim="userPassword">
                     </div>
-                    <div>
-                        <label for="userEmail">
-                            <p class="type">이메일</p>
-                            <div class="input">
-                                <input type="email" id="userEmail" v-model.trim="userEmail">
-                                <button class="btn btn-primary" @click="check('user_email',userEmail)">중복 확인</button>
-                            </div>
-                            <p v-if="store.emailCheck==0">중복 검사를 실시해 주세요</p>
-                            <p v-if="store.emailCheck==1" style="color:red">중복된 이메일입니다.</p>
-                            <p v-if="store.emailCheck==2" style="color:blue">중복 검사를 통과했습니다.</p>
-                        </label>
+                    <div class="form-group">
+                        <label for="userEmail">이메일</label>
+                        <input type="email" id="userEmail" v-model.trim="userEmail">
+                        <p v-if="store.emailCheck==0">중복 검사를 실시해 주세요</p>
+                        <p v-if="store.emailCheck==1" style="color:red">중복된 이메일입니다.</p>
+                        <p v-if="store.emailCheck==2" style="color:blue">중복 검사를 통과했습니다.</p>
+                        <button class="btn btn-primary" @click="check('user_email',userEmail)">중복 확인</button>                           
                     </div>
-                    <div>
-                        <label for="userNick">
-                            <p class="type">닉네임</p>
-                            <div class="input">
-                                <input type="text" id="userNick" v-model.trim="userNick">
-                                <button class="btn btn-primary" @click="check('user_nick',userNick)">중복 확인</button>
-                            </div>
-                            <p v-if="store.nickCheck==0">중복 검사를 실시해 주세요</p>
-                            <p v-if="store.nickCheck==1" style="color:red">중복된 닉네임입니다.</p>
-                            <p v-if="store.nickCheck==2" style="color:blue">중복 검사를 통과했습니다.</p>
-                        </label>
+                    <div class="form-group">
+                        <label for="userNick"> 닉네임</label>
+                        <input type="text" id="userNick" v-model.trim="userNick">
+                        <p v-if="store.nickCheck==0">중복 검사를 실시해 주세요</p>
+                        <p v-if="store.nickCheck==1" style="color:red">중복된 닉네임입니다.</p>
+                        <p v-if="store.nickCheck==2" style="color:blue">중복 검사를 통과했습니다.</p>
+                        <button class="btn btn-primary" @click="check('user_nick',userNick)">중복 확인</button>                            
                     </div>
-                    <div>
-                        <label for="userImg">
-                            <p class="type">프로필 이미지</p>
-                            <input type="file" id="userImg" @change="handleImageUpload" accept="image/*"/>
-                            <br>
-                            <img v-if="previewUrl" :src="previewUrl" alt="프로필 이미지 미리보기" width="200px" height="200px" />
-                        </label>
+                    <div class="form-group">
+                        <label for="userImg">프로필 이미지</label>
+                        <input type="file" id="userImg" @change="handleImageUpload" accept="image/*"/>
+                        <br>
+                        <img v-if="previewUrl" :src="previewUrl" alt="프로필 이미지 미리보기" width="200px" height="200px" />
                     </div>
                     <div>
                         <button id="button" type="submit button" class="btn btn-success">등록</button>    
                     </div>
-                </div>
-            </fieldset>
-        </form>
+                </fieldset>
+            </form>
+        </div>
     </div>
 </template>
 
@@ -122,94 +104,76 @@ onBeforeRouteLeave(()=>{
 
 <style scoped>
 
-label{
-    text-align: left;
-}
-
-.regist{
-    width: 1200px;
-    height: 100%; /* 전체 화면을 꽉 채우기 */
-    margin: 0;
+.regist-container {
     display: flex;
-    justify-content: center; /* 가로 중앙 정렬 */
-    align-items: center; /* 세로 중앙 정렬 */
-}
-
-.container {
-    width : 700px;
-    height : 900px;
-    border : 1px solid black;
-    border-radius : 30px;
-    background-color : rgb(255, 235, 197);
-    padding : 0px 15px;
-    text-align : center;
-    box-sizing : border-box;
-    margin : 100px ;
-    display: flex;
-    flex-direction: column;
-    justify-content: baseline; /* 내부 요소를 가로로 중앙 정렬 */
-    align-items: center; /* 내부 요소를 세로로 중앙 정렬 */
-}
-
-legend{
-    text-align: center;
-    font-size: 50px;
-    color:green;
-}
-
-fieldset {
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-    justify-content: center; /* 내부 요소를 가로로 중앙 정렬 */
-    width: 500px; 
-    height: 500px; 
-    padding: 10px;
-    margin: 10px 0;
-}
-
-input{
-    width: 300px;
-    height: 40px;
-    margin:5px;
-    margin-left:0px;
-}
-
-.input{
-    margin:0px;
-    display: flex;
+    justify-content: center;
     align-items: center;
+    height: 100vh;
+    background: linear-gradient(to bottom right, #4caf50, #81c784);
+    font-family: Arial, sans-serif;
+}
+.signup-container {
+    width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-p{
-    margin-bottom: 0px;
-}
-label{
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.inputform{
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    margin:10px;
+.form-group {
+    margin-bottom: 15px;
 }
 
-.type {
-    font-size: 20px;
+label {
+    display: block;
+    margin-bottom: 5px;
     font-weight: bold;
 }
 
-.button{
-    display:flex;
-    justify-content: center;
-    align-items: center;
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
-.btn-success{
-    margin-top:10px;
+button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.submit-btn {
+    width: 100%;
+}
+
+.image-preview {
+    margin-top: 10px;
+}
+
+.image-preview img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 50%;
 }
 </style>

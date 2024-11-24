@@ -94,6 +94,7 @@ header {
 
 main {
   flex: 1; /* 나머지 공간을 모두 차지 */
+  width: 100%;
   display: flex;
   flex-direction: column;
   margin:120px;

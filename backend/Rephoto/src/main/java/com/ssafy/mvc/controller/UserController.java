@@ -176,7 +176,6 @@ public class UserController {
 	// 회원 탈퇴
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<?> quit(@PathVariable String userId, HttpSession session) {
-
 		try {
 
 			// 로그인한 유저와 탈퇴하고자 하는 유저의 id가 같아야 탈퇴 가능
