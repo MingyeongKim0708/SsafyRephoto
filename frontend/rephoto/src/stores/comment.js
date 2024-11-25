@@ -32,17 +32,22 @@ export const useCommentStore = defineStore('comment', () => {
   };
 
 // 댓글 수정
-const saveEditedComment = (commentId, updatedReview) => {
-  axios
-    .put(`${REST_API_URL}/${commentId}`, { review: updatedReview }, { withCredentials: true })
-    .then(() => {
-      console.log("댓글 수정 성공");
-      router.go(); // 댓글 목록 새로 고침
-    })
-    .catch((err) => {
-      console.error(err);
-      alert("댓글 수정에 실패했습니다.");
-    });
+const saveEditedComment = (commentId, updatedComment) => {
+  console.log(commentId,updatedComment)
+  axios ({
+    url: `${REST_API_URL}/${commentId}`,
+    method: "PUT",
+    data:updatedComment,
+    withCredentials: true 
+  })
+  .then(() => {
+    console.log("댓글 수정 성공");
+    router.go(); // 댓글 목록 새로 고침
+  })
+  .catch((err) => {
+    console.error(err);
+    alert("댓글 수정에 실패했습니다.");
+  });
 };
 
 // 댓글 삭제

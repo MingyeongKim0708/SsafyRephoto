@@ -39,7 +39,7 @@
                     <div v-if="comment.isEditing">
                         <textarea v-model="editCommentContent" class="form-control"></textarea>
                         <button class="btn btn-success btn-sm mt-2"
-                            @click.prevent.stop="saveEditedComment(comment.id)">저장</button>
+                            @click.prevent.stop="saveEditedComment(comment)">저장</button>
                         <button class="btn btn-secondary btn-sm mt-2" @click.prevent.stop="cancelEdit">취소</button>
                     </div>
                     <div v-else>
@@ -80,6 +80,7 @@ const route = useRoute();
 const store = useBoardStore();
 const storeC = useCommentStore();
 const storeU = useUserStore();
+const editCommentContent = ref('');
 
 onMounted(() => {
     store.getBoard(route.params.id); // 게시글 정보 및 댓글 목록 로드
@@ -110,7 +111,7 @@ const addComment = function () {
     console.log(typeof newComment.value.score)
     console.log(typeof newComment.value.userNick)
     console.log(newComment.value)
-    store2.addComment(newComment.value)
+    storeC.addComment(newComment.value)
 
 
     newComment.value.review = "";   // 입력 필드 초기화
@@ -122,7 +123,7 @@ const addComment = function () {
 // 댓글 수정
 const editComment = (comment) => {
     comment.isEditing = true; // 해당 댓글 수정 모드로 변경
-    comment.editContent = comment.review; // 기존 댓글 내용 불러오기
+    editCommentContent.value = comment.review;
 };
 
 // 댓글 수정 저장
@@ -131,16 +132,18 @@ const saveEditedComment = (comment) => {
         alert("댓글 내용을 입력하세요.");
         return;
     }
-
+    console.log("가고있나")
+    console.log(comment)
+    comment.review = editCommentContent.value
     // store를 통해 댓글 수정 요청
-    storeC.saveEditedComment(comment.id, comment.editContent);
+    storeC.saveEditedComment(comment.commentId, comment);
     comment.isEditing = false; // 수정 모드 종료
 };
 
 // 수정 취소
 const cancelEdit = (comment) => {
     comment.isEditing = false; // 수정 모드 종료
-    comment.editContent = ""; // 내용 초기화
+    editCommentContent.value = ""; // 내용 초기화
 };
 
 // 댓글 삭제 확인
