@@ -95,11 +95,11 @@ const validateFile = (event) => {
             previewUrl.value = URL.createObjectURL(uploadedFile);
             error.value = "";
         } else {
-            file.value = null;
+            clearFile(); // 파일 상태 초기화
             error.value = "허용되지 않은 확장자입니다. jpg, jpeg, png, webp 파일만 업로드 가능합니다.";
         }
     } else {
-        file.value = null;
+        clearFile(); // 파일 상태 초기화
         error.value = "파일을 선택해주세요.";
     }
 };

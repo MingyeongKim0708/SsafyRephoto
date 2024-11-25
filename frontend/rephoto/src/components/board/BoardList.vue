@@ -7,16 +7,12 @@
       <div class="container-fluid" data-aos="fade-up" data-aos-delay="100" :key="currentPage">
         <!-- :key="currentPage"를 추가 -->
         <div class="row gy-4 justify-content-center">
-          <div
-            class="col-xl-3 col-lg-4 col-md-6"
-            v-for="board in currentPageBoardList"
-            :key="board.boardId"
-          >
+          <div class="col-xl-3 col-lg-4 col-md-6" v-for="board in currentPageBoardList" :key="board.boardId">
             <div class="gallery-item h-100">
               <img :src="getPhotoUrl(board.photoUuid)" :alt="board.boardTitle" class="img-fluid" />
               <div class="gallery-links d-flex flex-column align-items-center justify-content-center">
-                  <p class="gallery-title">{{ truncateText(board.boardTitle, 15) }}</p>
-                  <p class="gallery-author">{{ truncateText(board.userNick, 15) }}</p>
+                <p class="gallery-title">{{ truncateText(board.boardTitle, 15) }}</p>
+                <RouterLink :to="{'name':'profile', params:{'userId':storeU.loginUser.userId, 'userNick':storeU.loginUser.userNick}}" class="gallery-author">{{storeU.loginUser.userNick}}</RouterLink>
                 <RouterLink :to="`/board/${board.boardId}`" class="details-link">
                   <i class="bi bi-link-45deg"></i>
                 </RouterLink>
@@ -32,28 +28,15 @@
     <nav aria-label="Page navigation">
       <ul class="pagination-custom">
         <li class="page-item">
-          <a
-            class="page-link"
-            @click.prevent="currentPage--"
-            :class="{ disabled: currentPage <= 1 }"
-            href="#"
-          ></a>
+          <a class="page-link" @click.prevent="goToPage(currentPage - 1)" :class="{ disabled: currentPage <= 1 }"
+            href="#"></a>
         </li>
-        <li
-          class="page-item"
-          :class="{ active: currentPage == page }"
-          v-for="page in pageCount"
-          :key="page"
-        >
-          <a href="#" class="page-link" @click.prevent="clickPage(page)"></a>
+        <li class="page-item" :class="{ active: currentPage == page }" v-for="page in pageCount" :key="page">
+          <a href="#" class="page-link" @click.prevent="goToPage(page)"></a>
         </li>
         <li class="page-item">
-          <a
-            class="page-link"
-            @click.prevent="currentPage++"
-            :class="{ disabled: currentPage >= pageCount }"
-            href="#"
-          ></a>
+          <a class="page-link" @click.prevent="goToPage(currentPage + 1)"
+            :class="{ disabled: currentPage >= pageCount }" href="#"></a>
         </li>
       </ul>
     </nav>
@@ -67,11 +50,13 @@
 
 <script setup>
 import { useBoardStore } from '@/stores/board';
+import { useUserStore } from '@/stores/user';
 import { computed, onMounted, ref, watch } from 'vue';
 import BoardSearchInput from './BoardSearchInput.vue';
 import AOS from 'aos';
 
 const store = useBoardStore();
+const storeU = useUserStore();
 
 onMounted(() => {
   store.getBoardList();
@@ -85,11 +70,35 @@ const pageCount = computed(() => Math.ceil(store.boardList.length / perPage));
 const clickPage = (page) => {
   currentPage.value = page;
 
+  // 페이지 변경 시 스크롤 최상단으로 이동
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth", // 부드러운 스크롤 이동
+  });
+
   // 페이지 변경 후 AOS 새로고침
   setTimeout(() => {
     AOS.refresh();
   }, 0);
 };
+
+const goToPage = (page) => {
+  if (page >= 1 && page <= pageCount.value) {
+    currentPage.value = page;
+
+    // 스크롤을 최상단으로 이동
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // 부드러운 스크롤 이동
+    });
+
+    // 페이지 변경 후 AOS 새로고침
+    setTimeout(() => {
+      AOS.refresh();
+    }, 0);
+  }
+};
+
 
 const currentPageBoardList = computed(() =>
   store.boardList.slice((currentPage.value - 1) * perPage, currentPage.value * perPage)
@@ -121,8 +130,8 @@ const truncateText = (text, maxLength) => {
   padding-left: 15px;
 }
 
-#total{
-  color:white;
+#total {
+  color: white;
 }
 
 .row {
@@ -170,13 +179,20 @@ const truncateText = (text, maxLength) => {
 }
 
 .gallery .gallery-author {
-  color: #bdbdbd; /* 회색 톤 */
+  color: #bdbdbd;
+  /* 회색 톤 */
   font-size: 14px;
   margin-bottom: 10px;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-decoration: none;
+  
+}
+
+.gallery .gallery-author:hover{
+  color: #ffffff;
 }
 
 .gallery .gallery-links .details-link {
@@ -245,8 +261,8 @@ const truncateText = (text, maxLength) => {
 
 .upload-button-container {
   display: flex;
-  justify-content: flex-end; /* 버튼을 오른쪽 정렬 */
+  justify-content: flex-end;
+  /* 버튼을 오른쪽 정렬 */
   margin-top: 20px;
 }
-
 </style>
