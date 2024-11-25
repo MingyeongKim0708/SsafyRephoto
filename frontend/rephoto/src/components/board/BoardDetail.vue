@@ -1,7 +1,5 @@
 <template>
     <div class="container">
-        <h4>게시글 상세</h4>
-        <hr />
         <div class="d-flex justify-content-center">
             <div class="card" style="width: 30rem">
                 <div class="card-body">
