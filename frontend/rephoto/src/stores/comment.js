@@ -51,17 +51,21 @@ const saveEditedComment = (commentId, updatedComment) => {
 };
 
 // 댓글 삭제
-const deleteComment = (commentId) => {
-  axios
-    .delete(`${REST_API_URL}/${commentId}`, { withCredentials: true })
-    .then(() => {
-      console.log("댓글 삭제 성공");
-      router.go(); // 댓글 목록 새로 고침
-    })
-    .catch((err) => {
-      console.error(err);
-      alert("댓글 삭제에 실패했습니다.");
-    });
+const deleteComment = function(commentId,boardId){
+  console.log(commentId)
+  axios({
+    url: `${REST_API_URL}/${commentId}/${boardId}`,
+    method: "DELETE",
+    withCredentials: true
+  })
+  .then(() => {
+    console.log("댓글 삭제 성공");
+    router.go(); // 댓글 목록 새로 고침
+  })
+  .catch((err) => {
+    console.error(err);
+    alert("댓글 삭제에 실패했습니다.");
+  });
 };
 
 

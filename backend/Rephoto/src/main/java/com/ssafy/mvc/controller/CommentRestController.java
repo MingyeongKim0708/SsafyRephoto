@@ -44,8 +44,8 @@ public class CommentRestController {
     }
 
     // 댓글 삭제
-    @DeleteMapping("/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable("commentId") int commentId, @RequestParam("boardId") int boardId) {
+    @DeleteMapping("/{commentId}/{boardId}")
+    public ResponseEntity<?> deleteComment(@PathVariable("commentId") int commentId, @PathVariable("boardId") int boardId) {
         try {
             boolean result = commentService.removeComment(commentId, boardId);
             if (result) {

@@ -51,7 +51,7 @@
                             <button class="btn btn-outline-primary btn-sm mx-1"
                                 @click.prevent.stop="editComment(comment)">수정</button>
                             <button class="btn btn-outline-danger btn-sm"
-                                @click.prevent.stop="deleteConfirm(comment.id)">삭제</button>
+                                @click.prevent.stop="deleteConfirm(comment)">삭제</button>
                         </div>
                     </div>
                 </li>
@@ -132,8 +132,6 @@ const saveEditedComment = (comment) => {
         alert("댓글 내용을 입력하세요.");
         return;
     }
-    console.log("가고있나")
-    console.log(comment)
     comment.review = editCommentContent.value
     // store를 통해 댓글 수정 요청
     storeC.saveEditedComment(comment.commentId, comment);
@@ -147,9 +145,9 @@ const cancelEdit = (comment) => {
 };
 
 // 댓글 삭제 확인
-const deleteConfirm = (commentId) => {
+const deleteConfirm = (comment) => {
     if (confirm("정말로 삭제하시겠습니까?")) {
-        store.deleteComment(commentId); // 댓글 삭제
+        storeC.deleteComment(comment.commentId,comment.boardId); // 댓글 삭제
     }
 };
 
