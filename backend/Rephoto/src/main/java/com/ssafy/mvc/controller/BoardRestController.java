@@ -3,30 +3,24 @@ package com.ssafy.mvc.controller;
 import java.net.URI;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.mvc.model.dto.Board;
-import com.ssafy.mvc.model.dto.PaginationResponse;
+import com.ssafy.mvc.model.dto.Comment;
 import com.ssafy.mvc.model.dto.SearchCondition;
 import com.ssafy.mvc.model.service.BoardService;
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.ssafy.mvc.model.service.CommentService;
 
 @RestController // @Controller + @ResponseBody
 @RequestMapping("/board")
@@ -34,9 +28,11 @@ public class BoardRestController {
 
 	// 서비스 의존성 주입
 	private final BoardService boardService;
+	private final CommentService commentService;
 
-	public BoardRestController(BoardService boardService) {
+	public BoardRestController(BoardService boardService, CommentService commentService) {
 		this.boardService = boardService;
+		this.commentService = commentService;
 	}
 
 	// 게시물 전체 목록 조회 및 검색
@@ -83,7 +79,7 @@ public class BoardRestController {
 		}
 	}
 
-	// 게시글 상세 보기
+	// 게시글 상세 보기 + 댓글 불러오기
 	@GetMapping("/{boardId}")
 	public ResponseEntity<?> detail(@PathVariable("boardId") int boardId) {
 
@@ -103,12 +99,20 @@ public class BoardRestController {
 			// 게시글 조회 (200)
 			Board board = boardService.readBoard(boardId);
 			System.out.println("게시글 상세 : " + board);
-			if (board != null) {
-				return ResponseEntity.ok(board);
-			}
-
+			
 			// 게시글 없음 (404 Not Found)
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("404 Not Found: No board with the given ID");
+			if (board == null) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Board not found");
+	        }
+
+	        // 게시글 정보에 댓글 포함
+			System.out.println("댓글 불러오기 시도");
+	        List<Comment> comments = commentService.getCommentList(boardId);
+	        board.setComments(comments); // DTO에 댓글 포함
+	        System.out.println("댓글 : " + board.getComments());
+	        return ResponseEntity.ok(board);
+
+			
 		} catch (Exception e) {
 			// 서버 오류 (500 Internal server error)
 			e.printStackTrace();

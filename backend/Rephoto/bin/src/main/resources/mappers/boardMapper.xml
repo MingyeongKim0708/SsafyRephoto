@@ -1,64 +1,124 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.ssafy.mvc.model.dao.BoardDao">
-	<!-- 전체 게시글 조회 및 검색기능 -->
+
+	<!-- 전체 게시글 조회 및 검색기능 + pagination -->
 	<select id="search" resultType="Board" parameterType="SearchCondition">
-		SELECT * FROM board
+		SELECT
+			b.board_id, 
+			b.user_nick, 
+			b.board_title, 
+			b.board_info,
+			b.board_created_at, 
+			b.view_cnt, 
+			b.avg_score, 
+			p.photo_name, 
+			p.photo_uuid
+		FROM 
+			board b 
+		LEFT JOIN 
+			photo p 
+		ON 
+			b.board_id = p.board_id 
 		<!-- 검색 조건 -->
-		<if test="key != 'none'">
+		<if
+			test="key != 'none'">
 			WHERE ${key} LIKE concat('%',#{word},'%')
 		</if>
-		<!-- 정렬 조건 -->
-		<if test="orderBy != 'none'">
-			ORDER BY ${orderBy} ${orderByDir}
-		</if>
+		<!-- 동적 정렬 조건 -->
+	    <if test="orderBy != null and orderBy != 'none'">
+	        ORDER BY ${orderBy} ${orderByDir}
+	    </if>
+		
+		<!-- 페이징 처리-->
+		<!--LIMIT #{size} OFFSET #{offset}-->
 	</select>
-	
+
 	<!-- 상세 게시글 조회 -->
 	<select id="selectOne" resultType="Board" parameterType="int">
-		SELECT * FROM board
-		WHERE id = #{id};
+		SELECT 
+		    b.board_id, 
+		    b.user_nick, 
+		    b.board_title, 
+		    b.board_info,
+		    b.board_created_at, 
+		    b.view_cnt, 
+		    b.avg_score, 
+		    p.photo_name, 
+		    p.photo_uuid
+		FROM 
+		    board b 
+		LEFT JOIN 
+		    photo p 
+		ON 
+		    b.board_id = p.board_id 
+		WHERE 
+		    b.board_id = #{boardId};
 	</select>
-	
+
 	<!-- 게시글 등록 -->
-	<insert id="insertBoard" parameterType="Board" keyProperty="id" useGeneratedKeys="true">
-		INSERT INTO board (title, writer, content)
-		VALUES (#{title}, #{writer}, #{content});
+	<insert id="insertBoard" parameterType="Board" keyProperty="boardId"
+		useGeneratedKeys="true">
+		INSERT INTO board (board_title, user_nick, board_info)
+		VALUES (#{boardTitle}, #{userNick}, #{boardInfo});
 	</insert>
-	
+
 	<!-- 게시글 삭제 -->
 	<delete id="deleteBoard" parameterType="int">
 		DELETE FROM board
-		WHERE id = #{id};
+		WHERE board_id = #{boardId};
 	</delete>
-	
+
+	<!-- 파일 업로드 -->
+	<insert id="insertFile" parameterType="Board">
+		INSERT INTO photo (board_id, photo_name, photo_uuid)
+		VALUES (#{boardId}, #{photoName}, #{photoUuid});
+	</insert>
+
 	<!-- 조회수 증가 -->
 	<update id="updateViewCnt" parameterType="int">
 		UPDATE board
 		SET view_cnt = view_cnt+1
-		WHERE id = #{id};
+		WHERE board_id = #{boardId};
 	</update>
-	
-	<!-- 게시글 수정 -->
-	<update id="updateBoard" parameterType="Board">
-		UPDATE board
-		SET title = #{title}, content = #{content}
-		WHERE id = #{id};
-	</update>
-	
 
+	<!-- UUID로 원본 파일명 조회-->
+	<select id="getFileNameByUuid" resultType="String" parameterType="String">
+		SELECT photo_name
+		FROM photo
+		WHERE photo_uuid = #{fileUuid}
+	</select>
+
+	<!-- userNick이 존재하는지 확인-->
+	<select id="isUserNickExist" parameterType="string" resultType="boolean">
+		SELECT COUNT(*) > 0
+		FROM user
+		WHERE user_nick = #{userNick}
+	</select>
 	
+	<!-- 게시물 수 체크 -->
+	<select id="countBoards" parameterType="SearchCondition" resultType="int">
+		SELECT COUNT(*)
+		FROM board
+		WHERE 1=1
+		<if test="key != 'none'">
+            AND title LIKE CONCAT('%', #{key}, '%')  <!-- 예시: title에 key가 포함된 게시물 수 조회 -->
+        </if>
+	</select>
 	
+	<!-- photoUuid 조회 -->
+	<select id="getPhotoUuidByBoardId" resultType="String">
+		SELECT photo_uuid
+		FROM photo
+		WHERE board_id = #{boardId}
+	</select>
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	<!-- 게시글 수정.. 생각해보니까 안쓰네 댓글 수정할 때 사용하겠음 -->
+	<!--	<update id="updateBoard" parameterType="Board">
+		UPDATE board
+		SET board_title = #{boardTitle}, board_info = #{boardInfo}
+		WHERE id = #{id};
+	</update>-->
+
 </mapper>
