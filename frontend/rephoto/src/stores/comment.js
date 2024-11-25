@@ -49,7 +49,7 @@ const saveEditedComment = (commentId, updatedComment) => {
     alert("댓글 수정에 실패했습니다.");
   });
 };
-
+``
 // 댓글 삭제
 const deleteComment = function(commentId,boardId){
   console.log(commentId)
