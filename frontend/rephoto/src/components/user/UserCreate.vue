@@ -6,7 +6,7 @@
                     <legend>회원 가입</legend>
                     <div class="form-group">
                         <label for="userId">아이디</label>               
-                        <input type="text" id="userId" v-model.trim="userId" placeholder="영어, 숫자, -, _ 가능, 16자 이하">
+                        <input type="text" id="userId" v-model.trim="userId" placeholder="영어, 숫자, -, _만 가능, 16자 이하">
                         <p v-if="store.idCheck==0">중복 검사를 실시해 주세요</p>
                         <p v-if="store.idCheck==1" style="color:red">중복된 아이디입니다.</p>
                         <p v-if="store.idCheck==2" style="color:blue">중복 검사를 통과했습니다.</p>
