@@ -72,6 +72,7 @@ onMounted(async () => {
     await store.getUser(userId.value); // 사용자 정보 가져오기
 
     userUuid.value = store.user.userUuid;
+    console.log("Uuid: ",userUuid.value)
     console.log("닉네임:",userNick.value)
     store2.getUserBoardList(userNick.value)
   } catch (error) {

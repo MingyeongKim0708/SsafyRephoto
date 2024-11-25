@@ -147,14 +147,22 @@
 	<update id="updateAvgScore" parameterType="int">
 	    UPDATE board
 	    SET avg_score = (
-	        SELECT AVG(score)
+	        SELECT IFNULL(AVG(score),0)
 	        FROM comment
 	        WHERE board_id = #{boardId}
 	    )
 	    WHERE board_id = #{boardId};
 	</update>
 	
-	
+	<!-- 전체 평균 점수 최신화 -->
+	<update id="updateAllAvgScore">
+	UPDATE board
+	SET avg_score = (
+	        SELECT IFNULL(AVG(score),0)
+	        FROM comment
+	        WHERE comment.board_id = board.board_id
+	)
+	</update>
 	
 	<!-- 게시글 수정.. 생각해보니까 안쓰네 댓글 수정할 때 사용하겠음 -->
 	<!--	<update id="updateBoard" parameterType="Board">

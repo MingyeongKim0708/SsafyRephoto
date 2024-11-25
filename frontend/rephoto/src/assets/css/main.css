@@ -1395,10 +1395,10 @@ section,
 # Starter Section Section
 --------------------------------------------------------------*/
 
-body, button, input, textarea, select {
+/* body, button, input, textarea, select {
   font-family: var(--default-font) !important;
   color: var(--default-color) !important;
-}
+} */
 /* 가장 아래에 custom 설정 */
 
 .container{

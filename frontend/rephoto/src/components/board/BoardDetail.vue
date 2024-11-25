@@ -100,6 +100,7 @@ const storeU = useUserStore();
 const editCommentContent = ref('');
 
 onMounted(() => {
+    console.log(route.params.id)
     store.getBoard(route.params.id); // 게시글 정보 및 댓글 목록 로드
 });
 

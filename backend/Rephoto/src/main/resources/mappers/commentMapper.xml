@@ -47,7 +47,7 @@
     </delete>
     
     <!-- 댓글 개수 조회 -->
-    <select id="countCommentsByBoardId" resultType="int" parameterType="int">
+    <select id="countComments" resultType="int" parameterType="int">
 	    SELECT COUNT(*)
 	    FROM comment
 	    WHERE board_id = #{boardId};

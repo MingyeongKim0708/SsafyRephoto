@@ -66,6 +66,8 @@ body {
   padding: 0;
   overflow-x: hidden; /* 가로 스크롤 제거 */
 }
+
+
 .logo{
   max-width: 100%;
   width: 150px; 
