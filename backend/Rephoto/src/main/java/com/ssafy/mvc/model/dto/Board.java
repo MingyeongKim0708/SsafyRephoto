@@ -1,5 +1,7 @@
 package com.ssafy.mvc.model.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +23,7 @@ public class Board {
 	private float avgScore = 0;
 	private String photoName;
 	private String photoUuid;
+	private List<Comment> comments;
 	public Board(String userNick, String boardTitle, String boardInfo) {
 		super();
 		this.userNick = userNick;

@@ -40,6 +40,8 @@ public interface BoardDao {
 	// photoUuid 조회
 	public String getPhotoUuidByBoardId(int boardId);
 
+	// 점수 갱신
+	public void updateAvgScore(int boardId);
 
 	// 페이징 처리된 게시물을 조회하는 기능
 //	public List<Board> searchWithPagination(SearchCondition condition, int offset, int size);

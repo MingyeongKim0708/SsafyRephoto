@@ -37,7 +37,7 @@ export const useBoardStore = defineStore('board', () => {
       url: REST_API_URL,
       method: 'POST',
 
-      withCredentials:true
+      withCredentials:true,
       data: formData,
       headers: {
         "Content-Type" : "multipart/form-data",
@@ -84,5 +84,22 @@ export const useBoardStore = defineStore('board', () => {
       })
   }
 
-  return { boardList, getBoardList, createBoard, board, getBoard, updateBoard, searchBoardList }
+  // 게시글 삭제
+const deleteBoard = (id) => {
+  axios
+      .delete(`${REST_API_URL}/${id}`,
+        {
+          withCredentials:true
+        }
+      )
+      .then(() => {
+          router.push({ name: "boardList" });
+      })
+      .catch((err) => {
+          console.error(err);
+          alert("게시글 삭제에 실패했습니다.");
+      });
+};
+
+  return { boardList, getBoardList, createBoard, board, getBoard, updateBoard, searchBoardList, deleteBoard }
 })
