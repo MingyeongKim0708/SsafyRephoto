@@ -1,29 +1,32 @@
 <template>
+  <div class="con">
     <div class="login-container">
-        <form class="login-box">
-            <fieldset>
-                <legend>로그인</legend>
-                <div class="inputform">
-                    <div>
-                        <label for="id" class="input-group">
-                            <p>아이디</p>
-                            <input type="text" id="id" placeholder="아이디를 입력하세요" required v-model = "user.userId">
-                        </label>
-                    </div>
-                    <div>
-                        <label for="password" class="input-group">
-                            <p>비밀번호</p>
-                            <input type="password" id="password" placeholder="비밀번호를 입력하세요" required v-model = "user.userPassword">
-                        </label>
-                    </div>
-                    <div>
-                        <button type="button" class="login-btn" @click.prevent.stop="login">로그인</button>
-                        <p class="signup-link">계정이 없으신가요? <a href="/user/regist">회원가입</a></p>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
+      <img src="../../image/background.PNG" alt="" class="logo">
+      <form class="login-box">
+          <fieldset>
+              <legend>로그인</legend>
+              <div class="inputform">
+                  <div>
+                      <label for="id" class="input-group">
+                          <p>아이디</p>
+                          <input type="text" id="id" placeholder="아이디를 입력하세요" required v-model = "user.userId">
+                      </label>
+                  </div>
+                  <div>
+                      <label for="password" class="input-group">
+                          <p>비밀번호</p>
+                          <input type="password" id="password" placeholder="비밀번호를 입력하세요" required v-model = "user.userPassword">
+                      </label>
+                  </div>
+                  <div>
+                      <button type="button" class="login-btn" @click.prevent.stop="login">로그인</button>
+                      <p class="signup-link">계정이 없으신가요? <a href="/user/regist">회원가입</a></p>
+                  </div>
+              </div>
+          </fieldset>
+      </form>
     </div>
+  </div>
 </template>
 
 <script setup>
@@ -53,12 +56,39 @@ const goRegist = function(){
 </script>
 
 <style scoped>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* 가로 스크롤 제거 */
+}
+.logo{
+  max-width: 100%;
+  width: 150px; 
+  height: auto;
+  margin-bottom: 20px;
+}
+.con {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  text-align: center; /* 가운데 정렬 */
+  overflow-x: hidden;
+}
+
+
 .login-container {
+  max-width: 100%;
+  overflow-x: hidden ;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color:#5A5A5A;
   font-family: Arial, sans-serif;
 }
 

@@ -6,7 +6,7 @@
                     <legend>회원 가입</legend>
                     <div class="form-group">
                         <label for="userId">아이디</label>               
-                        <input type="text" id="userId" v-model.trim="userId">
+                        <input type="text" id="userId" v-model.trim="userId" placeholder="아이디를 입력해주세요">
                         <p v-if="store.idCheck==0">중복 검사를 실시해 주세요</p>
                         <p v-if="store.idCheck==1" style="color:red">중복된 아이디입니다.</p>
                         <p v-if="store.idCheck==2" style="color:blue">중복 검사를 통과했습니다.</p>
@@ -14,11 +14,11 @@
                     </div>
                     <div class="form-group">
                         <label for="userPassword">비밀번호</label>
-                        <input type="password" id="userPassword" v-model.trim="userPassword">
+                        <input type="password" id="userPassword" v-model.trim="userPassword" placeholder="비밀번호를 입력해주세요">
                     </div>
                     <div class="form-group">
                         <label for="userEmail">이메일</label>
-                        <input type="email" id="userEmail" v-model.trim="userEmail">
+                        <input type="email" id="userEmail" v-model.trim="userEmail" placeholder="이메일을 입력해주세요">
                         <p v-if="store.emailCheck==0">중복 검사를 실시해 주세요</p>
                         <p v-if="store.emailCheck==1" style="color:red">중복된 이메일입니다.</p>
                         <p v-if="store.emailCheck==2" style="color:blue">중복 검사를 통과했습니다.</p>
@@ -26,7 +26,7 @@
                     </div>
                     <div class="form-group">
                         <label for="userNick"> 닉네임</label>
-                        <input type="text" id="userNick" v-model.trim="userNick">
+                        <input type="text" id="userNick" v-model.trim="userNick" placeholder="닉네임을 입력해주세요">
                         <p v-if="store.nickCheck==0">중복 검사를 실시해 주세요</p>
                         <p v-if="store.nickCheck==1" style="color:red">중복된 닉네임입니다.</p>
                         <p v-if="store.nickCheck==2" style="color:blue">중복 검사를 통과했습니다.</p>
