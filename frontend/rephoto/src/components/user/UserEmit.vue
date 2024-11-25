@@ -61,6 +61,8 @@ const handleImageUpload = function(event){
     userProfile.value = file;
     if (file) {
         previewUrl.value = URL.createObjectURL(file);
+    } else {
+        previewUrl.value = "";
     }
 };
 
@@ -94,7 +96,6 @@ onBeforeRouteLeave(()=>{
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color:#5A5A5A;
     font-family: Arial, sans-serif;
 }
 .update-container {
