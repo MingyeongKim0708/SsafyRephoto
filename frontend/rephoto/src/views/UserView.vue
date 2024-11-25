@@ -2,6 +2,7 @@
   <div class="con">
     <div class="start-container">
       <div class="logo">📸 Photo Review</div>
+      <img src="../assets/img/REPHOTO-logo.png" alt="" width="50%">
         <div class="tagline">Explore and Share Stunning Moments</div>
       <div v-if="!store.isLogin">
         <button class="start-button" @click="goLogin">Start</button>
@@ -9,6 +10,7 @@
       <div v-if="store.isLogin">
         <button class="start-button" @click="goBoard">Start</button>
       </div>
+
     </div>
   </div>
 </template>
@@ -47,6 +49,7 @@ router.push({"name":"boardList"})
 
   text-align: center;
   animation: fadeIn 2s ease-in-out;
+  color:#fafafa;
 }
 
 .logo {

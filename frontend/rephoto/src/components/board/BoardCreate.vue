@@ -10,7 +10,8 @@
                     <label for="title">Title</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="writer" placeholder="작성자" v-model="board.writer" readonly>
+                    <input type="text" class="form-control" id="writer" placeholder="작성자" v-model="board.writer"
+                        readonly>
                     <label for="writer">Writer</label>
                 </div>
                 <div class="form-floating mb-3">
@@ -21,6 +22,7 @@
                 <div class="mb-3">
                     <label for="fileUpload" class="form-label">Attach Image</label>
                     <input type="file" class="form-control" id="fileUpload" accept="image/*" @change="validateFile">
+                    <img v-if="previewUrl" :src="previewUrl" alt="프로필 이미지 미리보기" width="200px" height="200px" />
                     <div v-if="error" class="text-danger mt-2">{{ error }}</div>
                 </div>
                 <div class="d-flex justify-content-end">
@@ -52,6 +54,7 @@ const store2 = useUserStore();
 // 파일 상태 관리
 const file = ref(null); // 업로드된 파일
 const error = ref(""); // 오류 메시지
+const previewUrl = ref("") // 미리보기
 
 // 로컬 스토리지에서 로그인 사용자 정보 가져오기
 const loadUserNick = () => {
@@ -75,6 +78,12 @@ const validateFile = (event) => {
 
             if (allowedExtensions.includes(fileExtension)) {
                 file.value = uploadedFile;
+
+                if (uploadedFile) {
+                    previewUrl.value = URL.createObjectURL(uploadedFile);
+                } else {
+                    previewUrl.value = "";
+                }
                 error.value = ""; // 오류 초기화
             } else {
                 file.value = null;
@@ -103,7 +112,7 @@ const createBoard = function () {
     if (file.value) {
         console.log("업로드된 파일 : ", file.value.name)
     }
-    store.createBoard(file.value,board.value.writer,board.value.title,board.value.content)
+    store.createBoard(file.value, board.value.writer, board.value.title, board.value.content)
 };
 
 // 컴포넌트가 마운트될 때 로그인 사용자 닉네임 로드

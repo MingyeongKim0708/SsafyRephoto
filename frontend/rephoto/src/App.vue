@@ -78,8 +78,10 @@ const isLoading = ref(true);
 #app {
   display: flex;
   flex-direction: column;
+
   height: 100vh;
   width: 100%;
+
   /* background-color: #5A5A5A; */
 }
 
@@ -89,12 +91,18 @@ header{
 }
 
 footer{
-  height:120px;
+  min-height: 120px; /* 유동적 설정 */
   background-color: black;
 }
 /* MainView가 Header와 Footer 사이의 영역을 채우도록 설정 */
 .main-content {
   flex: 1; /* 나머지 공간을 채우도록 */
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 0;
 }
 

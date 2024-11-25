@@ -2,7 +2,10 @@
   <div class="header">
     <div class="header-info">
       <a href="/board" class="logo d-flex align-items-center me-auto me-xl-0">
+        <i class="bi bi-camera"></i>
+        <img src="../../assets/img/REPHOTO-logo.png" alt="">
         <img src="../../image/REPHOTO-001-removebg-preview.png" alt="">
+
       </a>
       <div v-if="store.isLogin">
         <RouterLink :to="{'name':'profile', params:{'userId':store.loginUser.userId, 'userNick':store.loginUser.userNick}}">{{store.loginUser.userNick}}</RouterLink>
