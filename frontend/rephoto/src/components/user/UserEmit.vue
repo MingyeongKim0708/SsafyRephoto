@@ -94,7 +94,7 @@ onBeforeRouteLeave(()=>{
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(to bottom right, #4caf50, #81c784);
+    background-color:#5A5A5A;
     font-family: Arial, sans-serif;
 }
 .update-container {

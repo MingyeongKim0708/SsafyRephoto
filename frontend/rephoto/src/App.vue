@@ -1,25 +1,22 @@
 <template>
-  <div class="total">
-    <header>
-        <TheHeaderNav />
-    </header>
-    <div class="container">
-      <main>
-        <RouterView />
-        <!-- <div v-if="isLoading" id="preloader">Loading...</div>
-        <div v-else>
-          <slot></slot>
-        </div>
-        <div v-if="isLoading" id="preloader">
-          <div class="line"></div>
-        </div> -->
-      </main>
-
+  <div id="app">
+    <TheHeaderNav />
+    <main class="main-content">
+      <RouterView />
+      <!-- <div v-if="isLoading" id="preloader">Loading...</div>
+      <div v-else>
+        <slot></slot>
+      </div>
+      <div v-if="isLoading" id="preloader">
+        <div class="line"></div>
+      </div> -->
+    </main>
+    <footer class="footer">
       <TheFooter />
       <button class="scroll-top" @click="scrollToTop">
           ↑
       </button>
-    </div>
+    </footer>
   </div>
 </template>
 
@@ -72,39 +69,38 @@ const isLoading = ref(true);
 
 <style scoped>
 
-.total{
-  margin: 0px;
-  padding: 0px;
-}
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+} */
 
-.container{
-  height : 100vh;
-  width : 100vw;
+#app {
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background-color: #5A5A5A;
 }
 
-header {
-  position: fixed;
-  top: 0;
-  width: 100%;
+header{
   height:120px;
-  background-color: #f4f4f4;
 }
 
-main {
-  flex: 1; /* 나머지 공간을 모두 차지 */
-  width: 100%;
+footer{
+  height:120px;
+  background-color: black;
+}
+/* MainView가 Header와 Footer 사이의 영역을 채우도록 설정 */
+.main-content {
+  flex: 1; /* 나머지 공간을 채우도록 */
   display: flex;
-  flex-direction: column;
-  margin:120px;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;
+  padding: 0;
 }
 
-footer {
-  height: 100px;
-  position: relative;
-  transform: translateY(-100%);
-}
 
 .scroll-top {
   position: fixed;

@@ -1,5 +1,6 @@
 <template>
-    <div>
+  <div class="profile">
+    <div class="profile-detail">
       <div class="profile-header">
         <img :src="`http://localhost:8080/user/userImg/${userUuid}`" alt="Profile" class="profile-image">
         <div class="profile-info">
@@ -12,41 +13,39 @@
       </div>
     </div>
     <div class="container">
-    <h4>{{userNick}}님의 게시글</h4>
-    <UserOrderInput :userNick="userNick"/>
-    <hr />
-    <div class="gallery">
-      <div 
-        v-for="board in currentPageBoardList" 
-        :key="board.boardId" 
-        class="gallery-item"
-      >
-        <img 
-          :src="getPhotoUrl(board.photoUuid)" 
-          :alt="board.boardTitle" 
-          class="gallery-image"
-
-        />
-        <div class="gallery-info">
-          <h5>{{ board.boardTitle }}</h5>
-          <p>{{ board.userNick }}</p>
-          <p>조회수: {{ board.viewCnt }}</p>
-          <RouterLink :to="`/board/${board.boardId}`">상세보기</RouterLink>
+      <h4>{{userNick}}님의 게시글</h4>
+      <UserOrderInput :userNick="userNick"/>
+      <hr />
+      <div class="gallery">
+        <div 
+          v-for="board in currentPageBoardList" 
+          :key="board.boardId" 
+          class="gallery-item"
+        >
+          <img 
+            :src="getPhotoUrl(board.photoUuid)" 
+            :alt="board.boardTitle" 
+            class="gallery-image"
+          />
+          <div class="gallery-info">
+            <h5>{{ board.boardTitle }}</h5>
+            <p>{{ board.userNick }}</p>
+            <p>조회수: {{ board.viewCnt }}</p>
+            <RouterLink :to="`/board/${board.boardId}`">상세보기</RouterLink>
+          </div>
         </div>
       </div>
+      <nav aria-label="Page navigation">
+        <ul class="pagination d-flex justify-content-center">
+          <li class="page-item"><a class="page-link" @click.prevent="currentPage--" :class="{disabled: currentPage <= 1}" href="#">&lt;</a></li>
+          <li class="page-item" :class="{active: currentPage == page}" v-for="page in pageCount" :key="page">
+              <a href="#" class="page-link" @click.prevent="clickPage(page)">{{page}}</a>
+          </li>
+          <li class="page-item"><a class="page-link" @click.prevent="currentPage++" :class="{disabled: currentPage >= pageCount}" href="#">&gt;</a></li>
+        </ul>
+      </nav>
     </div>
-
-
-    <nav aria-label="Page navigation">
-      <ul class="pagination d-flex justify-content-center">
-        <li class="page-item"><a class="page-link" @click.prevent="currentPage--" :class="{disabled: currentPage <= 1}" href="#">&lt;</a></li>
-        <li class="page-item" :class="{active: currentPage == page}" v-for="page in pageCount" :key="page">
-            <a href="#" class="page-link" @click.prevent="clickPage(page)">{{page}}</a>
-        </li>
-        <li class="page-item"><a class="page-link" @click.prevent="currentPage++" :class="{disabled: currentPage >= pageCount}" href="#">&gt;</a></li>
-      </ul>
-    </nav>
-  </div>
+  </div>  
 </template>
 
 <script setup>
@@ -101,6 +100,12 @@ const goEmit = function(){
 
 <style scoped>
 
+.profile{
+  width:100vw;
+  display: flex;
+  flex-direction: column;
+}
+
 .profile-image {
   width: 100px;
   height: 100px;
@@ -114,7 +119,9 @@ const goEmit = function(){
   margin-bottom: 20px;
 }
 
-
+.profile-detail{
+  padding-left: 10%;
+}
 img{
   margin:10px;
 }

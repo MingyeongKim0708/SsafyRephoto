@@ -39,7 +39,7 @@
                         <img v-if="previewUrl" :src="previewUrl" alt="프로필 이미지 미리보기" width="200px" height="200px" />
                     </div>
                     <div>
-                        <button id="button" type="submit button" class="btn btn-success">등록</button>    
+                        <button id="button" type="submit-button" class="submit-btn">등록</button>    
                     </div>
                 </fieldset>
             </form>
@@ -105,21 +105,27 @@ onBeforeRouteLeave(()=>{
 <style scoped>
 
 .regist-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: linear-gradient(to bottom right, #4caf50, #81c784);
-    font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  height: 100vh; /* 부모 요소 높이를 화면 전체로 설정 */
+  overflow: hidden; /* 넘치는 내용 숨기기 */
 }
+
+.regist {
+  width: 100%;
+  max-width: 500px; /* 최대 너비 제한 */
+}
+
 .signup-container {
-    width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-height: 100vh; /* 내용이 너무 길어지지 않도록 제한 */
+  overflow-y: auto; /* 내용이 넘치면 세로 스크롤 활성화 */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
