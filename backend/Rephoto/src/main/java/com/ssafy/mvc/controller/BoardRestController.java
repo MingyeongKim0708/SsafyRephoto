@@ -84,7 +84,7 @@ public class BoardRestController {
 	}
 
 
-	// 게시물 전체 목록 조회 및 검색
+	// 유저 게시글 목록 조회 및 검색
 		@GetMapping("/userPhoto/{userNick}")
 		public ResponseEntity<?> photoList(@PathVariable String userNick, @ModelAttribute SearchCondition condition) {
 			try {

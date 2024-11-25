@@ -33,19 +33,8 @@ router.push({"name":"boardList"})
   box-sizing: border-box;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)),
-              url('https://via.placeholder.com/1920x1080') center/cover no-repeat;
-  color: white;
-  overflow: hidden;
-}
-
 .start-container {
+
   text-align: center;
   animation: fadeIn 2s ease-in-out;
 }

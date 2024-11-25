@@ -80,7 +80,7 @@ const isLoading = ref(true);
   flex-direction: column;
   height: 100vh;
   width: 100vw;
-  background-color: #5A5A5A;
+  /* background-color: #5A5A5A; */
 }
 
 header{
