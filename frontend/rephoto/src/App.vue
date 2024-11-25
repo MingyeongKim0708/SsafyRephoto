@@ -92,7 +92,6 @@ const isLoading = ref(true);
 #app {
   display: flex;
   flex-direction: column;
-
   min-height: 100vh;
   min-width: 100%;
 
@@ -111,6 +110,7 @@ footer{
 /* MainView가 Header와 Footer 사이의 영역을 채우도록 설정 */
 /* 메인 콘텐츠 영역 */
 .main-content {
+
   flex: 1;
   display: flex;
   justify-content: center;

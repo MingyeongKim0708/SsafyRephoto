@@ -121,6 +121,10 @@ const truncateText = (text, maxLength) => {
   padding-left: 15px;
 }
 
+#total{
+  color:white;
+}
+
 .row {
   margin-right: 0;
   margin-left: 0;

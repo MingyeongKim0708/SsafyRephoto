@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user', () => {
   const idCheck = ref(0);                                               // 아이디 중복확인
   const nickCheck = ref(0);                                             // 닉네임 중복확인
   const emailCheck = ref(0);                                            // 이메일 중복확인
-  const photoList = ref([]);                                             // 해당 유저의 photo리스트
+  const photoList = ref([]);                                            // 해당 유저의 photo리스트
   const login = function(user){                                         // 로그인 요청
     axios({
       url: `${REST_API_URL}/login`,
@@ -27,6 +27,7 @@ export const useUserStore = defineStore('user', () => {
       router.push({'name':'boardList'})                                   // 성공 시 boardList
     })
     .catch(()=>{
+      alert("아이디 혹은 비밀번호가 틀렸습니다.")
       router.push({'name':'login'}) // loginview에서 onbeforerouteleave쓰자
     })
   };
@@ -83,6 +84,7 @@ export const useUserStore = defineStore('user', () => {
       router.push({'name':'login'})
     })
     .catch(()=>{
+      alert("중복 검사 혹은 입력 정보를 다시 확인해주세요")
       console.log("회원가입 실패")
     })
   } 

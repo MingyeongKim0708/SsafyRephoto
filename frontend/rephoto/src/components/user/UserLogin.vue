@@ -1,7 +1,7 @@
 <template>
   <div class="con">
     <div class="login-container">
-      <img src="../../image/background.PNG" alt="" class="logo">
+      <img src="../../assets/img/REPHOTO-logo.png" alt="" class="logo">
       <form class="login-box">
           <fieldset>
               <legend>로그인</legend>

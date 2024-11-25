@@ -177,15 +177,16 @@ public class UserController {
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<?> quit(@PathVariable String userId, HttpSession session) {
 		try {
-
+			System.out.println(userId+" "+session.getAttribute("userId"));
 			// 로그인한 유저와 탈퇴하고자 하는 유저의 id가 같아야 탈퇴 가능
-			if (userId.equals(session.getAttribute("userId"))) {
+			if (!userId.equals(session.getAttribute("userId"))) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0);
 			}
 
 			// 이 Id로 탈퇴시키는 유저 수
 			int result = userService.removeUser(userId);
 			if (result == 1) {
+				session.invalidate();
 				return ResponseEntity.status(HttpStatus.OK).body(1);
 			} else {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0);

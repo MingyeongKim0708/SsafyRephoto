@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import {useUserStore} from '@/stores/user';
 import { useRoute,onBeforeRouteLeave } from 'vue-router';
 
@@ -49,6 +49,7 @@ const userId = ref(route.params.userId);
 const store = useUserStore();
 
 const previewUrl = ref("")
+
 
 const userPassword = ref('')
 const userEmail = ref('')
