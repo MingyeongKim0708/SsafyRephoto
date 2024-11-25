@@ -1,13 +1,16 @@
 <template>
-  
-  <div class="start-container">
-    <img src="../assets/img/REPHOTO-logo.png" alt="" width="50%">
-      <div class="tagline">Explore and Share Stunning Moments</div>
-    <div v-if="!store.isLogin">
-      <button class="start-button" @click="goLogin">Start</button>
-    </div>
-    <div v-if="store.isLogin">
-      <button class="start-button" @click="goBoard">Start</button>
+  <div class="con">
+    <div class="start-container">
+      <div class="logo">📸 Photo Review</div>
+      <img src="../assets/img/REPHOTO-logo.png" alt="" width="50%">
+        <div class="tagline">Explore and Share Stunning Moments</div>
+      <div v-if="!store.isLogin">
+        <button class="start-button" @click="goLogin">Start</button>
+      </div>
+      <div v-if="store.isLogin">
+        <button class="start-button" @click="goBoard">Start</button>
+      </div>
+
     </div>
   </div>
 </template>
@@ -32,6 +35,14 @@ router.push({"name":"boardList"})
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.con {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .start-container {

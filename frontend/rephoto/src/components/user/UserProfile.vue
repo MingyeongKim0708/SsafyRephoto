@@ -4,8 +4,8 @@
       <div class="profile-header">
         <img :src="`http://localhost:8080/user/userImg/${userUuid}`" alt="Profile" class="profile-image">
         <div class="profile-info">
-          <h3>{{userNick}}</h3>
-          <h4>게시글 수 : {{ store2.boardList.length }}</h4>
+          <h2>{{userNick}}</h2>
+          <p>게시글 수 : {{ store2.boardList.length }}</p>
         </div>
       </div>
       <div v-if="store.loginUser.userId === userId" class="emit">
@@ -101,9 +101,11 @@ const goEmit = function(){
 <style scoped>
 
 .profile{
+  padding-left: 20%;
   width:100vw;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
 }
 
 .profile-image {
@@ -120,8 +122,14 @@ const goEmit = function(){
 }
 
 .profile-detail{
-  padding-left: 10%;
+  width:100%;
 }
+
+.container{
+  margin:0;
+  width:100%;
+}
+
 img{
   margin:10px;
 }

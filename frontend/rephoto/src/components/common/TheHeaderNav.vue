@@ -1,21 +1,19 @@
 <template>
   <div class="header">
-    <div>
+    <div class="header-info">
       <a href="/board" class="logo d-flex align-items-center me-auto me-xl-0">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-        <!-- <img src="assets/img/logo.png" alt=""> -->
         <i class="bi bi-camera"></i>
         <img src="../../assets/img/REPHOTO-logo.png" alt="">
+        <img src="../../image/REPHOTO-001-removebg-preview.png" alt="">
+
       </a>
-      <span v-if="store.isLogin">
-
+      <div v-if="store.isLogin">
         <RouterLink :to="{'name':'profile', params:{'userId':store.loginUser.userId, 'userNick':store.loginUser.userNick}}">{{store.loginUser.userNick}}</RouterLink>
-
         <span>님, 안녕하세요!</span>
         <br>
-        <button @click.prevent.stop="logout">로그 아웃</button>
-        <button @click.prevent.stop="quit">회원 탈퇴</button>
-      </span>
+        <span class = "text" @click.prevent.stop="logout">로그아웃  </span>
+        <span class = "text" @click.prevent.stop="quit">회원탈퇴</span>
+      </div>
     </div>
   </div>
 </template>
@@ -68,6 +66,9 @@ function toggleDropdown() {
   z-index: 9999;
 }
 
+.logo{
+  text-decoration: none;
+}
 .mobile-nav-active .navmenu {
   position: fixed;
   overflow: hidden;
@@ -79,4 +80,20 @@ function toggleDropdown() {
 .mobile-nav-active .navmenu>ul {
   display: block;
 }
+
+.text{
+  color: white;
+}
+header{
+  padding: 0;
+}
+.header-info{
+  height:100%;
+  width: 100%;
+  padding:0 20px 0 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 </style>
