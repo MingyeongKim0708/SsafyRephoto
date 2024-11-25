@@ -71,6 +71,7 @@ export const useBoardStore = defineStore('board', () => {
     )
       .then((response) => {
         board.value = response.data
+        console.log(board.value)
       })
   }
 
