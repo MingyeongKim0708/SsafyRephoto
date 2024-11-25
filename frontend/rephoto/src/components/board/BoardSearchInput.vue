@@ -24,7 +24,7 @@
                     <div class="form-check-inline">
                         <input v-model="searchInfo.orderBy" class="form-check-input" type="radio" id="boardId"
                             value="board_id" />
-                        <label class="form-check-label" for="boardId">등록</label>
+                        <label class="form-check-label" for="boardId">등록일</label>
                     </div>
                     <div class="form-check-inline">
                         <input v-model="searchInfo.orderBy" class="form-check-input" type="radio" id="avgScore"
@@ -34,7 +34,7 @@
                     <div class="form-check-inline">
                         <input v-model="searchInfo.orderBy" class="form-check-input" type="radio" id="viewCnt"
                             value="view_cnt" />
-                        <label class="form-check-label" for="viewCnt">조회</label>
+                        <label class="form-check-label" for="viewCnt">조회수</label>
                     </div>
                 </div>
 
@@ -128,7 +128,7 @@ const sortChange = function () {
 
 .search-filters {
     display: flex;
-    gap: 10px;
+    gap: 1px;
     align-items: center;
     /* 라디오 버튼과 텍스트 정렬 */
 }

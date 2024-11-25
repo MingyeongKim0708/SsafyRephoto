@@ -11,8 +11,12 @@
             <div class="gallery-item h-100">
               <img :src="getPhotoUrl(board.photoUuid)" :alt="board.boardTitle" class="img-fluid" />
               <div class="gallery-links d-flex flex-column align-items-center justify-content-center">
+                <RouterLink v-if="board.userId"
+                  :to="{ name: 'profile', params: { userId: board.userId, userNick: board.userNick } }"
+                  class="gallery-author">
+                  {{ board.userNick }}
+                </RouterLink>
                 <p class="gallery-title">{{ truncateText(board.boardTitle, 15) }}</p>
-                <RouterLink :to="{'name':'profile', params:{'userId':storeU.loginUser.userId, 'userNick':storeU.loginUser.userNick}}" class="gallery-author">{{storeU.loginUser.userNick}}</RouterLink>
                 <RouterLink :to="`/board/${board.boardId}`" class="details-link">
                   <i class="bi bi-link-45deg"></i>
                 </RouterLink>
@@ -182,16 +186,16 @@ const truncateText = (text, maxLength) => {
   color: #bdbdbd;
   /* 회색 톤 */
   font-size: 14px;
-  margin-bottom: 10px;
+
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   text-decoration: none;
-  
+
 }
 
-.gallery .gallery-author:hover{
+.gallery .gallery-author:hover {
   color: #ffffff;
 }
 
