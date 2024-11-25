@@ -11,26 +11,25 @@ export const useCommentStore = defineStore('comment', () => {
   
 
   //댓글 등록
-const addComment = (newComment) => {
-  axios
-      .post(REST_API_URL, {
-          data : newComment,
-          withCredentials:true
-      })
-      .then(() => {
-          console.log("댓글 갱신")
-          router.push({
-            name:"boardDetail",
-            params:{
-              id:newComment.boardId
-            }
-          })
-      })
-      .catch((err) => {
-          console.error(err);
-          alert("댓글 작성에 실패했습니다.");
-      });
-};
+  const addComment = function(newCommentData){
+    console.log(newCommentData)
+    axios({
+      url: `${REST_API_URL}`,
+      method: `POST`,
+      data: newCommentData,
+      withCredentials:true
+    })
+    .then(() => {
+        console.log("댓글 갱신")
+        console.log(newCommentData)
+        router.go()
+    })
+    .catch((err) => {
+        console.log(newCommentData)
+        console.error(err);
+        alert("댓글 작성에 실패했습니다.");
+    });
+  };
 
 
 
