@@ -100,6 +100,10 @@ const router = createRouter({
       ]
     },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    // 항상 최상단으로 이동
+    return { top: 0 };
+  },
 })
 
 export default router

@@ -1,7 +1,5 @@
 <template>
     <div class="container">
-        <h4>게시글 작성</h4>
-
         <form @submit.prevent.stop="createBoard">
             <fieldset>
 
