@@ -105,6 +105,10 @@ const getPhotoUrl = (photoUuid) => `http://localhost:8080/img/${photoUuid}`;
   padding-left: 15px;
 }
 
+#total{
+  color:white;
+}
+
 .row {
   margin-right: 0;
   margin-left: 0;

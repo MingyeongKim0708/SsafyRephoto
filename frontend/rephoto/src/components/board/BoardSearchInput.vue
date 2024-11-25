@@ -18,7 +18,7 @@
                 </div>
                 <div class="form-check form-check-inline">
                     <input v-model="searchInfo.orderBy" class="form-check-input" type="radio" id="avgScore" value="avg_score" />
-                    <label class="form-check-label" for="avgScore"><i class="bi bi-person-fill">평점순</i></label>
+                    <label class="form-check-label" for="avgScore"><i class="bi bi-person-fill"></i>평점순</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input v-model="searchInfo.orderBy" class="form-check-input" type="radio" id="viewCnt"

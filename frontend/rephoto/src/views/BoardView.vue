@@ -12,5 +12,7 @@ import { RouterView } from 'vue-router';
 </script>
 
 <style scoped>
-
+.text-center{
+  color:white;
+}
 </style>
