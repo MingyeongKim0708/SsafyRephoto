@@ -106,8 +106,9 @@ public class UserServiceImpl implements UserService {
 		info.put("id", id);
 		info.put("password", password);
 		User tmp_user = userDao.selectOne(info);
-		String userUuid = userDao.selectUuid(id);
-		tmp_user.setUserUuid(userUuid);
+		User tmp = userDao.selectUuid(id);
+		tmp_user.setUserImg(tmp.getUserImg());
+		tmp_user.setUserUuid(tmp.getUserUuid());
 		return tmp_user;
 	}
 
@@ -119,6 +120,10 @@ public class UserServiceImpl implements UserService {
 		info.put("id", id);
 		info.put("password", null);
 		User tmp_user = userDao.selectOne(info);
+		User tmp = userDao.selectUuid(id);
+		System.out.println(tmp);
+		tmp_user.setUserImg(tmp.getUserImg());
+		tmp_user.setUserUuid(tmp.getUserUuid());
 		tmp_user.setUserEmail(null);
 		tmp_user.setUserPassword(null);
 		System.out.println("서비스유저"+tmp_user);
@@ -127,7 +132,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int removeUser(String id) throws IOException {
-		String userUuid = userDao.selectUuid(id);
+		User tmp = userDao.selectUuid(id);
+		String userUuid = tmp.getUserUuid();
 		Resource resource = resourceLoader.getResource("classpath:/static/img");
 		if(!userUuid.equals("0.webp")) {
 			File file = new File(resource.getFile(),userUuid);
@@ -141,7 +147,8 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public void removeProfile(String id) throws IOException {
-		String userUuid = userDao.selectUuid(id);
+		User tmp = userDao.selectUuid(id);
+		String userUuid = tmp.getUserPassword();
 		Resource resource = resourceLoader.getResource("classpath:/static/img");
 		if(!userUuid.equals("0.webp")) {
 			File file = new File(resource.getFile(),userUuid);

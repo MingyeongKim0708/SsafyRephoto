@@ -62,16 +62,14 @@ const store2 = useBoardStore();
 const userId = ref(route.params.userId)
 const userNick = ref(route.params.userNick)
 
-const userUuid = ref('')
+const userUuid = computed(()=>store.user.userUuid)
 const currentPage = ref(1)
 const perPage = 12;
 
 
-onMounted(async () => {
+onMounted(() => {
   try {
-    await store.getUser(userId.value); // 사용자 정보 가져오기
-
-    userUuid.value = store.user.userUuid;
+    store.getUser(userId.value); // 사용자 정보 가져오기
     console.log("Uuid: ",userUuid.value)
     console.log("닉네임:",userNick.value)
     store2.getUserBoardList(userNick.value)

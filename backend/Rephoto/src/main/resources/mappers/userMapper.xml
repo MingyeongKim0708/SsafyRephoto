@@ -14,8 +14,8 @@
 	</select>
 	
 	<!--유저의 Uuid 가져오기-->
-	<select id="selectUuid" parameterType="String" resultType="String">
-		SELECT user_uuid
+	<select id="selectUuid" parameterType="String" resultType="User">
+		SELECT user_img, user_uuid
 		FROM profile
 		WHERE user_id = #{id}
 	</select>
