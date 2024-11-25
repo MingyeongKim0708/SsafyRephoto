@@ -36,11 +36,23 @@
             <h5>댓글</h5>
             <ul class="list-group">
                 <li class="list-group-item" v-for="comment in store.board.comments" :key="comment.id">
-                    <strong>{{ comment.userNick }}</strong> <small class="text-muted">{{ comment.createdAt }}</small>
-                    <p>{{ comment.review }}</p>
-                    <div v-if="isOwner(comment.userNick)" class="d-flex justify-content-end">
-                        <button class="btn btn-outline-primary btn-sm mx-1" @click="editComment(comment)">수정</button>
-                        <button class="btn btn-outline-danger btn-sm" @click="deleteComment(comment.id)">삭제</button>
+                    <div v-if="comment.isEditing">
+                        <textarea v-model="editCommentContent" class="form-control"></textarea>
+                        <button class="btn btn-success btn-sm mt-2"
+                            @click.prevent.stop="saveEditedComment(comment.id)">저장</button>
+                        <button class="btn btn-secondary btn-sm mt-2" @click.prevent.stop="cancelEdit">취소</button>
+                    </div>
+                    <div v-else>
+                        <!-- 일반 모드 -->
+                        <strong>{{ comment.userNick }}</strong>
+                        <small class="text-muted">{{ comment.createdAt }}</small>
+                        <p>{{ comment.review }}</p>
+                        <div v-if="isOwner(comment.userNick)" class="d-flex justify-content-end">   
+                            <button class="btn btn-outline-primary btn-sm mx-1"
+                                @click.prevent.stop="editComment(comment)">수정</button>
+                            <button class="btn btn-outline-danger btn-sm"
+                                @click.prevent.stop="deleteConfirm(comment.id)">삭제</button>
+                        </div>
                     </div>
                 </li>
             </ul>
@@ -67,23 +79,20 @@ import axios from "axios";
 const route = useRoute();
 const router = useRouter();
 const store = useBoardStore();
-const store2 = useCommentStore();
-const store3 = useUserStore();
-
-// 새 댓글 입력 데이터
-const newComment = ref({
-    review: "",
-    score: 0,
-    userNick: store3.loginUser.userNick,
-    boardId: parseInt(route.params.id)
-})
+const storeC = useCommentStore();
+const storeU = useUserStore();
 
 onMounted(() => {
     store.getBoard(route.params.id); // 게시글 정보 및 댓글 목록 로드
 });
 
-// 사진 URL 생성 함수
-const getPhotoUrl = (photoUuid) => `http://localhost:8080/img/${photoUuid}`;
+// 새 댓글 입력 데이터
+const newComment = ref({
+    review: "",
+    score: 0,
+    userNick: storeU.loginUser.userNick,
+    boardId: parseInt(route.params.id)
+})
 
 // 댓글 등록
 const addComment = function () {
@@ -97,25 +106,63 @@ const addComment = function () {
         return;
     }
 
-    console.log(typeof newComment.value.review)
-    console.log(typeof newComment.value.boardId)
-    console.log(typeof newComment.value.score)
-    console.log(typeof newComment.value.userNick)
-    store2.addComment(newComment.value)
+    // console.log(typeof newComment.value.review)
+    // console.log(typeof newComment.value.boardId)
+    // console.log(typeof newComment.value.score)
+    // console.log(typeof newComment.value.userNick)
+    storeC.addComment(newComment.value)
 
     newComment.value.review = "";   // 입력 필드 초기화
     newComment.value.score = 0;      // 평점 초기화
 }
 
+
+
+// 댓글 수정
+const editComment = (comment) => {
+    comment.isEditing = true; // 해당 댓글 수정 모드로 변경
+    comment.editContent = comment.review; // 기존 댓글 내용 불러오기
+};
+
+// 댓글 수정 저장
+const saveEditedComment = (comment) => {
+    if (!editCommentContent.value.trim()) {
+        alert("댓글 내용을 입력하세요.");
+        return;
+    }
+
+    // store를 통해 댓글 수정 요청
+    storeC.saveEditedComment(comment.id, comment.editContent);
+    comment.isEditing = false; // 수정 모드 종료
+};
+
+// 수정 취소
+const cancelEdit = (comment) => {
+    comment.isEditing = false; // 수정 모드 종료
+    comment.editContent = ""; // 내용 초기화
+};
+
+// 댓글 삭제 확인
+const deleteConfirm = (commentId) => {
+    if (confirm("정말로 삭제하시겠습니까?")) {
+        store.deleteComment(commentId); // 댓글 삭제
+    }
+};
+
+
+// 사진 URL 생성 함수
+const getPhotoUrl = (photoUuid) => `http://localhost:8080/img/${photoUuid}`;
+
+
 // 게시글 삭제
-const deleteBoard = function(){
+const deleteBoard = function () {
     store.deleteBoard(route.params.id)
 }
 
 // 본인 여부 확인
 const isOwner = (userNick) => {
-    const loginUser = JSON.parse(localStorage.getItem("loginUser"));
-    return loginUser && loginUser.userNick === userNick;
+    // 로그인한 사용자의 닉네임과 댓글 작성자의 닉네임을 비교
+    return userNick === storeU.loginUser.userNick;
 };
 
 
