@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-center">Board</h2>
+    <RouterLink :to="`/board`" id="title"><h2 class="text-center">REPHOTO : GALLERY</h2></RouterLink>
     <RouterView/>
   </div>
 </template>
@@ -12,7 +12,9 @@ import { RouterView } from 'vue-router';
 </script>
 
 <style scoped>
-.text-center{
-  color:white;
+#title{
+  text-decoration: none;
+  color: #fff;
 }
+
 </style>

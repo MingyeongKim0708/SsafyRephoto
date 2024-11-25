@@ -1,8 +1,13 @@
 <template>
   <div id="app">
     <TheHeaderNav />
+
     <main class="main-content">
-      <RouterView />
+      <div class="container">
+        <RouterView />
+      </div>
+
+      <!-- 로딩화면 시작-->
       <!-- <div v-if="isLoading" id="preloader">Loading...</div>
       <div v-else>
         <slot></slot>
@@ -10,18 +15,20 @@
       <div v-if="isLoading" id="preloader">
         <div class="line"></div>
       </div> -->
+      <!-- 로딩화면 끝 -->
     </main>
+
     <footer class="footer">
       <TheFooter />
-      <button class="scroll-top" @click="scrollToTop">
-          ↑
-      </button>
     </footer>
+        
+    <button class="scroll-top" :class="{ active: isScrollTopVisible }" @click="scrollToTop">↑</button>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
+import { useRouter } from 'vue-router';
 import TheHeaderNav from "./components/common/TheHeaderNav.vue";
 import TheFooter from "./components/common/TheFooter.vue";
 
@@ -30,6 +37,7 @@ import 'aos/dist/aos.css';
 import GLightbox from 'glightbox';
 import 'glightbox/dist/css/glightbox.css';
 
+const router = useRouter();
 const isScrolled = ref(false);
 const isScrollTopVisible = ref(false);
 
@@ -48,9 +56,15 @@ onMounted(() => {
   AOS.init({
     duration: 600,
     easing: 'ease-in-out',
-    once: true,
+    once: false,
     mirror: false,
   });
+  router.afterEach(() => {
+    AOS.refresh(); // 페이지 전환 시 애니메이션 재적용
+  });
+
+  
+
   GLightbox({ selector: '.glightbox' });
 
   // 로딩 상태 변경 후 2초 뒤에 'loaded' 클래스 추가
@@ -94,22 +108,48 @@ footer{
   background-color: black;
 }
 /* MainView가 Header와 Footer 사이의 영역을 채우도록 설정 */
+/* 메인 콘텐츠 영역 */
 .main-content {
-  flex: 1; /* 나머지 공간을 채우도록 */
+
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 0;
+  padding: 20px;
+}
+
+/* 콘텐츠를 감싸는 컨테이너 */
+.main-content .container {
+  max-width: 1200px; /* 콘텐츠의 최대 너비 */
+  width: 100%;
+  padding: 20px;
+  border-radius: 8px; /* 시각적 강조를 위한 모서리 둥글기 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
 }
 
 
+
+/* 스크롤 버튼 스타일 */
 .scroll-top {
   position: fixed;
   bottom: 20px;
   right: 20px;
   display: none;
+  background-color: var(--accent-color);
+  color: var(--contrast-color);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 20px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  z-index: 1000; /* 항상 위에 표시 */
 }
 
 .scroll-top.active {
