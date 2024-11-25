@@ -46,26 +46,25 @@
             </ul>
             <!-- 댓글 입력 -->
             <div class="mt-3">
-                <textarea v-model="newComment.review" class="form-control" rows="3" placeholder="댓글을 입력하세요"></textarea>
-                <input v-model.number="newComment.score" type="number" class="form-control mt-2"
-                    placeholder="평점을 입력하세요 (0~5)" min="0" max="5" />
-                <button class="btn btn-primary mt-2" @click.prevent.stop="addComment">댓글 작성</button>
+                <form @submit.prevent.stop="addComment">
+                    <textarea v-model="newComment.review" class="form-control" rows="3" placeholder="댓글을 입력하세요"></textarea>
+                    <input v-model.number="newComment.score" type="number" class="form-control mt-2"
+                        placeholder="평점을 입력하세요 (0~5)" min="0" max="5" />
+                    <button type="submit" class="btn btn-primary mt-2" >댓글 작성</button>
+                </form>
             </div>
-
         </div>
     </div>
 </template>
 
 <script setup>
-import { useRoute, useRouter } from "vue-router";
+import { useRoute} from "vue-router";
 import { ref, onMounted } from "vue";
 import { useBoardStore } from "@/stores/board";
 import { useCommentStore } from "@/stores/comment";
 import { useUserStore } from "@/stores/user";
-import axios from "axios";
 
 const route = useRoute();
-const router = useRouter();
 const store = useBoardStore();
 const store2 = useCommentStore();
 const store3 = useUserStore();
@@ -101,6 +100,7 @@ const addComment = function () {
     console.log(typeof newComment.value.boardId)
     console.log(typeof newComment.value.score)
     console.log(typeof newComment.value.userNick)
+    console.log(newComment.value)
     store2.addComment(newComment.value)
 
     newComment.value.review = "";   // 입력 필드 초기화
