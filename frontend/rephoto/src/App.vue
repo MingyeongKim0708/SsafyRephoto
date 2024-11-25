@@ -1,19 +1,22 @@
 <template>
-  <div>
+  <div id="app">
     <TheHeaderNav />
-    <RouterView />
-    <!-- 이것도 라우터로 분리하는 게 좋을 것 같긴한데 -->
-    <div v-if="isLoading" id="preloader">Loading...</div>
-    <div v-else>
-      <slot />
-    </div>
-    <div v-if="isLoading" id="preloader">
-      <div class="line"></div>
-    </div>
-    <TheFooter />
-    <button class="scroll-top" @click="scrollToTop">
-      ↑
-    </button>
+    <main class="main-content">
+      <RouterView />
+      <!-- <div v-if="isLoading" id="preloader">Loading...</div>
+      <div v-else>
+        <slot></slot>
+      </div>
+      <div v-if="isLoading" id="preloader">
+        <div class="line"></div>
+      </div> -->
+    </main>
+    <footer class="footer">
+      <TheFooter />
+      <button class="scroll-top" @click="scrollToTop">
+          ↑
+      </button>
+    </footer>
   </div>
 </template>
 
@@ -22,7 +25,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import TheHeaderNav from "./components/common/TheHeaderNav.vue";
 import TheFooter from "./components/common/TheFooter.vue";
 
-import AOS from 'aos'
+import AOS from 'aos';
 import 'aos/dist/aos.css';
 import GLightbox from 'glightbox';
 import 'glightbox/dist/css/glightbox.css';
@@ -62,11 +65,43 @@ onUnmounted(() => {
 });
 
 const isLoading = ref(true);
-
-
 </script>
 
 <style scoped>
+
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+} */
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background-color: #5A5A5A;
+}
+
+header{
+  height:120px;
+}
+
+footer{
+  height:120px;
+  background-color: black;
+}
+/* MainView가 Header와 Footer 사이의 영역을 채우도록 설정 */
+.main-content {
+  flex: 1; /* 나머지 공간을 채우도록 */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;
+  padding: 0;
+}
+
+
 .scroll-top {
   position: fixed;
   bottom: 20px;
@@ -150,7 +185,7 @@ const isLoading = ref(true);
 #preloader.loaded:before,
 #preloader.loaded:after {
   animation: preloaderfinish 300ms ease-in-out 500ms forwards;
-  display: none; /* Add this line to hide the preloader when it is loaded */
+  display: none;
 }
 
 @keyframes lineincrease {

@@ -24,6 +24,16 @@ export const useBoardStore = defineStore('board', () => {
       });
   }
 
+  const getUserBoardList = function (userNick) {
+    axios.get(`${REST_API_URL}/userPhoto/${userNick}`, {
+      withCredentials:true
+    })
+      .then((res) => {
+        boardList.value = res.data
+      })
+  }
+
+
   //게시글 등록
   const createBoard = function (file,userNick,boardTitle,boardInfo) {
     const formData = new FormData();
@@ -84,22 +94,31 @@ export const useBoardStore = defineStore('board', () => {
       })
   }
 
-  // 게시글 삭제
-const deleteBoard = (id) => {
-  axios
-      .delete(`${REST_API_URL}/${id}`,
-        {
-          withCredentials:true
-        }
-      )
-      .then(() => {
-          router.push({ name: "boardList" });
+  const searchUserBoardList = function (searchCondition, userNick) {
+    axios.get(`${REST_API_URL}/userPhoto/${userNick}`, {
+      params: searchCondition,
+      withCredentials:true
+    })
+      .then((res) => {
+        boardList.value = res.data
       })
-      .catch((err) => {
-          console.error(err);
-          alert("게시글 삭제에 실패했습니다.");
-      });
-};
+  }
+  // 게시글 삭제
+  const deleteBoard = (id) => {
+    axios
+        .delete(`${REST_API_URL}/${id}`,
+          {
+            withCredentials:true
+          }
+        )
+        .then(() => {
+            router.push({ name: "boardList" });
+        })
+        .catch((err) => {
+            console.error(err);
+            alert("게시글 삭제에 실패했습니다.");
+        });
+  };
+  return { boardList, getBoardList, getUserBoardList, createBoard, board, getBoard, updateBoard, searchBoardList, searchUserBoardList, deleteBoard }
 
-  return { boardList, getBoardList, createBoard, board, getBoard, updateBoard, searchBoardList, deleteBoard }
 })

@@ -34,7 +34,36 @@
 		<!-- 페이징 처리-->
 		<!--LIMIT #{size} OFFSET #{offset}-->
 	</select>
-
+	
+	<!-- 특정 유저의 게시글 조회 및 검색 기능-->
+	<select id="searchByUserNick" resultType="Board" parameterType="SearchCondition">
+		SELECT
+			b.board_id, 
+			b.user_nick, 
+			b.board_title, 
+			b.board_info,
+			b.board_created_at, 
+			b.view_cnt, 
+			b.avg_score, 
+			p.photo_name, 
+			p.photo_uuid
+		FROM 
+			board b 
+		LEFT JOIN 
+			photo p 
+		ON 
+			b.board_id = p.board_id 
+		<!-- 검색 조건 -->
+			WHERE user_nick = #{word}
+		<!-- 동적 정렬 조건 -->
+	    <if test="orderBy != null and orderBy != 'none'">
+	        ORDER BY ${orderBy} ${orderByDir}
+	    </if>
+		
+		<!-- 페이징 처리-->
+		<!--LIMIT #{size} OFFSET #{offset}-->
+	</select>
+	
 	<!-- 상세 게시글 조회 -->
 	<select id="selectOne" resultType="Board" parameterType="int">
 		SELECT 
