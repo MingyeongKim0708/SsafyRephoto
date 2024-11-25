@@ -3,7 +3,7 @@
 
 <mapper namespace="com.ssafy.mvc.model.dao.BoardDao">
 
-	<!-- 전체 게시글 조회 및 검색기능 + pagination -->
+	<!-- 전체 게시글 조회 및 검색기능 -->
 	<select id="search" resultType="Board" parameterType="SearchCondition">
 		SELECT
 			b.board_id, 
@@ -143,11 +143,26 @@
 		WHERE board_id = #{boardId}
 	</select>
 	
+	<!-- 평균 점수 계산 -->
+	<update id="updateAvgScore" parameterType="int">
+	    UPDATE board
+	    SET avg_score = (
+	        SELECT AVG(score)
+	        FROM comment
+	        WHERE board_id = #{boardId}
+	    )
+	    WHERE board_id = #{boardId};
+	</update>
+	
+	
+	
 	<!-- 게시글 수정.. 생각해보니까 안쓰네 댓글 수정할 때 사용하겠음 -->
 	<!--	<update id="updateBoard" parameterType="Board">
 		UPDATE board
 		SET board_title = #{boardTitle}, board_info = #{boardInfo}
 		WHERE id = #{id};
 	</update>-->
+	
+
 
 </mapper>

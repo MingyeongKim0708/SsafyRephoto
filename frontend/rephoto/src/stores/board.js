@@ -103,6 +103,22 @@ export const useBoardStore = defineStore('board', () => {
         boardList.value = res.data
       })
   }
+  // 게시글 삭제
+  const deleteBoard = (id) => {
+    axios
+        .delete(`${REST_API_URL}/${id}`,
+          {
+            withCredentials:true
+          }
+        )
+        .then(() => {
+            router.push({ name: "boardList" });
+        })
+        .catch((err) => {
+            console.error(err);
+            alert("게시글 삭제에 실패했습니다.");
+        });
+  };
+  return { boardList, getBoardList, getUserBoardList, createBoard, board, getBoard, updateBoard, searchBoardList, searchUserBoardList, deleteBoard }
 
-  return { boardList, getBoardList, getUserBoardList, createBoard, board, getBoard, updateBoard, searchBoardList, searchUserBoardList }
 })

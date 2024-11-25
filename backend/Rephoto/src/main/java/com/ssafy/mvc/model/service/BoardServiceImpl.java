@@ -31,11 +31,11 @@ public class BoardServiceImpl implements BoardService {
 		this.resourceLoader = resourceLoader;
 	}
 
-	// 게시물 전체 목록 조회 및 검색 + pagination
+	// 게시물 전체 목록 조회 및 검색
 	@Override
 	public List<Board> search(SearchCondition condition) {
 		System.out.println(condition);
-		System.out.println("게시물 전체 목록 조회 및 검색 + pagination");
+		System.out.println("게시물 전체 목록 조회 및 검색");
 
 //		condition.setOffset((condition.getPage() -1 )*condition.getSize());
 
