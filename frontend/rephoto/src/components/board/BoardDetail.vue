@@ -37,7 +37,7 @@
             <ul class="list-group">
                 <li class="list-group-item" v-for="comment in store.board.comments" :key="comment.id">
                     <div v-if="comment.isEditing">
-                        <textarea v-model="editCommentContent" class="form-control"></textarea>
+                        <textarea v-model="editContent" class="form-control"></textarea>
                         <button class="btn btn-success btn-sm mt-2"
                             @click.prevent.stop="saveEditedComment(comment.id)">저장</button>
                         <button class="btn btn-secondary btn-sm mt-2" @click.prevent.stop="cancelEdit">취소</button>
@@ -45,9 +45,17 @@
                     <div v-else>
                         <!-- 일반 모드 -->
                         <strong>{{ comment.userNick }}</strong>
-                        <small class="text-muted">{{ comment.createdAt }}</small>
+                        <small class="text-muted">{{ comment.commentUpdatedAt }}</small>
                         <p>{{ comment.review }}</p>
-                        <div v-if="isOwner(comment.userNick)" class="d-flex justify-content-end">   
+                        <div class="d-flex align-items-center">
+                            <!-- 별 표시 -->
+                            <span v-for="n in 5" :key="n" :class="{'text-warning': comment.score >= n, 'text-muted': comment.score < n}">
+                                ★
+                            </span>
+                            <!-- 평점 숫자 표시 -->
+                            <small class="ms-2">({{ comment.score }})</small>
+                        </div>
+                        <div v-if="isOwner(comment.userNick)" class="d-flex justify-content-end">    
                             <button class="btn btn-outline-primary btn-sm mx-1"
                                 @click.prevent.stop="editComment(comment)">수정</button>
                             <button class="btn btn-outline-danger btn-sm"
@@ -60,8 +68,19 @@
             <div class="mt-3">
                 <form @submit.prevent.stop="addComment">
                     <textarea v-model="newComment.review" class="form-control" rows="3" placeholder="댓글을 입력하세요"></textarea>
-                    <input v-model.number="newComment.score" type="number" class="form-control mt-2"
-                        placeholder="평점을 입력하세요 (0~5)" min="0" max="5" />
+                    <div class="d-flex align-items-center mt-2">
+                        <span>평점: </span>
+                        <div class="star-rating">
+                            <span 
+                                v-for="n in 5" 
+                                :key="n" 
+                                class="star" 
+                                :class="{ filled: n <= newComment.score }"
+                                @click="setScore(n)">
+                                ★
+                            </span>
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-primary mt-2" >댓글 작성</button>
                 </form>
             </div>
@@ -110,7 +129,7 @@ const addComment = function () {
     console.log(typeof newComment.value.score)
     console.log(typeof newComment.value.userNick)
     console.log(newComment.value)
-    store2.addComment(newComment.value)
+    storeC.addComment(newComment.value)
 
 
     newComment.value.review = "";   // 입력 필드 초기화
@@ -121,13 +140,14 @@ const addComment = function () {
 
 // 댓글 수정
 const editComment = (comment) => {
+    console.log(comment)
     comment.isEditing = true; // 해당 댓글 수정 모드로 변경
     comment.editContent = comment.review; // 기존 댓글 내용 불러오기
 };
 
 // 댓글 수정 저장
 const saveEditedComment = (comment) => {
-    if (!editCommentContent.value.trim()) {
+    if (!editContent.value.trim()) {
         alert("댓글 내용을 입력하세요.");
         return;
     }
@@ -166,8 +186,24 @@ const isOwner = (userNick) => {
     return userNick === storeU.loginUser.userNick;
 };
 
+// 평점 설정
+const setScore = (score) => {
+    newComment.value.score = score; // 평점 설정
+};
+
 
 </script>
 
 
-<style scoped></style>
+
+<style scoped>
+.star {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #ddd;
+}
+
+.star.filled {
+    color: gold;
+}
+</style>
