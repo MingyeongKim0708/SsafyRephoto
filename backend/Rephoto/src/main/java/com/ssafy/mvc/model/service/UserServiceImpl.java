@@ -148,7 +148,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void removeProfile(String id) throws IOException {
 		User tmp = userDao.selectUuid(id);
-		String userUuid = tmp.getUserPassword();
+		System.out.println("service"+tmp);
+		String userUuid = tmp.getUserUuid();
 		Resource resource = resourceLoader.getResource("classpath:/static/img");
 		if(!userUuid.equals("0.webp")) {
 			File file = new File(resource.getFile(),userUuid);
