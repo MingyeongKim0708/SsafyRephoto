@@ -6,13 +6,17 @@
             <div class="meta-info">
                 <!-- 작성자, 작성일, 조회수 -->
                 <div class="left-meta">
-                    <span class="writer">{{ store.board.userNick }}</span>
+                    <RouterLink v-if="store.board.userId"
+                    :to="{ name: 'profile', params: { userId: store.board.userId, userNick: store.board.userNick } }"
+                    class="gallery-author">{{ store.board.userNick }}
+                    <span class="writer"></span>
+                </RouterLink>
                     <span class="separator"> </span>
                     <span class="date">{{ store.board.boardCreatedAt }}</span>
                     <span class="separator">·</span>
                     <span class="view-count">{{ store.board.viewCnt }} views</span>
                     <span class="separator">·</span>
-                    <span class="view-count">★ {{ formatScore(store.board.avgScore) }}</span>
+                    <span class="avg-score">★ {{ formatScore(store.board.avgScore) }}</span>
                 </div>
                 <!-- 삭제 버튼 -->
                 <div v-if="isOwner(store.board.userNick)" class="right-meta">
@@ -44,7 +48,8 @@
                 <li v-for="comment in store.board.comments" :key="comment.id" class="comment-item">
                     <div class="comment-container">
                         <!-- 댓글 작성자 프로필 이미지 -->
-                        <img :src="`http://localhost:8080/user/userImg/${comment.userUuid}`" alt="Profile" class="profile-image" />
+                        <img :src="`http://localhost:8080/user/userImg/${comment.userUuid}`" alt="Profile"
+                            class="profile-image" />
                         <!-- 댓글 내용 -->
                         <div class="comment-content">
                             <div v-if="comment.isEditing">
@@ -59,7 +64,8 @@
                                     </div>
                                 </div>
                                 <textarea v-model="editCommentContent" class="form-control"></textarea>
-                                
+                                <!-- 경고 메시지 -->
+                                <p v-if="editWarning" class="text-danger mt-2">{{ editWarning }}</p>
                                 <div class="action-buttons">
                                     <button class="edit-button"
                                         @click.prevent.stop="saveEditedComment(comment)">저장</button>
@@ -79,9 +85,10 @@
                                 <!-- 댓글 본문 -->
                                 <p class="comment-body">{{ comment.review }}</p>
 
+                                <span class="comment-date">{{ comment.commentUpdatedAt }}</span>
                                 <!-- 댓글 하단 -->
                                 <div class="comment-footer">
-                                    <span class="comment-date">{{ comment.commentUpdatedAt }}</span>
+                                    
                                     <div v-if="isOwner(comment.userNick)" class="action-buttons">
                                         <button class="edit-button" @click="editComment(comment)">수정</button>
                                         <button class="delete-button"
@@ -96,51 +103,38 @@
 
             <!-- 댓글 입력창 -->
             <!-- 댓글 입력창 -->
-<div class="comment-item">
-  <div class="comment-container">
-    <!-- 프로필 이미지 -->
-    <img :src="`http://localhost:8080/user/userImg/${userUuid}`" alt="Profile" class="profile-image" />
+            <div class="comment-item">
+                <div class="comment-container">
+                    <!-- 프로필 이미지 -->
+                    <img :src="`http://localhost:8080/user/userImg/${userUuid}`" alt="Profile" class="profile-image" />
 
-    <!-- 댓글 작성 영역 -->
-    <div class="comment-content">
-      <!-- 별점 입력 -->
-      <div class="d-flex align-items-center mt-2">
-        <span style="font-weight: bold;">평가 </span>
-        <div class="star-rating">
-          <span
-            v-for="n in 5"
-            :key="n"
-            class="star"
-            :class="{ filled: n <= newComment.score }"
-            @click="setScore(n)"
-          >
-            ★
-          </span>
-        </div>
-      </div>
+                    <!-- 댓글 작성 영역 -->
+                    <div class="comment-content">
+                        <!-- 별점 입력 -->
+                        <div class="rating-section">
+                            <span style="font-weight: bold;">평가</span>
+                            <div class="star-rating">
+                                <span v-for="n in 5" :key="n" class="star" :class="{ filled: n <= newComment.score }"
+                                    @click="setScore(n)">
+                                    ★
+                                </span>
+                            </div>
+                        </div>
 
-      <!-- 댓글 입력 -->
-      <textarea
-        v-model="newComment.review"
-        placeholder="댓글을 입력하세요"
-        class="form-control"
-      ></textarea>
-      <!-- 경고 메시지 추가 -->
-      <p v-if="reviewWarning" class="text-danger mt-2">{{ reviewWarning }}</p>
+                        <!-- 댓글 입력 -->
+                        <textarea v-model="newComment.review" placeholder="댓글을 입력하세요" class="form-control"></textarea>
+                        <!-- 경고 메시지 추가 -->
+                        <p v-if="reviewWarning" class="text-danger mt-2">{{ reviewWarning }}</p>
 
-      <!-- 버튼들 -->
-      <div class="action-buttons">
-        <button
-          class="edit-button"
-          @click="addComment"
-          :disabled="isSubmitDisabled"
-        >
-          작성
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+                        <!-- 버튼들 -->
+                        <div class="action-buttons">
+                            <button class="edit-button" @click="addComment" :disabled="isSubmitDisabled">
+                                작성
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -164,19 +158,20 @@ const storeU = useUserStore();
 const editCommentContent = ref('');
 const editCommentScore = ref(0);
 
-const userUuid = ref('');
+const userUuid = computed(() => storeU.user.userUuid)
 const reviewWarning = ref('');
+const editWarning = ref('');
 
 onMounted(() => {
     store.getBoard(route.params.id);
-    userUuid.value = storeU.user.userUuid;
+    storeU.getUser(storeU.loginUser.userId)
 });
 
 const formatScore = (score) => {
     if (score === undefined || score === null) {
-    return "0.00"; // 기본값 설정
-  }
-  return parseFloat(score.toFixed(2));
+        return "0.00"; // 기본값 설정
+    }
+    return parseFloat(score.toFixed(2));
 };
 
 const newComment = ref({
@@ -210,10 +205,24 @@ const validateReview = () => {
     }
 };
 
+// 댓글 수정 유효성 검사 함수
+const validateEditComment = () => {
+    if (editCommentContent.value.length > 500) {
+        editWarning.value = "댓글은 500자 이내로 작성해주세요.";
+    } else {
+        editWarning.value = "";
+    }
+};
+
 // 댓글 감시자
 watch(
     () => newComment.value.review,
     validateReview
+);
+// 댓글 수정 감시자 추가
+watch(
+    () => editCommentContent.value,
+    validateEditComment
 );
 
 // 댓글 작성 버튼 비활성화 상태 계산
@@ -230,7 +239,12 @@ const editComment = (comment) => {
     editCommentScore.value = comment.score;
 };
 
+// 댓글 저장 함수 수정
 const saveEditedComment = (comment) => {
+    if (editWarning.value) {
+        alert(editWarning.value); // 경고 메시지가 있을 경우 저장 중단
+        return;
+    }
     if (!editCommentContent.value.trim()) {
         alert("댓글 내용을 입력하세요.");
         return;
@@ -333,6 +347,13 @@ const setScore = (score) => {
     color: gray;
 }
 
+.avg-score {
+    font-size: 12px;
+    color: gray;
+    vertical-align: middle;
+    /* 텍스트와 별을 동일 높이로 정렬 */
+}
+
 .right-meta {
     margin-left: auto;
 }
@@ -371,20 +392,25 @@ const setScore = (score) => {
 
 /* 댓글 섹션 */
 .star {
-  font-size: 1.5rem; /* 기본 크기 */
-  color: #ddd; /* 비활성화 상태 색상 */
-  cursor: pointer;
-  transition: transform 0.2s ease, color 0.2s ease;
+    font-size: 1.5rem;
+    /* 기본 크기 */
+    color: #ddd;
+    /* 비활성화 상태 색상 */
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .star.filled {
-  color: gold !important; /* 활성화 상태 색상 */
+    color: gold !important;
+    /* 활성화 상태 색상 */
 }
 
 .star:hover {
-  transform: scale(1.2);
-  color: gold !important; /* 호버 시 강조 */
+    transform: scale(1.2);
+    color: gold !important;
+    /* 호버 시 강조 */
 }
+
 .comments-section {
     margin-top: 30px;
 }
@@ -450,11 +476,15 @@ const setScore = (score) => {
     padding: 10px 15px;
     border: 1px solid color-mix(in srgb, var(--default-color), transparent 80%);
     border-radius: 4px;
-    background-color: var(--surface-color); /* 어두운 색상으로 변경 */
-    color: var(--default-color); /* 텍스트 색상은 전역 기본값 */
+    background-color: var(--surface-color);
+    /* 어두운 색상으로 변경 */
+    color: var(--default-color);
+    /* 텍스트 색상은 전역 기본값 */
     resize: none;
-    transition: border-color 0.3s ease, background-color 0.3s ease; /* 부드러운 전환 효과 */
-    height: 120px; /* 높이 약간 증가 */
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    /* 부드러운 전환 효과 */
+    height: 120px;
+    /* 높이 약간 증가 */
 }
 
 .comment-content textarea:focus {
@@ -464,34 +494,44 @@ const setScore = (score) => {
 
 .comment-content .star-rating {
     display: flex;
-    gap: 1px; /* 별과 텍스트 사이의 간격 추가 */
-    margin-left: 10px; /* 별과 '평가' 텍스트 간의 여유 공간 */
+    gap: 1px;
+    /* 별과 텍스트 사이의 간격 추가 */
+    margin-left: 10px;
+    /* 별과 '평가' 텍스트 간의 여유 공간 */
 }
 
 .comment-content .star-rating .star {
-    font-size: 1.2rem; /* 별 크기 키우기 */
+    font-size: 1.2rem;
+    /* 별 크기 키우기 */
     color: #ddd;
-    cursor: pointer; /* 클릭 가능하다는 느낌 제공 */
-    transition: transform 0.2s ease; /* 클릭 시 부드러운 애니메이션 */
+    cursor: pointer;
+    /* 클릭 가능하다는 느낌 제공 */
+    transition: transform 0.2s ease;
+    /* 클릭 시 부드러운 애니메이션 */
 }
 
 .comment-content .star-rating .star:hover {
-    transform: scale(1.2); /* 마우스를 올리면 확대 */
+    transform: scale(1.2);
+    /* 마우스를 올리면 확대 */
 }
 
 .comment-content .star-rating .star.filled {
-    color: gold; /* 선택된 별 색상 */
+    color: gold;
+    /* 선택된 별 색상 */
 }
 
 .comment-content .action-buttons {
     display: flex;
-    justify-content: flex-end; /* 버튼을 오른쪽 정렬 */
-    gap: 10px; /* 버튼 사이 간격 */
-    margin-top: 10px; /* 수정창과 버튼 사이에 여백 추가 */
+    justify-content: flex-end;
+    /* 버튼을 오른쪽 정렬 */
+    gap: 10px;
+    /* 버튼 사이 간격 */
+    margin-top: 10px;
+    /* 수정창과 버튼 사이에 여백 추가 */
 }
 
-.comment-content .edit-button,
-.comment-content .delete-button {
+.edit-button,
+.delete-button {
     font-family: var(--default-font);
     font-size: 12px;
     padding: 5px 10px;
@@ -501,22 +541,32 @@ const setScore = (score) => {
     transition: background-color 0.3s ease;
 }
 
-.comment-content .edit-button {
+.edit-button {
     background-color: #2776a7;
     color: var(--default-color);
 }
 
-.comment-content .edit-button:hover {
+.edit-button:hover {
     background-color: color-mix(in srgb, #2776a7 60%, white 40%);
 }
 
-.comment-content .delete-button {
+.delete-button {
     background-color: #a72727;
     color: var(--default-color);
 }
 
-.comment-content .delete-button:hover {
+.delete-button:hover {
     background-color: color-mix(in srgb, #a72727 60%, white 40%);
+}
+
+
+.edit-button:disabled {
+    background-color: color-mix(in srgb, #2776a7, transparent 50%);
+    cursor: not-allowed;
+}
+
+.edit-button:hover:not(:disabled) {
+    background-color: color-mix(in srgb, #2776a7 90%, white 10%);
 }
 
 
@@ -556,16 +606,23 @@ const setScore = (score) => {
     margin: 5px 0 10px;
 }
 
+.comment-date{
+    display: flex;
+    justify-content:end;
+    font-size: 12px;
+    color: gray;
+}
+
 /* 댓글 하단 */
 .comment-footer {
     display: flex;
-    justify-content: space-between;
+    justify-content:end;
     font-size: 12px;
     color: gray;
 }
 
 .comment-date {
-    font-size: 12px;
+    font-size: 10px;
 }
 
 /* 수정/삭제 버튼 */
@@ -632,6 +689,8 @@ const setScore = (score) => {
     align-items: center;
     margin-top: 10px;
     font-size: 14px;
+    margin: 10px 0 20px;
+    /* 아래쪽 여백 추가 */
 }
 
 .rating-section .star-rating {
@@ -711,23 +770,28 @@ const setScore = (score) => {
 }
 
 .gallery .gallery-link {
-  color: var(--contrast-color); /* 기본 텍스트 색상 */
-  background-color: var(--surface-color); /* 기본 배경색 */
-  border: none;
-  padding: 10px 15px;
-  margin: 5px 0;
-  font-size: 14px;
-  font-weight: bold;
-  border-radius: 5px;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  transition: background-color 0.3s ease, color 0.3s ease; /* 색상과 배경색 변화에 애니메이션 추가 */
+    color: var(--contrast-color);
+    /* 기본 텍스트 색상 */
+    background-color: var(--surface-color);
+    /* 기본 배경색 */
+    border: none;
+    padding: 10px 15px;
+    margin: 5px 0;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    /* 색상과 배경색 변화에 애니메이션 추가 */
 }
 
 .gallery .gallery-link:hover {
-  background-color: var(--accent-color); /* 호버 시 배경을 강조색으로 변경 */
-  color: var(--heading-color); /* 텍스트 색상을 강조색 대비 색으로 변경 */
+    background-color: var(--accent-color);
+    /* 호버 시 배경을 강조색으로 변경 */
+    color: var(--heading-color);
+    /* 텍스트 색상을 강조색 대비 색으로 변경 */
 }
 
 .gallery .gallery-item:hover .gallery-links {
@@ -736,5 +800,131 @@ const setScore = (score) => {
 
 .gallery .gallery-item:hover img {
     transform: scale(1.1);
+}
+
+.gallery-author {
+    color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none;
+
+}
+
+.gallery-author:hover {
+  
+  color: #bdbdbd;
+}
+
+@media screen and (max-width: 768px) {
+    .meta-info {
+        flex-direction: column;
+        /* 세로 배치 */
+        align-items: flex-start;
+        /* 왼쪽 정렬 */
+    }
+
+    .left-meta {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        /* 줄바꿈 허용 */
+        gap: 5px;
+    }
+
+    .separator {
+        display: none;
+        /* 구분자 제거 */
+    }
+
+    .writer,
+    .date,
+    .view-count {
+        display: block;
+        /* 한 줄에 하나씩 */
+        font-size: 14px;
+        /* 글씨 크기 조정 */
+        margin-bottom: 5px;
+    }
+
+    .right-meta {
+        align-self: flex-end;
+        /* 삭제 버튼은 아래쪽에 정렬 */
+        margin-top: 10px;
+    }
+
+    .view-count:last-child {
+        margin-bottom: 10px;
+        /* 마지막 항목 하단 여백 */
+    }
+
+    .avg-score {
+        display: flex;
+        align-items: center;
+        /* 텍스트와 별 정렬 */
+        gap: 5px;
+        /* 별과 숫자 간격 */
+        font-size: 14px;
+        /* 모바일에서도 적절한 크기 */
+        margin-bottom: 5px;
+        /* 하단 여백 추가 */
+    }
+
+    .comment-container {
+        flex-direction: row;
+        /* 프로필 이미지는 왼쪽에 유지 */
+        align-items: flex-start;
+        /* 프로필 이미지와 내용 정렬 */
+        gap: 10px;
+    }
+
+    .comment-content {
+        display: flex;
+        flex-direction: column;
+        /* 닉네임, 별점, 내용, 수정일자, 버튼 순으로 */
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .comment-header {
+        flex-direction: column;
+        /* 닉네임과 별점을 세로로 */
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .comment-footer {
+        flex-direction: column;
+        /* 수정일자와 버튼을 세로로 */
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .comment-footer .action-buttons {
+        justify-content: flex-start;
+        /* 버튼을 왼쪽 정렬 */
+    }
+
+
+    .comment-body {
+        margin: 10px 0;
+        /* 댓글 내용 간격 */
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .rating-section {
+        flex-direction: column;
+        /* 세로 정렬 */
+        align-items: center;
+        /* 가운데 정렬 */
+        gap: 5px;
+        /* 텍스트와 별 간격 좁힘 */
+        margin: 10px 0 20px;
+        /* 아래쪽 여백 추가 */
+    }
 }
 </style>

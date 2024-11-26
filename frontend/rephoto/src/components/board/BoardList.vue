@@ -16,7 +16,8 @@
                   class="gallery-author">
                   {{ board.userNick }}
                 </RouterLink>
-                <p class="gallery-title">{{ truncateText(board.boardTitle, 15) }}</p>
+                <RouterLink :to="`/board/${board.boardId}`" class="gallery-title ">{{ truncateText(board.boardTitle, 15) }}</RouterLink>
+                <!-- <p class="gallery-title">{{ truncateText(board.boardTitle, 15) }}</p> -->
                 <RouterLink :to="`/board/${board.boardId}`" class="details-link">
                   <i class="bi bi-link-45deg"></i>
                 </RouterLink>
@@ -180,6 +181,7 @@ const truncateText = (text, maxLength) => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-decoration: none;
 }
 
 .gallery .gallery-author {
@@ -268,5 +270,6 @@ const truncateText = (text, maxLength) => {
   justify-content: flex-end;
   /* 버튼을 오른쪽 정렬 */
   margin-top: 20px;
+  font-weight: bold;
 }
 </style>
