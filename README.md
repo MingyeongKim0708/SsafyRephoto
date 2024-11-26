@@ -12,8 +12,12 @@
 
 🌱팀원구성
 -----------
-김민경  
-이준영  
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/MingyeongKim0708"><img src="https://avatars.githubusercontent.com/u/94948198?v=4" width="100px;" alt=""/><br /><sub><b>김민경</b></sub></a><br /><a href="https://github.com/MingyeongKim0708" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/junyoung0619"><img src="https://avatars.githubusercontent.com/u/175185136?s=400&u=6f6ec2069e7691c47f600ee6072c45fed0954cca&v=4" width="100px;" alt=""/><br /><sub><b>이준영</b></sub></a><br /><a href="https://github.com/junyoung0619" title="Code">💻</a></td>
+  </tr>
+</table>
 <br/>
 
 🖥️개발환경
