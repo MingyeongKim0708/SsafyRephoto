@@ -146,7 +146,7 @@ C:.
 ⚙️설치 및 실행 방법
 -----------
 - 원활한 사용을 위해 크롬 웹 스토어에서 Vue.js devtools 다운
-- node.js 사이트(https://nodejs.org/en)에서 다운
+- node.js 사이트 (https://nodejs.org/en) 에서 다운
 ```
 cd frontend/rephoto
 npm i axios bootstrap bootstrap-icons
