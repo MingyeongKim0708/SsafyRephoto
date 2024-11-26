@@ -59,10 +59,15 @@ public class BoardServiceImpl implements BoardService {
 
 	// 게시물 상세 조회
 	@Override
-	public Board readBoard(int boardId) {
+	public Board readBoard(int boardId, String userId) {
 		System.out.println(boardId + "번 상세 조회");
-		boardDao.updateViewCnt(boardId);
-		return boardDao.selectOne(boardId);
+		Board board = boardDao.selectOne(boardId);
+		System.out.println("보드읽기"+userId+" "+board.getUserId());	
+		System.out.println(!userId.equals(board.getUserId()));
+		if(!userId.equals(board.getUserId())) {
+			boardDao.updateViewCnt(boardId);
+		}
+		return board;
 	}
 
 	// 게시글 삭제

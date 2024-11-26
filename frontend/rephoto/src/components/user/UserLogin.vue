@@ -66,7 +66,9 @@ body {
   padding: 0;
   overflow-x: hidden; /* 가로 스크롤 제거 */
 }
-
+input{
+  background-color: black;
+}
 
 .logo{
   max-width: 100%;
@@ -98,7 +100,8 @@ body {
 .login-box {
   width: 300px;
   padding: 20px;
-  background: #ffffff;
+  background: black;
+  border: 1px solid white; 
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;

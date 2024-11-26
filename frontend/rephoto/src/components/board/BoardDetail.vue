@@ -96,7 +96,7 @@
 
             <!-- 댓글 입력창 -->
             <!-- 댓글 입력창 -->
-<div class="comment-item">
+<div v-if="store.board.userId !== storeU.loginUser.userId" class="comment-item">
   <div class="comment-container">
     <!-- 프로필 이미지 -->
     <img :src="`http://localhost:8080/user/userImg/${userUuid}`" alt="Profile" class="profile-image" />
@@ -164,12 +164,12 @@ const storeU = useUserStore();
 const editCommentContent = ref('');
 const editCommentScore = ref(0);
 
-const userUuid = ref('');
+const userUuid  = computed(()=>storeU.user.userUuid)
 const reviewWarning = ref('');
 
 onMounted(() => {
     store.getBoard(route.params.id);
-    userUuid.value = storeU.user.userUuid;
+    storeU.getUser(storeU.loginUser.userId);
 });
 
 const formatScore = (score) => {

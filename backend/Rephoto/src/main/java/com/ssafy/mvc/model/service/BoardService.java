@@ -15,7 +15,7 @@ public interface BoardService {
 	public List<Board> searchByUserNick(SearchCondition condition);
 	
 	// 게시물 상세 조회
-	public Board readBoard(int boardId);
+	public Board readBoard(int boardId, String userId);
 	
 	// 게시글 삭제
 	public boolean removeBoard(int id);

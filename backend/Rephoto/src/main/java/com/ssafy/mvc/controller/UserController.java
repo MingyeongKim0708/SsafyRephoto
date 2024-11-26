@@ -105,7 +105,8 @@ public class UserController {
 	@Transactional
 	@PostMapping("/regist")
 	public ResponseEntity<?> regist(@RequestParam("userId") String userId,
-			@RequestParam("userPassword") String userPassword, @RequestParam("userNick") String userNick,
+			@RequestParam("userPassword") String userPassword, 
+			@RequestParam("userNick") String userNick,
 			@RequestParam("userEmail") String userEmail,
 			@RequestParam(value = "file", required = false) MultipartFile file) {
 
@@ -210,6 +211,7 @@ public class UserController {
 		try {
 			System.out.println(session.getAttribute("userId"));
 			// 로그인한 유저와 수정하고자 하는 유저의 id가 같아야 수정 가능
+			System.out.println();
 			if (!userId.equals(session.getAttribute("userId"))) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0);
 			}
