@@ -209,7 +209,7 @@ public class UserController {
 			@RequestParam(value = "file", required = false) MultipartFile file, HttpSession session) {
 
 		try {
-			System.out.println(session.getAttribute("userId"));
+			System.out.println("시작"+session.getAttribute("userId"));
 			// 로그인한 유저와 수정하고자 하는 유저의 id가 같아야 수정 가능
 			System.out.println();
 			if (!userId.equals(session.getAttribute("userId"))) {
@@ -218,13 +218,13 @@ public class UserController {
 
 			User user = new User(userId, userPassword, userNick, userEmail);
 			userService.removeProfile(userId);
-			
+			System.out.println("중간");
 			if (file != null && file.getSize() > 0) {
 				user.setUserImg(file.getOriginalFilename());
 				String userUuid = userService.upload(file);
 				user.setUserUuid(userUuid);
 			}
-			
+			System.out.println("끝");
 			userService.emitUser(user);
 			session.setAttribute("userNick", user.getUserNick());
 			return ResponseEntity.status(HttpStatus.OK).body(1);
