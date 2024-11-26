@@ -39,6 +39,7 @@ public class UserServiceImpl implements UserService {
 		Map<String, String> info = new HashMap<>();
 		info.put("condition", condition);
 		info.put("word", word);
+		System.out.println(info);
 		int result = userDao.checkUser(info);
 		if (result == 0) {
 			return true;

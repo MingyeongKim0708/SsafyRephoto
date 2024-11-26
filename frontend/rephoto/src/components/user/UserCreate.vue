@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import {useUserStore} from '@/stores/user';
 import { onBeforeRouteLeave } from 'vue-router';
 
@@ -63,6 +63,11 @@ const userNick = ref('')
 
 const userProfile = ref(null)
 
+onMounted(()=>{
+    store.setIdCheck(0);
+    store.setNickCheck(0);
+    store.setEmailCheck(0);
+})
 const handleImageUpload = function(event){
     const file = event.target.files[0];
     userProfile.value = file;
