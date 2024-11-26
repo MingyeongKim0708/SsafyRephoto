@@ -4,12 +4,23 @@
 <mapper namespace="com.ssafy.mvc.model.dao.CommentDao">
 
 	<!-- 해당 게시글에 대한 댓글 전체 목록 불러오기 -->
-	<select id="selectAllComment" parameterType="int" resultType="Comment">
-        SELECT *
-        FROM comment
-        JOIN user ON comment.user_nick = user.user_nick
-        WHERE comment.board_id = #{board_id}
-    </select>
+<select id="selectAllComment" parameterType="int" resultType="Comment">
+    SELECT 
+        c.comment_id, 
+        c.board_id, 
+        c.user_nick, 
+        c.score, 
+        c.review, 
+        c.comment_created_at, 
+        c.comment_updated_at, 
+        p.user_uuid
+    FROM comment c
+    JOIN user u ON c.user_nick = u.user_nick
+    LEFT JOIN profile p ON u.user_id = p.user_id
+    WHERE c.board_id = #{boardId}
+</select>
+
+
     
 <!--    <select id="selectAllComment" resultType="Comment">
         SELECT 

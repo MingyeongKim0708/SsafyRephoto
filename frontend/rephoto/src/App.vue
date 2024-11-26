@@ -34,6 +34,7 @@ import TheFooter from "./components/common/TheFooter.vue";
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import 'aos/dist/aos.js'
 import GLightbox from 'glightbox';
 import 'glightbox/dist/css/glightbox.css';
 
@@ -62,8 +63,6 @@ onMounted(() => {
   router.afterEach(() => {
     AOS.refresh(); // 페이지 전환 시 애니메이션 재적용
   });
-
-  
 
   GLightbox({ selector: '.glightbox' });
 

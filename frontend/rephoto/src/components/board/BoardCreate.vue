@@ -25,7 +25,8 @@
                             이미지 없음
                         </div>
                     </div>
-                    <input type="file" class="form-control" id="fileUpload" accept="image/*" @change="validateFile" ref="fileInput"/>
+                    <input type="file" class="form-control" id="fileUpload" accept="image/*" @change="validateFile"
+                        ref="fileInput" />
                     <div v-if="error" class="text-danger mt-2">{{ error }}</div>
                 </div>
 
@@ -95,11 +96,11 @@ const validateFile = (event) => {
             previewUrl.value = URL.createObjectURL(uploadedFile);
             error.value = "";
         } else {
-            file.value = null;
+            clearFile(); // 파일 상태 초기화
             error.value = "허용되지 않은 확장자입니다. jpg, jpeg, png, webp 파일만 업로드 가능합니다.";
         }
     } else {
-        file.value = null;
+        clearFile(); // 파일 상태 초기화
         error.value = "파일을 선택해주세요.";
     }
 };
@@ -138,12 +139,12 @@ watch(
 const fileInput = ref(null); // 파일 입력 요소에 대한 참조
 
 const clearFile = () => {
-  file.value = null; // 파일 상태 초기화
-  previewUrl.value = ""; // 미리보기 URL 초기화
-  error.value = ""; // 오류 메시지 초기화
-  if (fileInput.value) {
-    fileInput.value.value = ""; // 파일 입력 요소 초기화
-  }
+    file.value = null; // 파일 상태 초기화
+    previewUrl.value = ""; // 미리보기 URL 초기화
+    error.value = ""; // 오류 메시지 초기화
+    if (fileInput.value) {
+        fileInput.value.value = ""; // 파일 입력 요소 초기화
+    }
 };
 
 </script>
@@ -232,9 +233,9 @@ const clearFile = () => {
 }
 
 .form-actions {
-  display: flex;
-  justify-content: flex-end; /* 버튼을 오른쪽으로 배치 */
-  margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    /* 버튼을 오른쪽으로 배치 */
+    margin-top: 20px;
 }
-
 </style>

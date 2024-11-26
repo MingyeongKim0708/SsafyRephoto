@@ -8,6 +8,7 @@
 		SELECT
 			b.board_id, 
 			b.user_nick, 
+			u.user_id, <!-- 추가: user 테이블에서 userId 가져오기 -->
 			b.board_title, 
 			b.board_info,
 			b.board_created_at, 
@@ -21,6 +22,10 @@
 			photo p 
 		ON 
 			b.board_id = p.board_id 
+		LEFT JOIN 
+        	user u 
+	    ON 
+	        b.user_nick = u.user_nick <!-- board 테이블의 userNick과 user 테이블의 userNick을 조인 -->
 		<!-- 검색 조건 -->
 		<if
 			test="key != 'none'">
