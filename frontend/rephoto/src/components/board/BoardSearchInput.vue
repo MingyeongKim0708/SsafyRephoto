@@ -4,7 +4,7 @@
             <!-- 검색 키 선택 -->
             <select class="search-select" v-model="searchInfo.key">
                 <option value="board_title">제목</option>
-                <option value="user_nick">작성자</option>
+                <option value="b.user_nick">작성자</option>
                 <option value="board_info">내용</option>
             </select>
 
