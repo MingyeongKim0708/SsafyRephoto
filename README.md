@@ -78,7 +78,7 @@ C:.
 -----------
 ![REPHOTOUseCaseDiagram](https://github.com/user-attachments/assets/fbf9768e-f5fb-4f90-aeb9-1312bcdbd572)
 
-📌Class Doagram
+📌Class Diagram
 -----------
 ![REPHOTOClassDiagram](https://github.com/user-attachments/assets/15635b65-88f8-4ce8-91c6-24c9ab953bf2)
 
@@ -102,6 +102,22 @@ C:.
 
 <br/>
 
+✨구현 화면
+-----------
+![localhost_5173_](https://github.com/user-attachments/assets/4d1eb897-44ca-4362-a2d6-6d4785304d46)
+![localhost_5173_ (2)](https://github.com/user-attachments/assets/b017ae29-9aa6-4720-bd65-5dc844f767f8)
+![localhost_5173_user_regist](https://github.com/user-attachments/assets/c2e0b51e-07ad-4d5d-872e-1b48afc96de6)
+![localhost_5173_user_regist (1)](https://github.com/user-attachments/assets/0432b839-cd75-497f-b406-71eeed5d7c9d)
+![localhost_5173_ (3)](https://github.com/user-attachments/assets/a368d40c-392c-4d80-bab4-3653076f70f8)
+![localhost_5173_board_1 (3)](https://github.com/user-attachments/assets/21664fc8-8595-4134-8923-6bde91338e73)
+![localhost_5173_board_1 (5)](https://github.com/user-attachments/assets/132e1869-7f9f-4631-948e-2c89169383be)
+![localhost_5173_ (6)](https://github.com/user-attachments/assets/3f317d5f-b6e1-4678-b979-ae812ef7bf2d)
+![localhost_5173_ (7)](https://github.com/user-attachments/assets/80640878-5d52-435b-9ddd-7f579836c4ca)
+![localhost_5173_board_1](https://github.com/user-attachments/assets/00d165b0-6a03-4c7b-9364-e11228b047f3)
+![localhost_5173_board_1 (4)](https://github.com/user-attachments/assets/fafae9d7-a4b4-4c9f-ab66-45f2e871a2d3)
+![localhost_5173_board_1 (2)](https://github.com/user-attachments/assets/2651733a-20cf-4bdd-b97c-5a7415c93ee9)
+
+<br/>
 
 ❗신경 쓴 부분
 -----------
@@ -118,25 +134,6 @@ C:.
 - 로그인이 되어 있지 않은 경우 로그인 요청, 회원 가입 요청, 중복 확인 여부를 제외한 모든 요청을 차단함.
 
 <br/>
-
-✨구현 화면
------------
-![localhost_5173_](https://github.com/user-attachments/assets/4d1eb897-44ca-4362-a2d6-6d4785304d46)
-![localhost_5173_ (2)](https://github.com/user-attachments/assets/b017ae29-9aa6-4720-bd65-5dc844f767f8)
-![localhost_5173_user_regist](https://github.com/user-attachments/assets/c2e0b51e-07ad-4d5d-872e-1b48afc96de6)
-![localhost_5173_user_regist (1)](https://github.com/user-attachments/assets/0432b839-cd75-497f-b406-71eeed5d7c9d)
-![localhost_5173_ (3)](https://github.com/user-attachments/assets/a368d40c-392c-4d80-bab4-3653076f70f8)
-![localhost_5173_board_1 (3)](https://github.com/user-attachments/assets/21664fc8-8595-4134-8923-6bde91338e73)
-![localhost_5173_board_1 (5)](https://github.com/user-attachments/assets/132e1869-7f9f-4631-948e-2c89169383be)
-![localhost_5173_ (6)](https://github.com/user-attachments/assets/3f317d5f-b6e1-4678-b979-ae812ef7bf2d)
-![localhost_5173_ (7)](https://github.com/user-attachments/assets/80640878-5d52-435b-9ddd-7f579836c4ca)
-![localhost_5173_board_1](https://github.com/user-attachments/assets/00d165b0-6a03-4c7b-9364-e11228b047f3)
-![localhost_5173_board_1 (4)](https://github.com/user-attachments/assets/fafae9d7-a4b4-4c9f-ab66-45f2e871a2d3)
-![localhost_5173_board_1 (2)](https://github.com/user-attachments/assets/2651733a-20cf-4bdd-b97c-5a7415c93ee9)
-
-
-<br/>
-
 
 💥트러블 슈팅
 -----------  
