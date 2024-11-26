@@ -19,6 +19,7 @@ public class Comment {
     private String review;            // 리뷰 내용
     private String commentCreatedAt;  // 생성일
     private String commentUpdatedAt;  // 수정일
+    private String userUuid;           // 작성자 프로필 이미지 (추가)
 
     // 댓글 등록 시 사용할 생성자
     public Comment(int boardId, String userNick, int score, String review) {

@@ -16,6 +16,7 @@ import lombok.ToString;
 public class Board {
 	private int boardId;
 	private String userNick;
+	private String userId; // 추가: 작성자의 userId
 	private String boardTitle;
 	private String boardInfo;
 	private String boardCreatedAt;
