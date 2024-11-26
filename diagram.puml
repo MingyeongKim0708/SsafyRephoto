@@ -1,0 +1,63 @@
+@startuml
+
+' Board 클래스
+class Board {
+    - boardId: int
+    - userNick: String
+    - userId: String
+    - boardTitle: String
+    - boardInfo: String
+    - boardCreatedAt: String
+    - viewCnt: int = 0
+    - avgScore: float = 0
+    - photoName: String
+    - photoUuid: String
+    «constructor»
+    + Board(userNick: String, boardTitle: String, boardInfo: String)
+}
+
+' Comment 클래스
+class Comment {
+    - commentId: int
+    - boardId: int
+    - userNick: String
+    - score: int
+    - review: String
+    - commentCreatedAt: String
+    - commentUpdatedAt: String
+    - userUuid: String
+    «constructor»
+    + Comment(boardId: int, userNick: String, score: int, review: String)
+}
+
+' SearchCondition 클래스
+class SearchCondition {
+    - key: String = "none"
+    - word: String
+    - orderBy: String = "board_id"
+    - orderByDir: String = "desc"
+}
+
+' User 클래스
+class User {
+    - userId: String
+    - userPassword: String
+    - userNick: String
+    - userEmail: String
+    - userCreatedAt: String
+    - authority: String = "general"
+    - userImg: String = "window.webp"
+    - userUuid: String = "0.webp"
+    «constructor»
+    + User(userId: String, userPassword: String)
+    «constructor»
+    + User(userId: String, userPassword: String, userNick: String, userEmail: String)
+}
+
+' 클래스 간의 관계
+Board "1" <-- "0..*" Comment : has
+SearchCondition <-- Board : uses
+User "1" <-- "0..*" Board : creates
+User "1" <-- "0..*" Comment : writes
+
+@enduml

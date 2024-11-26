@@ -1,29 +1,33 @@
 <template>
-    <div class="sort-options">
-        <div class="search-filters">
-            <div class="form-check-inline">
-                <input v-model="searchInfo.orderBy" class="form-check-input" type="radio" id="boardId" 
-                    value="board_id" />
-                <label class="form-check-label" for="boardId">등록일</label>
+    <div class="search-bar">
+        <div class="search-bar-row">
+            <div class="sort-options">
+                <div class="search-filters">
+                    <div class="form-check-inline">
+                        <input v-model="searchInfo.orderBy" class="form-check-input" type="radio" id="boardId" 
+                            value="board_id" @change="order"/>
+                        <label class="form-check-label" for="boardId">등록일</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input v-model="searchInfo.orderBy" class="form-check-input" type="radio" id="avgScore" 
+                            value="avg_score" @change="order"/>
+                        <label class="form-check-label" for="avgScore">평점</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input v-model="searchInfo.orderBy" class="form-check-input" type="radio" id="viewCnt"
+                            value="view_cnt" @change="order"/>
+                        <label class="form-check-label" for="viewCnt">조회수</label>
+                    </div>
+                    <button class="sort-button" @click="sortChange">
+                        <span v-if="searchInfo.orderByDir === 'asc'">
+                            <i class="bi bi-arrow-up-right-square-fill"></i>오름차순
+                        </span>
+                        <span v-else>
+                            <i class="bi bi-arrow-down-right-square-fill"></i>내림차순
+                        </span>
+                    </button>
+                </div>
             </div>
-            <div class="form-check-inline">
-                <input v-model="searchInfo.orderBy" class="form-check-input" type="radio" id="avgScore" 
-                    value="avg_score" />
-                <label class="form-check-label" for="avgScore">평점</label>
-            </div>
-            <div class="form-check-inline">
-                <input v-model="searchInfo.orderBy" class="form-check-input" type="radio" id="viewCnt"
-                    value="view_cnt" />
-                <label class="form-check-label" for="viewCnt">조회수</label>
-            </div>
-            <button class="sort-button" @click="sortChange">
-                <span v-if="searchInfo.orderByDir === 'asc'">
-                    <i class="bi bi-arrow-up-right-square-fill"></i>오름차순
-                </span>
-                <span v-else>
-                    <i class="bi bi-arrow-down-right-square-fill"></i>내림차순
-                </span>
-            </button>
         </div>
     </div>
 </template>
@@ -42,18 +46,36 @@ const searchInfo = ref({
     orderBy: "board_id",
     orderByDir: "desc",
 });
-const searchBoardList = function () {
+
+const order = function(){
     store.searchUserBoardList(searchInfo.value,props.userNick);
-};
+}
 
 const sortChange = function () {
     if (searchInfo.value.orderByDir === "asc")
         searchInfo.value.orderByDir = "desc";
     else searchInfo.value.orderByDir = "asc";
+    store.searchUserBoardList(searchInfo.value,props.userNick);
 };
 </script>
   
 <style scoped>
+.search-bar {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: var(--surface-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
 .search-filters {
     display: flex;
     gap: 1px;
