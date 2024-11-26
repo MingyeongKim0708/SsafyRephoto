@@ -97,6 +97,7 @@
             b.board_id = #{boardId};
     </select>
 
+
     <!-- 게시글 등록 -->
     <insert id="insertBoard" parameterType="Board" keyProperty="boardId"
         useGeneratedKeys="true">

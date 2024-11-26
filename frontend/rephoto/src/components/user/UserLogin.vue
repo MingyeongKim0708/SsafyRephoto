@@ -15,7 +15,7 @@
                   <div>
                       <label for="password" class="input-group">
                           <p>비밀번호</p>
-                          <input type="password" id="password" placeholder="비밀번호를 입력하세요" required v-model = "user.userPassword">
+                          <input type="password" id="password" placeholder="비밀번호를 입력하세요" required v-model = "user.userPassword" @keyup.enter="login">
                       </label>
                   </div>
                   <div>
