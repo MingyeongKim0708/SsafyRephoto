@@ -161,6 +161,7 @@ public class BoardRestController {
 	        // 게시글 정보에 댓글 포함
 			System.out.println("댓글 불러오기 시도");
 	        List<Comment> comments = commentService.getCommentList(boardId);
+	        System.out.println(comments);
 	        board.setComments(comments); // DTO에 댓글 포함
 	        System.out.println("댓글 : " + board.getComments());
 	        return ResponseEntity.ok(board);

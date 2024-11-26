@@ -12,6 +12,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ssafy.mvc.model.dao.BoardDao;
 import com.ssafy.mvc.model.dao.UserDao;
 import com.ssafy.mvc.model.dto.User;
 
@@ -19,10 +20,12 @@ import com.ssafy.mvc.model.dto.User;
 public class UserServiceImpl implements UserService {
 
 	private final UserDao userDao;
+	private final BoardDao boardDao;
 	private final ResourceLoader resourceLoader;
 
-	public UserServiceImpl(UserDao userDao, ResourceLoader resourceLoader) {
+	public UserServiceImpl(UserDao userDao, BoardDao boardDao, ResourceLoader resourceLoader) {
 		this.userDao = userDao;
+		this.boardDao = boardDao;
 		this.resourceLoader = resourceLoader;
 	}
 
@@ -103,6 +106,9 @@ public class UserServiceImpl implements UserService {
 		info.put("id", id);
 		info.put("password", password);
 		User tmp_user = userDao.selectOne(info);
+		User tmp = userDao.selectUuid(id);
+		tmp_user.setUserImg(tmp.getUserImg());
+		tmp_user.setUserUuid(tmp.getUserUuid());
 		return tmp_user;
 	}
 
@@ -114,26 +120,35 @@ public class UserServiceImpl implements UserService {
 		info.put("id", id);
 		info.put("password", null);
 		User tmp_user = userDao.selectOne(info);
+		User tmp = userDao.selectUuid(id);
+		System.out.println(tmp);
+		tmp_user.setUserImg(tmp.getUserImg());
+		tmp_user.setUserUuid(tmp.getUserUuid());
 		tmp_user.setUserEmail(null);
 		tmp_user.setUserPassword(null);
-
+		System.out.println("서비스유저"+tmp_user);
 		return tmp_user;
 	}
 
 	@Override
 	public int removeUser(String id) throws IOException {
-		String userUuid = userDao.selectUuid(id);
+		User tmp = userDao.selectUuid(id);
+		String userUuid = tmp.getUserUuid();
 		Resource resource = resourceLoader.getResource("classpath:/static/img");
 		if(!userUuid.equals("0.webp")) {
 			File file = new File(resource.getFile(),userUuid);
 			file.delete();
 		}
-		return userDao.deleteUser(id);
+		int result = userDao.deleteUser(id);
+		boardDao.updateAllAvgScore();
+		return result;
+		
 	}
 	
 	@Override
 	public void removeProfile(String id) throws IOException {
-		String userUuid = userDao.selectUuid(id);
+		User tmp = userDao.selectUuid(id);
+		String userUuid = tmp.getUserPassword();
 		Resource resource = resourceLoader.getResource("classpath:/static/img");
 		if(!userUuid.equals("0.webp")) {
 			File file = new File(resource.getFile(),userUuid);

@@ -46,6 +46,7 @@ public interface BoardDao {
 	// 점수 갱신
 	public void updateAvgScore(int boardId);
 
+	public void updateAllAvgScore();
 	// 페이징 처리된 게시물을 조회하는 기능
 //	public List<Board> searchWithPagination(SearchCondition condition, int offset, int size);
 

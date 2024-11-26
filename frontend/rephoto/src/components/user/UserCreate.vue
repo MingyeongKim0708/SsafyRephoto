@@ -39,7 +39,7 @@
                         <img v-if="previewUrl" :src="previewUrl" alt="프로필 이미지 미리보기" width="200px" height="200px" />
                     </div>
                     <div>
-                        <button id="button" type="submit-button" class="submit-btn">등록</button>    
+                        <button id="button" type="submit" class="submit-btn">등록</button>    
                     </div>
                 </fieldset>
             </form>

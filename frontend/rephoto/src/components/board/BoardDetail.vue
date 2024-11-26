@@ -169,8 +169,6 @@ const reviewWarning = ref('');
 
 onMounted(() => {
     store.getBoard(route.params.id);
-    
-    // console.log("ddd" + store.board.comments[0].userNick)
     userUuid.value = storeU.user.userUuid;
 });
 

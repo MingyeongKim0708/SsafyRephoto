@@ -132,6 +132,7 @@ public class UserController {
 	@GetMapping("/myPage/{userId}")
 	public ResponseEntity<?> seeMyPage(@PathVariable String userId) {
 		User user = userService.getInfo(userId);
+		System.out.println(user);
 		if (user == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0);
 		}

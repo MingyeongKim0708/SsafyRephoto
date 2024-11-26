@@ -1395,6 +1395,7 @@ section,
 # Starter Section Section
 --------------------------------------------------------------*/
 
+
 body, button, input, textarea, select, span {
   font-family: var(--default-font) !important;
   color: var(--default-color) !important;
