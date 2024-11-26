@@ -25,6 +25,8 @@ import com.ssafy.mvc.model.dto.SearchCondition;
 import com.ssafy.mvc.model.service.BoardService;
 import com.ssafy.mvc.model.service.CommentService;
 
+import jakarta.servlet.http.HttpSession;
+
 
 @RestController // @Controller + @ResponseBody
 @RequestMapping("/board")
@@ -134,7 +136,7 @@ public class BoardRestController {
 
 	// 게시글 상세 보기 + 댓글 불러오기
 	@GetMapping("/{boardId}")
-	public ResponseEntity<?> detail(@PathVariable("boardId") int boardId) {
+	public ResponseEntity<?> detail(@PathVariable("boardId") int boardId, HttpSession session) {
 
 		try {
 			// 인증 정보가 없거나 유효하지 않으면 401 Unauthorized 반환 - 아직 인증 관련된 것 안넣어서 주석 처리
@@ -150,7 +152,8 @@ public class BoardRestController {
 			}
 
 			// 게시글 조회 (200)
-			Board board = boardService.readBoard(boardId);
+			String userId = (String) session.getAttribute("userId");
+			Board board = boardService.readBoard(boardId, userId);
 			System.out.println("게시글 상세 : " + board);
 			
 			// 게시글 없음 (404 Not Found)

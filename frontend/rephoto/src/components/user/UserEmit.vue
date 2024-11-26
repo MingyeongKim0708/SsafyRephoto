@@ -103,9 +103,9 @@ onBeforeRouteLeave(()=>{
     width: 400px;
     margin: 50px auto;
     padding: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid white;
     border-radius: 8px;
-    background-color: #f9f9f9;
+    background-color: black;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -122,6 +122,10 @@ label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
+}
+
+input{
+    background-color: black;
 }
 
 input[type="text"],

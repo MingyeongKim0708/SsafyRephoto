@@ -3,185 +3,186 @@
 
 <mapper namespace="com.ssafy.mvc.model.dao.BoardDao">
 
-	<!-- 전체 게시글 조회 및 검색기능 -->
-	<select id="search" resultType="Board" parameterType="SearchCondition">
-		SELECT
-			b.board_id, 
-			b.user_nick, 
-			u.user_id, <!-- 추가: user 테이블에서 userId 가져오기 -->
-			b.board_title, 
-			b.board_info,
-			b.board_created_at, 
-			b.view_cnt, 
-			b.avg_score, 
-			p.photo_name, 
-			p.photo_uuid
-		FROM 
-			board b 
-		LEFT JOIN 
-			photo p 
-		ON 
-			b.board_id = p.board_id 
-		LEFT JOIN 
-        	user u 
-	    ON 
-	        b.user_nick = u.user_nick <!-- board 테이블의 userNick과 user 테이블의 userNick을 조인 -->
-		<!-- 검색 조건 -->
-		<if
-			test="key != 'none'">
-			WHERE ${key} LIKE concat('%',#{word},'%')
-		</if>
-		<!-- 동적 정렬 조건 -->
-	    <if test="orderBy != null and orderBy != 'none'">
-	        ORDER BY ${orderBy} ${orderByDir}
-	    </if>
-		
-		<!-- 페이징 처리-->
-		<!--LIMIT #{size} OFFSET #{offset}-->
-	</select>
-	
-	<!-- 특정 유저의 게시글 조회 및 검색 기능-->
-	<select id="searchByUserNick" resultType="Board" parameterType="SearchCondition">
-		SELECT
-			b.board_id, 
-			b.user_nick, 
-			b.board_title, 
-			b.board_info,
-			b.board_created_at, 
-			b.view_cnt, 
-			b.avg_score, 
-			p.photo_name, 
-			p.photo_uuid
-		FROM 
-			board b 
-		LEFT JOIN 
-			photo p 
-		ON 
-			b.board_id = p.board_id 
-		<!-- 검색 조건 -->
-			WHERE user_nick = #{word}
-		<!-- 동적 정렬 조건 -->
-	    <if test="orderBy != null and orderBy != 'none'">
-	        ORDER BY ${orderBy} ${orderByDir}
-	    </if>
-		
-		<!-- 페이징 처리-->
-		<!--LIMIT #{size} OFFSET #{offset}-->
-	</select>
-	
-	<!-- 상세 게시글 조회 -->
-	<select id="selectOne" resultType="Board" parameterType="int">
-		SELECT 
-		    b.board_id, 
-		    b.user_nick, 
-		    u.user_id,
-		    b.board_title, 
-		    b.board_info,
-		    b.board_created_at, 
-		    b.view_cnt, 
-		    b.avg_score, 
-		    p.photo_name, 
-		    p.photo_uuid
-		FROM 
-		    board b 
-		LEFT JOIN 
-		    photo p 
-		ON 
-		    b.board_id = p.board_id 
-		
-	   LEFT JOIN 
-        	user u 
-	    ON 
-	        b.user_nick = u.user_nick <!-- board 테이블의 userNick과 user 테이블의 userNick을 조인 -->
-	        WHERE 
-		    b.board_id = #{boardId};
-	</select>
+    <!-- 전체 게시글 조회 및 검색기능 -->
+    <select id="search" resultType="Board" parameterType="SearchCondition">
+        SELECT
+            b.board_id, 
+            b.user_nick, 
+            u.user_id, <!-- 추가: user 테이블에서 userId 가져오기 -->
+            b.board_title, 
+            b.board_info,
+            b.board_created_at, 
+            b.view_cnt, 
+            b.avg_score, 
+            p.photo_name, 
+            p.photo_uuid
+        FROM 
+            board b 
+        LEFT JOIN 
+            photo p 
+        ON 
+            b.board_id = p.board_id 
+        LEFT JOIN 
+            user u 
+        ON 
+            b.user_nick = u.user_nick <!-- board 테이블의 userNick과 user 테이블의 userNick을 조인 -->
+        <!-- 검색 조건 -->
+        <if
+            test="key != 'none'">
+            WHERE ${key} LIKE concat('%',#{word},'%')
+        </if>
+        <!-- 동적 정렬 조건 -->
+        <if test="orderBy != null and orderBy != 'none'">
+            ORDER BY ${orderBy} ${orderByDir}
+        </if>
+        
+        <!-- 페이징 처리-->
+        <!--LIMIT #{size} OFFSET #{offset}-->
+    </select>
+    
+    <!-- 특정 유저의 게시글 조회 및 검색 기능-->
+    <select id="searchByUserNick" resultType="Board" parameterType="SearchCondition">
+        SELECT
+            b.board_id, 
+            b.user_nick, 
+            b.board_title, 
+            b.board_info,
+            b.board_created_at, 
+            b.view_cnt, 
+            b.avg_score, 
+            p.photo_name, 
+            p.photo_uuid
+        FROM 
+            board b 
+        LEFT JOIN 
+            photo p 
+        ON 
+            b.board_id = p.board_id 
+        <!-- 검색 조건 -->
+            WHERE user_nick = #{word}
+        <!-- 동적 정렬 조건 -->
+        <if test="orderBy != null and orderBy != 'none'">
+            ORDER BY ${orderBy} ${orderByDir}
+        </if>
+        
+        <!-- 페이징 처리-->
+        <!--LIMIT #{size} OFFSET #{offset}-->
+    </select>
+    
+    <!-- 상세 게시글 조회 -->
+    <select id="selectOne" resultType="Board" parameterType="int">
+        SELECT 
+            b.board_id, 
+            b.user_nick, 
+            u.user_id,
+            b.board_title, 
+            b.board_info,
+            b.board_created_at, 
+            b.view_cnt, 
+            b.avg_score, 
+            p.photo_name, 
+            p.photo_uuid
+        FROM 
+            board b 
+        LEFT JOIN 
+            photo p 
+        ON 
+            b.board_id = p.board_id 
+        
+       LEFT JOIN 
+            user u 
+        ON 
+            b.user_nick = u.user_nick <!-- board 테이블의 userNick과 user 테이블의 userNick을 조인 -->
+            WHERE 
+            b.board_id = #{boardId};
+    </select>
 
-	<!-- 게시글 등록 -->
-	<insert id="insertBoard" parameterType="Board" keyProperty="boardId"
-		useGeneratedKeys="true">
-		INSERT INTO board (board_title, user_nick, board_info)
-		VALUES (#{boardTitle}, #{userNick}, #{boardInfo});
-	</insert>
 
-	<!-- 게시글 삭제 -->
-	<delete id="deleteBoard" parameterType="int">
-		DELETE FROM board
-		WHERE board_id = #{boardId};
-	</delete>
+    <!-- 게시글 등록 -->
+    <insert id="insertBoard" parameterType="Board" keyProperty="boardId"
+        useGeneratedKeys="true">
+        INSERT INTO board (board_title, user_nick, board_info)
+        VALUES (#{boardTitle}, #{userNick}, #{boardInfo});
+    </insert>
 
-	<!-- 파일 업로드 -->
-	<insert id="insertFile" parameterType="Board">
-		INSERT INTO photo (board_id, photo_name, photo_uuid)
-		VALUES (#{boardId}, #{photoName}, #{photoUuid});
-	</insert>
+    <!-- 게시글 삭제 -->
+    <delete id="deleteBoard" parameterType="int">
+        DELETE FROM board
+        WHERE board_id = #{boardId};
+    </delete>
 
-	<!-- 조회수 증가 -->
-	<update id="updateViewCnt" parameterType="int">
-		UPDATE board
-		SET view_cnt = view_cnt+1
-		WHERE board_id = #{boardId};
-	</update>
+    <!-- 파일 업로드 -->
+    <insert id="insertFile" parameterType="Board">
+        INSERT INTO photo (board_id, photo_name, photo_uuid)
+        VALUES (#{boardId}, #{photoName}, #{photoUuid});
+    </insert>
 
-	<!-- UUID로 원본 파일명 조회-->
-	<select id="getFileNameByUuid" resultType="String" parameterType="String">
-		SELECT photo_name
-		FROM photo
-		WHERE photo_uuid = #{fileUuid}
-	</select>
+    <!-- 조회수 증가 -->
+    <update id="updateViewCnt" parameterType="int">
+        UPDATE board
+        SET view_cnt = view_cnt+1
+        WHERE board_id = #{boardId};
+    </update>
 
-	<!-- userNick이 존재하는지 확인-->
-	<select id="isUserNickExist" parameterType="string" resultType="boolean">
-		SELECT COUNT(*) > 0
-		FROM user
-		WHERE user_nick = #{userNick}
-	</select>
-	
-	<!-- 게시물 수 체크 -->
-	<select id="countBoards" parameterType="SearchCondition" resultType="int">
-		SELECT COUNT(*)
-		FROM board
-		WHERE 1=1
-		<if test="key != 'none'">
+    <!-- UUID로 원본 파일명 조회-->
+    <select id="getFileNameByUuid" resultType="String" parameterType="String">
+        SELECT photo_name
+        FROM photo
+        WHERE photo_uuid = #{fileUuid}
+    </select>
+
+    <!-- userNick이 존재하는지 확인-->
+    <select id="isUserNickExist" parameterType="string" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM user
+        WHERE user_nick = #{userNick}
+    </select>
+    
+    <!-- 게시물 수 체크 -->
+    <select id="countBoards" parameterType="SearchCondition" resultType="int">
+        SELECT COUNT(*)
+        FROM board
+        WHERE 1=1
+        <if test="key != 'none'">
             AND title LIKE CONCAT('%', #{key}, '%')  <!-- 예시: title에 key가 포함된 게시물 수 조회 -->
         </if>
-	</select>
-	
-	<!-- photoUuid 조회 -->
-	<select id="getPhotoUuidByBoardId" resultType="String">
-		SELECT photo_uuid
-		FROM photo
-		WHERE board_id = #{boardId}
-	</select>
-	
-	<!-- 평균 점수 계산 -->
-	<update id="updateAvgScore" parameterType="int">
-	    UPDATE board
-	    SET avg_score = (
-	        SELECT IFNULL(AVG(score),0)
-	        FROM comment
-	        WHERE board_id = #{boardId}
-	    )
-	    WHERE board_id = #{boardId};
-	</update>
-	
-	<!-- 전체 평균 점수 최신화 -->
-	<update id="updateAllAvgScore">
-	UPDATE board
-	SET avg_score = (
-	        SELECT IFNULL(AVG(score),0)
-	        FROM comment
-	        WHERE comment.board_id = board.board_id
-	)
-	</update>
-	
-	<!-- 게시글 수정.. 생각해보니까 안쓰네 댓글 수정할 때 사용하겠음 -->
-	<!--	<update id="updateBoard" parameterType="Board">
-		UPDATE board
-		SET board_title = #{boardTitle}, board_info = #{boardInfo}
-		WHERE id = #{id};
-	</update>-->
-	
+    </select>
+    
+    <!-- photoUuid 조회 -->
+    <select id="getPhotoUuidByBoardId" resultType="String">
+        SELECT photo_uuid
+        FROM photo
+        WHERE board_id = #{boardId}
+    </select>
+    
+    <!-- 평균 점수 계산 -->
+    <update id="updateAvgScore" parameterType="int">
+        UPDATE board
+        SET avg_score = (
+            SELECT IFNULL(AVG(score),0)
+            FROM comment
+            WHERE board_id = #{boardId}
+        )
+        WHERE board_id = #{boardId};
+    </update>
+    
+    <!-- 전체 평균 점수 최신화 -->
+    <update id="updateAllAvgScore">
+    UPDATE board
+    SET avg_score = (
+            SELECT IFNULL(AVG(score),0)
+            FROM comment
+            WHERE comment.board_id = board.board_id
+    )
+    </update>
+    
+    <!-- 게시글 수정.. 생각해보니까 안쓰네 댓글 수정할 때 사용하겠음 -->
+    <!--    <update id="updateBoard" parameterType="Board">
+        UPDATE board
+        SET board_title = #{boardTitle}, board_info = #{boardInfo}
+        WHERE id = #{id};
+    </update>-->
+    
 
 
 </mapper>

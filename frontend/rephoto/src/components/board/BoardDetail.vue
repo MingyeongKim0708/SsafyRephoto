@@ -102,39 +102,38 @@
             </ul>
 
             <!-- 댓글 입력창 -->
-            <!-- 댓글 입력창 -->
-            <div class="comment-item">
-                <div class="comment-container">
-                    <!-- 프로필 이미지 -->
-                    <img :src="`http://localhost:8080/user/userImg/${userUuid}`" alt="Profile" class="profile-image" />
+<div v-if="store.board.userId !== storeU.loginUser.userId" class="comment-item">
+    <div class="comment-container">
+        <!-- 프로필 이미지 -->
+        <img :src="`http://localhost:8080/user/userImg/${userUuid}`" alt="Profile" class="profile-image" />
 
-                    <!-- 댓글 작성 영역 -->
-                    <div class="comment-content">
-                        <!-- 별점 입력 -->
-                        <div class="rating-section">
-                            <span style="font-weight: bold;">평가</span>
-                            <div class="star-rating">
-                                <span v-for="n in 5" :key="n" class="star" :class="{ filled: n <= newComment.score }"
-                                    @click="setScore(n)">
-                                    ★
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- 댓글 입력 -->
-                        <textarea v-model="newComment.review" placeholder="댓글을 입력하세요" class="form-control"></textarea>
-                        <!-- 경고 메시지 추가 -->
-                        <p v-if="reviewWarning" class="text-danger mt-2">{{ reviewWarning }}</p>
-
-                        <!-- 버튼들 -->
-                        <div class="action-buttons">
-                            <button class="edit-button" @click="addComment" :disabled="isSubmitDisabled">
-                                작성
-                            </button>
-                        </div>
-                    </div>
+        <!-- 댓글 작성 영역 -->
+        <div class="comment-content">
+            <!-- 별점 입력 -->
+            <div class="rating-section">
+                <span style="font-weight: bold;">평가</span>
+                <div class="star-rating">
+                    <span v-for="n in 5" :key="n" class="star" :class="{ filled: n <= newComment.score }"
+                        @click="setScore(n)">
+                        ★
+                    </span>
                 </div>
             </div>
+
+            <!-- 댓글 입력 -->
+            <textarea v-model="newComment.review" placeholder="댓글을 입력하세요" class="form-control"></textarea>
+            <!-- 경고 메시지 추가 -->
+            <p v-if="reviewWarning" class="text-danger mt-2">{{ reviewWarning }}</p>
+
+            <!-- 버튼들 -->
+            <div class="action-buttons">
+                <button class="edit-button" @click="addComment" :disabled="isSubmitDisabled">
+                    작성
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
         </div>
     </div>
@@ -158,13 +157,16 @@ const storeU = useUserStore();
 const editCommentContent = ref('');
 const editCommentScore = ref(0);
 
+
 const userUuid = computed(() => storeU.user.userUuid)
+
 const reviewWarning = ref('');
 const editWarning = ref('');
 
 onMounted(() => {
     store.getBoard(route.params.id);
-    storeU.getUser(storeU.loginUser.userId)
+    storeU.getUser(storeU.loginUser.userId);
+
 });
 
 const formatScore = (score) => {
