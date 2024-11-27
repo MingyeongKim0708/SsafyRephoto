@@ -100,6 +100,7 @@ C:.
 ![스크린샷 2024-11-26 210257](https://github.com/user-attachments/assets/27fdded3-e541-4616-b3c0-bf0d2ee34157)
 
 ### 작업 관리
+- [Notion](https://puffy-echinodon-d88.notion.site/SSAFY-1-REPHOTO-13d3eaa46d15802486ece0e6c6c043dc)
 - Notion과 GitHub를 이용한 협업 진행
 - 컨벤션, 명세서, 트러블 슈팅, 문서 등은 Notion으로 관리
 - 소스코드는 GitHub로 관리
